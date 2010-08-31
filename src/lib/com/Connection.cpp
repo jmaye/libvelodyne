@@ -9,7 +9,8 @@
 
 using namespace std;
 
-Connection::Connection(double f64Timeout) : mf64Timeout(f64Timeout),
+Connection::Connection(uint32_t u32Port, double f64Timeout) : mu32Port(),
+                                            mf64Timeout(f64Timeout),
                                             mi32Socket(0),
                                             mu16PacketPos(0) {
 }
@@ -22,6 +23,10 @@ double Connection::getTimeout() const {
   return mf64Timeout;
 }
 
+uint32_t Connection::getPort() const {
+  return mu32Port;
+}
+
 void Connection::setTimeout(double f64Time) {
   mf64Timeout = f64Time;
 }
@@ -30,6 +35,14 @@ void Connection::open() throw(IOException) {
   mi32Socket = socket(AF_INET, SOCK_DGRAM, 0);
   if (mi32Socket == -1)
     throw IOException("Connection::open: Socket creation failed");
+
+  struct sockaddr_in local;
+  local.sin_family = AF_INET;
+  local.sin_port   = htons(mu32Port);
+  local.sin_addr.s_addr = htonl(INADDR_ANY);
+
+  if (bind(mi32Socket, (struct sockaddr*)&local, sizeof(local)) == -1)
+    throw IOException("Connection::open: Socket binding failed");
 }
 
 void Connection::close() throw(IOException) {

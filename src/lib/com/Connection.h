@@ -26,16 +26,19 @@ class Connection {
 
   static const uint16_t mcu16PacketSize = 1206;
 
+  uint32_t mu32Port;
   double mf64Timeout;
   int32_t mi32Socket;
   uint8_t mau8Packet[mcu16PacketSize];
   uint16_t mu16PacketPos;
 
 public:
-  Connection(double f64Timeout = 2.5);
+  Connection(uint32_t u32Port = 2368, double f64Timeout = 2.5);
   ~Connection();
 
   double getTimeout() const;
+
+  uint32_t getPort() const;
 
   void setTimeout(double f64Time);
 
