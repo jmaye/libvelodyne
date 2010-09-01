@@ -31,6 +31,7 @@ class Connection {
   int32_t mi32Socket;
   uint8_t mau8Packet[mcu16PacketSize];
   uint16_t mu16PacketPos;
+  VelodynePacket mVelodynePacket;
 
 public:
   Connection(uint32_t u32Port = 2368, double f64Timeout = 2.5);

@@ -10,7 +10,7 @@
 using namespace std;
 
 Connection::Connection(uint32_t u32Port, double f64Timeout)
-  : mu32Port(mu32Port),
+  : mu32Port(u32Port),
     mf64Timeout(f64Timeout),
     mi32Socket(0),
     mu16PacketPos(0) {
@@ -67,7 +67,23 @@ const VelodynePacket& Connection::receivePacket() throw(IOException) {
     mu16PacketPos += readBytes();
   }
   while (mu16PacketPos != mcu16PacketSize);
-  return *(VelodynePacket*)&mau8Packet[0];
+  uint32_t u32Index = 0;
+  mVelodynePacket.mu16HeaderInfo     = *(uint16_t*)&mau8Packet[u32Index];
+  u32Index += sizeof(uint16_t);
+  mVelodynePacket.mu16RotationalInfo = *(uint16_t*)&mau8Packet[u32Index];
+  u32Index += sizeof(uint16_t);
+  for (uint32_t i = 0; i < 32; i++) {
+    mVelodynePacket.maLaserData[i].mu16Distance =
+      *(uint16_t*)&mau8Packet[u32Index];
+    u32Index += sizeof(uint16_t);
+    mVelodynePacket.maLaserData[i].mu8Intensity =
+      *(uint8_t*)&mau8Packet[u32Index];
+    u32Index += sizeof(uint8_t);
+  }
+  mVelodynePacket.mu16SpinCount = *(uint16_t*)&mau8Packet[u32Index];
+  u32Index += sizeof(uint16_t);
+  mVelodynePacket.mu32Reserved = *(uint32_t*)&mau8Packet[u32Index];
+  return mVelodynePacket;
 }
 
 int32_t Connection::readBytes() const throw(IOException) {

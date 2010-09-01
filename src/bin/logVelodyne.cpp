@@ -27,14 +27,14 @@ int main(int argc, char **argv) {
   com.open();
   while (1) {
     const VelodynePacket& packet = com.receivePacket();
-    ofstream logFile(argv[3], ios_base::app);
-    logFile << seconds() << " ";
-    logFile << packet.mu16HeaderInfo << " " << packet.mu16RotationalInfo << " ";
+    ofstream logFile(argv[1], ios_base::app);
+    logFile << fixed << seconds() << " ";
+    logFile << hex << packet.mu16HeaderInfo << " " << dec << packet.mu16RotationalInfo << " ";
     for (uint32_t i = 0; i < 32; i++) {
       logFile << packet.maLaserData[i].mu16Distance << " "
-              << packet.maLaserData[i].mu8Intensity << " ";
+              << (int)packet.maLaserData[i].mu8Intensity << " ";
     }
-    logFile << packet.mu16SpinCount << " " << packet.mu32Reserved << endl;
+    logFile << packet.mu16SpinCount << endl;
     logFile.close();
   }
   com.close();
