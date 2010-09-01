@@ -9,10 +9,11 @@
 
 using namespace std;
 
-Connection::Connection(uint32_t u32Port, double f64Timeout) : mu32Port(),
-                                            mf64Timeout(f64Timeout),
-                                            mi32Socket(0),
-                                            mu16PacketPos(0) {
+Connection::Connection(uint32_t u32Port, double f64Timeout)
+  : mu32Port(mu32Port),
+    mf64Timeout(f64Timeout),
+    mi32Socket(0),
+    mu16PacketPos(0) {
 }
 
 Connection::~Connection() {
