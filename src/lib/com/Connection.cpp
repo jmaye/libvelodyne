@@ -68,17 +68,21 @@ const VelodynePacket& Connection::receivePacket() throw(IOException) {
   }
   while (mu16PacketPos != mcu16PacketSize);
   uint32_t u32Index = 0;
-  mVelodynePacket.mu16HeaderInfo     = *(uint16_t*)&mau8Packet[u32Index];
-  u32Index += sizeof(uint16_t);
-  mVelodynePacket.mu16RotationalInfo = *(uint16_t*)&mau8Packet[u32Index];
-  u32Index += sizeof(uint16_t);
-  for (uint32_t i = 0; i < 32; i++) {
-    mVelodynePacket.maLaserData[i].mu16Distance =
+  for (uint32_t i = 0; i < 12; i++) {
+    mVelodynePacket.mData[i].mu16HeaderInfo     =
       *(uint16_t*)&mau8Packet[u32Index];
     u32Index += sizeof(uint16_t);
-    mVelodynePacket.maLaserData[i].mu8Intensity =
-      *(uint8_t*)&mau8Packet[u32Index];
-    u32Index += sizeof(uint8_t);
+    mVelodynePacket.mData[i].mu16RotationalInfo =
+      *(uint16_t*)&mau8Packet[u32Index];
+    u32Index += sizeof(uint16_t);
+    for (uint32_t j = 0; j < 32; j++) {
+      mVelodynePacket.mData[i].maLaserData[j].mu16Distance =
+        *(uint16_t*)&mau8Packet[u32Index];
+      u32Index += sizeof(uint16_t);
+      mVelodynePacket.mData[i].maLaserData[j].mu8Intensity =
+        *(uint8_t*)&mau8Packet[u32Index];
+      u32Index += sizeof(uint8_t);
+    }
   }
   mVelodynePacket.mu16SpinCount = *(uint16_t*)&mau8Packet[u32Index];
   u32Index += sizeof(uint16_t);

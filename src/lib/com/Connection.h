@@ -10,10 +10,14 @@ struct LaserData {
   uint8_t mu8Intensity;
 };
 
-struct VelodynePacket {
+struct Data {
   uint16_t mu16HeaderInfo;
   uint16_t mu16RotationalInfo;
   LaserData maLaserData[32];
+};
+
+struct VelodynePacket {
+  Data mData[12];
   uint16_t mu16SpinCount;
   uint32_t mu32Reserved;
 };
