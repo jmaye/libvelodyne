@@ -20,8 +20,8 @@ class VelodynePointCloud {
   VelodynePointCloud(const VelodynePointCloud &other);
   VelodynePointCloud& operator = (const VelodynePointCloud &other);
 
-  static const double mcf64MinDistance = 3.0;
-  static const double mcf64MaxDistance = 120.0;
+  static const double mcf64MinDistance = 90.0;
+  static const double mcf64MaxDistance = 12000.0;
 
   struct Point3D {
     double mf64x;

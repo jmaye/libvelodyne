@@ -19,7 +19,7 @@ VelodynePointCloud::VelodynePointCloud(const VelodynePacket &vdynePacket,
     for (uint32_t j = 0; j < vdynePacket.mcu16LaserNbr; j++) {
       uint32_t u32LaserIdx = u32IdxOffs + j;
       double f64Distance = vdyneCalibration.mCorr[u32LaserIdx].mf64DistCorr
-        / 100.0 + (double)vdynePacket.mData[i].maLaserData[j].mu16Distance;
+        + (double)vdynePacket.mData[i].maLaserData[j].mu16Distance * 0.2;
 
       if (f64Distance < mcf64MinDistance || f64Distance > mcf64MaxDistance)
         f64Distance = 0.0;
@@ -40,19 +40,19 @@ VelodynePointCloud::VelodynePointCloud(const VelodynePacket &vdynePacket,
         f64CosRotCorr + sin(deg2rad(vdynePacket.mData[i].mu16RotationalInfo)) *
         f64SinRotCorr;
 
+      f64Distance /= 100.0;
+      double f64HorizOffsCorr =
+        vdyneCalibration.mCorr[u32LaserIdx].mf64HorizOffsCorr / 100.0;
+      double f64VertOffsCorr =
+        vdyneCalibration.mCorr[u32LaserIdx].mf64VertOffsCorr / 100.0;
+
       double f64xyDist = f64Distance * f64CosVert - 
-        vdyneCalibration.mCorr[u32LaserIdx].mf64VertOffsCorr / 100.0 * f64SinVert;
+        f64VertOffsCorr * f64SinVert;
 
       Point3D point;
-      point.mf64x = f64xyDist * f64SinRot -
-        vdyneCalibration.mCorr[u32LaserIdx].mf64HorizOffsCorr /
-        100.0 * f64CosRot;
-      point.mf64y = f64xyDist * f64CosRot +
-        vdyneCalibration.mCorr[u32LaserIdx].mf64HorizOffsCorr /
-        100.0 * f64SinRot;
-      point.mf64z = f64Distance * f64SinVert +
-        vdyneCalibration.mCorr[u32LaserIdx].mf64VertOffsCorr /
-        100.0 * f64CosVert;
+      point.mf64x = f64xyDist * f64SinRot - f64HorizOffsCorr * f64CosRot;
+      point.mf64y = f64xyDist * f64CosRot + f64HorizOffsCorr * f64SinRot;
+      point.mf64z = f64Distance * f64SinVert + f64VertOffsCorr * f64CosVert;
       mPointCloud.push_back(point);
     }
   }
