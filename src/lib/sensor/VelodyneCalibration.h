@@ -7,6 +7,8 @@
 
 #include <stdint.h>
 
+class VelodynePointCloud;
+
 class VelodyneCalibration {
   friend std::ostream& operator << (std::ostream &stream,
     const VelodyneCalibration &obj);
@@ -16,6 +18,8 @@ class VelodyneCalibration {
     const VelodyneCalibration &obj);
   friend std::ifstream& operator >> (std::ifstream &stream,
     VelodyneCalibration &obj) throw(IOException);
+
+  friend class VelodynePointCloud;
 
   VelodyneCalibration(const VelodyneCalibration &other);
   VelodyneCalibration& operator = (const VelodyneCalibration &other);

@@ -8,6 +8,7 @@
 #include <stdint.h>
 
 class UDPConnection;
+class VelodynePointCloud;
 
 class VelodynePacket {
   friend std::ostream& operator << (std::ostream &stream,
@@ -20,6 +21,8 @@ class VelodynePacket {
     VelodynePacket &obj);
   friend UDPConnection& operator >> (UDPConnection &stream,
     VelodynePacket &obj) throw(IOException);
+
+  friend class VelodynePointCloud;
 
   VelodynePacket(const VelodynePacket &other);
   VelodynePacket& operator = (const VelodynePacket &other);
