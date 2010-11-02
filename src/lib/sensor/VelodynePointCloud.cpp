@@ -66,7 +66,7 @@ VelodynePointCloud& VelodynePointCloud::operator =
 }
 
 double VelodynePointCloud::deg2rad(double f64Deg) const {
-  return f64Deg * M_PI / 180;
+  return f64Deg * M_PI / 180.0;
 }
 
 VelodynePointCloud::~VelodynePointCloud() {
