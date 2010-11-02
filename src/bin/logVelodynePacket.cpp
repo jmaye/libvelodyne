@@ -16,6 +16,8 @@ int main(int argc, char **argv) {
   VelodynePacket vdynePacket;
   com >> vdynePacket;
   cout << vdynePacket;
+  ofstream logFile (argv[1], ios::out | ios::binary);
+  logFile << vdynePacket;
   com.close();
   return 0;
 }
