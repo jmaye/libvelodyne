@@ -1,1 +1,1 @@
-remake_add_directories(exceptions com)
+remake_add_directories(exceptions com sensor)
