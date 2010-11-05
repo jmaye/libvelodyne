@@ -3,6 +3,8 @@
 #include <iostream>
 #include <fstream>
 
+#include <math.h>
+
 using namespace std;
 
 VelodyneCalibration::VelodyneCalibration() {
@@ -22,7 +24,7 @@ void VelodyneCalibration::read(istream &stream) {
 }
 
 void VelodyneCalibration::write(ostream &stream) const {
-  for (uint32_t i = 0; i < mcu16LaserNbr; i++) {
+  for (uint32_t i = 0; i < mcu16LasersNbr; i++) {
     stream << "Laser " << i << ": "
                        << mCorr[i].mf64RotCorr << " "
                        << mCorr[i].mf64VertCorr << " "
@@ -33,7 +35,7 @@ void VelodyneCalibration::write(ostream &stream) const {
 }
 
 void VelodyneCalibration::read(ifstream &stream) throw(IOException) {
-  for (uint32_t i = 0; i < mcu16LaserNbr; i++) {
+  for (uint32_t i = 0; i < mcu16LasersNbr; i++) {
     string strKey;
     double f64Value;
     stream >> strKey;
@@ -46,12 +48,16 @@ void VelodyneCalibration::read(ifstream &stream) throw(IOException) {
     if (strKey.compare("rotCorrection") != 0)
       throw IOException("VelodyneCalibration::read: Unexcepted key");
     stream >> f64Value;
-    mCorr[i].mf64RotCorr = f64Value;
+    mCorr[i].mf64RotCorr = deg2rad(f64Value);
+    mCorr[i].mf64SinRotCorr = sin(mCorr[i].mf64RotCorr);
+    mCorr[i].mf64CosRotCorr = cos(mCorr[i].mf64RotCorr);
     stream >> strKey;
     if (strKey.compare("vertCorrection") != 0)
       throw IOException("VelodyneCalibration::read: Unexcepted key");
     stream >> f64Value;
-    mCorr[i].mf64VertCorr = f64Value;
+    mCorr[i].mf64VertCorr = deg2rad(f64Value);
+    mCorr[i].mf64SinVertCorr = sin(mCorr[i].mf64VertCorr);
+    mCorr[i].mf64CosVertCorr = cos(mCorr[i].mf64VertCorr);
     stream >> strKey;
     if (strKey.compare("distCorrection") != 0)
       throw IOException("VelodyneCalibration::read: Unexcepted key");
@@ -71,6 +77,10 @@ void VelodyneCalibration::read(ifstream &stream) throw(IOException) {
 }
 
 void VelodyneCalibration::write(ofstream &stream) const {
+}
+
+double VelodyneCalibration::deg2rad(double f64Deg) const {
+  return f64Deg * M_PI / 180.0;
 }
 
 ostream& operator << (ostream &stream,

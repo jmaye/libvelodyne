@@ -23,6 +23,7 @@ class VelodynePacket {
     VelodynePacket &obj) throw(IOException);
 
   friend class VelodynePointCloud;
+  friend class VelodyneScanCloud;
 
   VelodynePacket(const VelodynePacket &other);
   VelodynePacket& operator = (const VelodynePacket &other);
@@ -36,8 +37,14 @@ class VelodynePacket {
 
   double seconds() const;
 
+  static const uint16_t mcu16UpperBank = 0xeeff;
+  static const uint16_t mcu16LowerBank = 0xddff;
+  static const uint16_t mcu16RotationResolution = 100;
+  static const uint16_t mcu16DistanceResolution = 5;
+  static const uint16_t mcu16TemperatureResolution = 256;
+  static const uint32_t mcu32TimeResolution = 1000000;
   static const uint16_t mcu16PacketSize = 1206;
-  static const uint16_t mcu16LaserNbr = 32;
+  static const uint16_t mcu16LasersPerPacket = 32;
   static const uint16_t mcu16DataChunkNbr = 12;
 
   struct LaserData {
@@ -48,7 +55,7 @@ class VelodynePacket {
   struct DataChunk {
     uint16_t mu16HeaderInfo;
     uint16_t mu16RotationalInfo;
-    LaserData maLaserData[mcu16LaserNbr];
+    LaserData maLaserData[mcu16LasersPerPacket];
   };
 
   double mf64Timestamp;

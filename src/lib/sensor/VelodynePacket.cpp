@@ -24,7 +24,8 @@ VelodynePacket::~VelodynePacket() {
 double VelodynePacket::seconds() const {
   struct timeval now;
   gettimeofday(&now, 0L);
-  return (double)((double)now.tv_sec + ((double)now.tv_usec / 1000000.0));
+  return (double)((double)now.tv_sec + ((double)now.tv_usec /
+    (double)mcu32TimeResolution));
 }
 
 void VelodynePacket::read(istream &stream) {
@@ -34,14 +35,16 @@ void VelodynePacket::write(ostream &stream) const {
   stream << fixed << "Time: " << mf64Timestamp << endl;
   for (uint32_t i = 0; i < mcu16DataChunkNbr; i++) {
     stream << "Row: ";
-    if (mData[i].mu16HeaderInfo == 0xEEFF)
+    if (mData[i].mu16HeaderInfo == mcu16UpperBank)
       stream << "up";
     else
       stream << "low";
     stream << endl;
-    stream << "Angle: " <<  (double)mData[i].mu16RotationalInfo / 100.0 << endl;
-    for (uint32_t j = 0; j < mcu16LaserNbr; j++) {
-      stream  << mData[i].maLaserData[j].mu16Distance * 2 << " ";
+    stream << "Angle: " <<  (double)mData[i].mu16RotationalInfo /
+      (double)mcu16RotationResolution << endl;
+    for (uint32_t j = 0; j < mcu16LasersPerPacket; j++) {
+      stream  << (double)mData[i].maLaserData[j].mu16Distance /
+        (double)mcu16DistanceResolution << " ";
     }
     stream << endl;
   }
@@ -54,7 +57,8 @@ void VelodynePacket::write(ostream &stream) const {
   }
   else {
     uint8_t u8IntTemp = ((uint8_t*)&mu16SpinCount)[1];
-    double f64FracTemp = (double)((uint8_t*)&mu16SpinCount)[0] / 256.0;
+    double f64FracTemp = (double)((uint8_t*)&mu16SpinCount)[0] /
+      (double)mcu16TemperatureResolution;
     double f64Temperature = (double)u8IntTemp + f64FracTemp;
     stream << "Temperature: " << f64Temperature << endl;
   }
@@ -84,7 +88,7 @@ void VelodynePacket::read(uint8_t au8Packet[]) {
     u32Index += sizeof(uint16_t);
     mData[i].mu16RotationalInfo = *(uint16_t*)&au8Packet[u32Index];
     u32Index += sizeof(uint16_t);
-    for (uint32_t j = 0; j < mcu16LaserNbr; j++) {
+    for (uint32_t j = 0; j < mcu16LasersPerPacket; j++) {
       mData[i].maLaserData[j].mu16Distance = *(uint16_t*)&au8Packet[u32Index];
       u32Index += sizeof(uint16_t);
       mData[i].maLaserData[j].mu8Intensity = *(uint8_t*)&au8Packet[u32Index];

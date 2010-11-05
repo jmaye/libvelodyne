@@ -20,6 +20,7 @@ class VelodyneCalibration {
     VelodyneCalibration &obj) throw(IOException);
 
   friend class VelodynePointCloud;
+  friend class VelodyneScanCloud;
 
   VelodyneCalibration(const VelodyneCalibration &other);
   VelodyneCalibration& operator = (const VelodyneCalibration &other);
@@ -29,17 +30,23 @@ class VelodyneCalibration {
   virtual void read(std::ifstream &stream) throw(IOException);
   virtual void write(std::ofstream &stream) const;
 
-  static const uint16_t mcu16LaserNbr = 64;
+  static const uint16_t mcu16LasersNbr = 64;
 
   struct VelodyneLaserCorrection {
     double mf64RotCorr;
+    double mf64SinRotCorr;
+    double mf64CosRotCorr;
     double mf64VertCorr;
+    double mf64SinVertCorr;
+    double mf64CosVertCorr;
     double mf64DistCorr;
     double mf64VertOffsCorr;
     double mf64HorizOffsCorr;
   };
 
-  VelodyneLaserCorrection mCorr[mcu16LaserNbr];
+  VelodyneLaserCorrection mCorr[mcu16LasersNbr];
+
+  double deg2rad(double f64Deg) const;
 
 public:
   VelodyneCalibration();

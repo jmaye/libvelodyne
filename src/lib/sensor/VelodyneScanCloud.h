@@ -1,5 +1,5 @@
-#ifndef VELODYNEPOINTCLOUD_H
-#define VELODYNEPOINTCLOUD_H
+#ifndef VELODYNESCANCLOUD_H
+#define VELODYNESCANCLOUD_H
 
 #include "VelodynePacket.h"
 #include "VelodyneCalibration.h"
@@ -7,26 +7,26 @@
 #include <vector>
 #include <iosfwd>
 
-class VelodynePointCloud {
+class VelodyneScanCloud {
   friend std::ostream& operator << (std::ostream &stream,
-    const VelodynePointCloud &obj);
+    const VelodyneScanCloud &obj);
   friend std::istream& operator >> (std::istream &stream,
-    VelodynePointCloud &obj);
+    VelodyneScanCloud &obj);
   friend std::ofstream& operator << (std::ofstream &stream,
-    const VelodynePointCloud &obj);
+    const VelodyneScanCloud &obj);
   friend std::ifstream& operator >> (std::ifstream &stream,
-    VelodynePointCloud &obj);
+    VelodyneScanCloud &obj);
 
-  VelodynePointCloud(const VelodynePointCloud &other);
-  VelodynePointCloud& operator = (const VelodynePointCloud &other);
+  VelodyneScanCloud(const VelodyneScanCloud &other);
+  VelodyneScanCloud& operator = (const VelodyneScanCloud &other);
 
   static const double mcf64MinDistance = 150.0;
   static const uint16_t mcu16MeterConversion = 100;
 
-  struct Point3D {
-    double mf64x;
-    double mf64y;
-    double mf64z;
+  struct Scan {
+    double mf64Range;
+    double mf64Heading;
+    double mf64Pitch;
   };
 
   virtual void read(std::istream &stream);
@@ -34,17 +34,22 @@ class VelodynePointCloud {
   virtual void read(std::ifstream &stream);
   virtual void write(std::ofstream &stream) const;
 
-  std::vector<Point3D> mPointCloud;
+  double normalizeAnglePositive(double f64Angle) const;
+
+  double normalizeAngle(double f64Angle) const;
+
+  std::vector<Scan> mScanCloud;
   double mf64Timestamp;
 
+
 public:
-  VelodynePointCloud();
-  VelodynePointCloud(const VelodynePacket &vdynePacket,
+  VelodyneScanCloud();
+  VelodyneScanCloud(const VelodynePacket &vdynePacket,
     const VelodyneCalibration &vdyneCalibration);
-  ~VelodynePointCloud();
+  ~VelodyneScanCloud();
 
 protected:
 
 };
 
-#endif // VELODYNEPOINTCLOUD_H
+#endif // VELODYNESCANCLOUD_H
