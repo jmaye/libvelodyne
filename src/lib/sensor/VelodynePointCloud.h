@@ -24,9 +24,9 @@ class VelodynePointCloud {
   static const uint16_t mcu16MeterConversion = 100;
 
   struct Point3D {
-    double mf64x;
-    double mf64y;
-    double mf64z;
+    double mf64X;
+    double mf64Y;
+    double mf64Z;
   };
 
   virtual void read(std::istream &stream);
@@ -34,7 +34,6 @@ class VelodynePointCloud {
   virtual void read(std::ifstream &stream);
   virtual void write(std::ofstream &stream) const;
 
-  std::vector<Point3D> mPointCloud;
   double mf64Timestamp;
 
 public:
@@ -42,6 +41,8 @@ public:
   VelodynePointCloud(const VelodynePacket &vdynePacket,
     const VelodyneCalibration &vdyneCalibration);
   ~VelodynePointCloud();
+
+  std::vector<Point3D> mPointCloudVector;
 
 protected:
 

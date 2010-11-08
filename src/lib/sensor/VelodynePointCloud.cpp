@@ -52,12 +52,12 @@ VelodynePointCloud::VelodynePointCloud(const VelodynePacket &vdynePacket,
         f64VertOffsCorr * vdyneCalibration.mCorr[u32LaserIdx].mf64SinVertCorr;
 
       Point3D point;
-      point.mf64x = f64xyDist * f64SinRot - f64HorizOffsCorr * f64CosRot;
-      point.mf64y = f64xyDist * f64CosRot + f64HorizOffsCorr * f64SinRot;
-      point.mf64z = f64Distance *
+      point.mf64X = f64xyDist * f64SinRot - f64HorizOffsCorr * f64CosRot;
+      point.mf64Y = f64xyDist * f64CosRot + f64HorizOffsCorr * f64SinRot;
+      point.mf64Z = f64Distance *
         vdyneCalibration.mCorr[u32LaserIdx].mf64SinVertCorr + f64VertOffsCorr *
         vdyneCalibration.mCorr[u32LaserIdx].mf64CosVertCorr;
-      mPointCloud.push_back(point);
+      mPointCloudVector.push_back(point);
     }
   }
 }
@@ -82,10 +82,10 @@ void VelodynePointCloud::read(ifstream &stream) {
 }
 
 void VelodynePointCloud::write(ofstream &stream) const {
-  for (uint32_t i = 0; i < mPointCloud.size(); i++)
-    stream << mPointCloud[i].mf64x << " "
-           << mPointCloud[i].mf64y << " "
-           << mPointCloud[i].mf64z << endl;
+  for (uint32_t i = 0; i < mPointCloudVector.size(); i++)
+    stream << mPointCloudVector[i].mf64X << " "
+           << mPointCloudVector[i].mf64Y << " "
+           << mPointCloudVector[i].mf64Z << endl;
 }
 
 ostream& operator << (ostream &stream,

@@ -1,49 +1,33 @@
-#include <GL/glut.h>
+#include "VelodyneCalibration.h"
+#include "VelodynePacket.h"
+#include "VelodynePointCloud.h"
+#include "Window.h"
 
-void drawAxis(float length){
-  glBegin(GL_LINES);
-  glColor3f(1, 0, 0);
-  glVertex3f(0, 0, 0);
-  glVertex3f(length, 0, 0);
-  glColor3f(0, 1, 0);
-  glVertex3f(0, 0, 0);
-  glVertex3f(0, length, 0);
-  glColor3f(0, 0, 1);
-  glVertex3f(0, 0, 0);
-  glVertex3f(0, 0, length);
-  glEnd();
-  glPointSize(100);
-  glColor3f(0.2, 0.2, 0.8);
-  glBegin(GL_POINTS);
-  glVertex3f(0, 0, 0);
-  glEnd();
-}
+#include <iostream>
+#include <fstream>
 
-void renderScene(void) {
-  glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-  glLoadIdentity();
-  glTranslatef(0, -10, -60);
-  glRotatef(30, 1, 0, 0);
-  glRotatef(0, 0, 1, 0);
-  glRotatef(0, 0, 0, 1);
-  drawAxis(3);
-  glutSwapBuffers();
-  glFlush();
-}
+using namespace std;
 
 int main(int argc, char **argv) {
-  glutInit(&argc, argv);
-  glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB | GLUT_DEPTH);
-  glutInitWindowPosition(100, 100);
-  glutInitWindowSize(1000, 800);
-  glutCreateWindow("Velodyne Live View");
-  glShadeModel(GL_SMOOTH);
-  glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
-  glClearDepth(1.0f);
-  glEnable(GL_DEPTH_TEST);
-  glDepthFunc(GL_LEQUAL);
-  glEnable(GL_LINE_SMOOTH);
-  glHint(GL_PERSPECTIVE_CORRECTION_HINT, GL_NICEST);
-  glutDisplayFunc(renderScene);
-  glutMainLoop();
+  if (argc != 3) {
+    cerr << "Usage: " << argv[0] << " <logFile> <calibrationFile>"
+         << endl;
+    return -1;
+  }
+  Window window(argc, argv);
+  ifstream logFile(argv[1], ios::in | ios::binary);
+  VelodyneCalibration vdyneCalibration;
+  ifstream calibFile(argv[2]);
+  calibFile >> vdyneCalibration;
+  while (logFile.eof() != true) {
+    VelodynePacket vdynePacket;
+    logFile >> vdynePacket;
+    VelodynePointCloud pointCloud(vdynePacket, vdyneCalibration);
+    window.addPointCloud(pointCloud);
+  }
+  window.setTranslation(0, -10, -60);
+  window.setRotation(0, 30, 0);
+  window.setVisibility(true);
+  window.show();
+  return 0;
 }
