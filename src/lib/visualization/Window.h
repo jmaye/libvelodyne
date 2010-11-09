@@ -44,17 +44,6 @@ class Window {
   int mi32Width;
   int mi32Height;
 
-  struct Point3D {
-    double mf64X;
-    double mf64Y;
-    double mf64Z;
-    Point3D() {
-      mf64X = 0;
-      mf64Y = 0;
-      mf64Z = 0;
-    }
-  };
-
   Point3D mTranslation;
   Point3D mRotation;
 

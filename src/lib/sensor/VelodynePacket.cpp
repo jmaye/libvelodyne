@@ -6,16 +6,37 @@
 #include <fstream>
 
 #include <sys/time.h>
+#include <string.h>
 
 using namespace std;
 
-VelodynePacket::VelodynePacket() {
+VelodynePacket::VelodynePacket() : mf64Timestamp(0),
+                                   mu16SpinCount(0),
+                                   mu32Reserved(0) {
+  memset(mau8Packet, 0, mcu16PacketSize * sizeof(uint8_t));
 }
 
-VelodynePacket::VelodynePacket(const VelodynePacket &other) {
+VelodynePacket::VelodynePacket(const VelodynePacket &other)
+  : mf64Timestamp(other.mf64Timestamp),
+    mu16SpinCount(other.mu16SpinCount),
+    mu32Reserved(other.mu32Reserved) {
+  for (uint32_t i = 0; i < mcu16DataChunkNbr; i++) {
+    mData[i] = other.mData[i];
+  }
+  memcpy(mau8Packet, other.mau8Packet, mcu16PacketSize * sizeof(uint8_t));
 }
 
 VelodynePacket& VelodynePacket::operator = (const VelodynePacket &other) {
+  if (this != &other) {
+    mf64Timestamp = other.mf64Timestamp;
+    mu16SpinCount = other.mu16SpinCount;
+    mu32Reserved = other.mu32Reserved;
+    for (uint32_t i = 0; i < mcu16DataChunkNbr; i++) {
+      mData[i] = other.mData[i];
+    }
+    memcpy(mau8Packet, other.mau8Packet, mcu16PacketSize * sizeof(uint8_t));
+  }
+  return *this;
 }
 
 VelodynePacket::~VelodynePacket() {
@@ -42,7 +63,7 @@ void VelodynePacket::write(ostream &stream) const {
     stream << endl;
     stream << "Angle: " <<  (double)mData[i].mu16RotationalInfo /
       (double)mcu16RotationResolution << endl;
-    for (uint32_t j = 0; j < mcu16LasersPerPacket; j++) {
+    for (uint32_t j = 0; j < DataChunk::mcu16LasersPerPacket; j++) {
       stream  << (double)mData[i].maLaserData[j].mu16Distance /
         (double)mcu16DistanceResolution << " ";
     }
@@ -88,7 +109,7 @@ void VelodynePacket::read(uint8_t au8Packet[]) {
     u32Index += sizeof(uint16_t);
     mData[i].mu16RotationalInfo = *(uint16_t*)&au8Packet[u32Index];
     u32Index += sizeof(uint16_t);
-    for (uint32_t j = 0; j < mcu16LasersPerPacket; j++) {
+    for (uint32_t j = 0; j < DataChunk::mcu16LasersPerPacket; j++) {
       mData[i].maLaserData[j].mu16Distance = *(uint16_t*)&au8Packet[u32Index];
       u32Index += sizeof(uint16_t);
       mData[i].maLaserData[j].mu8Intensity = *(uint8_t*)&au8Packet[u32Index];
@@ -98,6 +119,52 @@ void VelodynePacket::read(uint8_t au8Packet[]) {
   mu16SpinCount = *(uint16_t*)&au8Packet[u32Index];
   u32Index += sizeof(uint16_t);
   mu32Reserved = *(uint32_t*)&au8Packet[u32Index];
+}
+
+double VelodynePacket::getTimestamp() const {
+  return mf64Timestamp;
+}
+
+uint16_t VelodynePacket::getSpinCount() const {
+  return mu16SpinCount;
+}
+
+uint32_t VelodynePacket::getReserved() const {
+  return mu32Reserved;
+}
+
+const DataChunk& VelodynePacket::getDataChunk(uint16_t u16DataChunkIdx) const
+  throw(OutOfBoundException) {
+  if (u16DataChunkIdx > mcu16DataChunkNbr)
+    throw OutOfBoundException("VelodynePacket::getDataChunk: Out of bound");
+  return mData[u16DataChunkIdx];
+}
+
+const uint8_t* VelodynePacket::getRawPacket() const {
+  return mau8Packet;
+}
+
+void VelodynePacket::setTimestamp(double f64Timestamp) {
+  mf64Timestamp = f64Timestamp;
+}
+
+void VelodynePacket::setSpinCount(uint16_t u16SpinCount) {
+  mu16SpinCount = u16SpinCount;
+}
+
+void VelodynePacket::setReserved(uint32_t u32Reserved) {
+  mu32Reserved = u32Reserved;
+}
+
+void VelodynePacket::setDataChunk(const DataChunk &data,
+  uint16_t u16DataChunkIdx) throw(OutOfBoundException) {
+  if (u16DataChunkIdx > mcu16DataChunkNbr)
+    throw OutOfBoundException("VelodynePacket::getDataChunk: Out of bound");
+  mData[u16DataChunkIdx] = data;
+}
+
+void VelodynePacket::setRawPacket(const uint8_t *au8Data) {
+  memcpy(mau8Packet, au8Data, mcu16PacketSize * sizeof(uint8_t));
 }
 
 ostream& operator << (ostream &stream,

@@ -96,7 +96,8 @@ void Window::drawScene() const {
     glColor3f(1,0,0);
     glPointSize(2.0);
     glBegin(GL_POINTS);
-    glVertex3f(mPointCloudVector[i].mf64X, mPointCloudVector[i].mf64Y, mPointCloudVector[i].mf64Z);
+    glVertex3f(mPointCloudVector[i].mf64X, mPointCloudVector[i].mf64Y,
+      mPointCloudVector[i].mf64Z);
     glEnd();
   }
   glutSwapBuffers();
@@ -184,12 +185,11 @@ void Window::mouseCallback(int i32Button, int i32State, int i32X, int i32Y) {
 }
 
 void Window::addPointCloud(const VelodynePointCloud &pointCloud) {
-  for (uint32_t i = 0; i < pointCloud.mPointCloudVector.size(); i++) {
-    Point3D point;
-    point.mf64X = pointCloud.mPointCloudVector[i].mf64X;
-    point.mf64Y = pointCloud.mPointCloudVector[i].mf64Y;
-    point.mf64Z = pointCloud.mPointCloudVector[i].mf64Z;
-    mPointCloudVector.push_back(point);
+  vector<Point3D>::const_iterator itStart = pointCloud.getStartIterator();
+  vector<Point3D>::const_iterator itEnd = pointCloud.getEndIterator();
+  vector<Point3D>::const_iterator it;
+  for (it = itStart; it != itEnd; it++) {
+    mPointCloudVector.push_back((*it));
   }
 }
 
