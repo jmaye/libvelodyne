@@ -37,9 +37,11 @@ void PacketsBuffer::pushPacket(shared_ptr<VelodynePacket> packet) {
   pthread_mutex_unlock(&mMutex);
 }
 
-shared_ptr<VelodynePacket> PacketsBuffer::popPacket() {
+shared_ptr<VelodynePacket> PacketsBuffer::popPacket() throw(IOException) {
   shared_ptr<VelodynePacket> packet;
   pthread_mutex_lock(&mMutex);
+  if (mu32Content == 0)
+    throw IOException("PacketsBuffer::popPacket: empty queue");
   packet = mBuffer.front();
   mBuffer.pop_front();
   mu32Content--;

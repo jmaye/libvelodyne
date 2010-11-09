@@ -3,6 +3,7 @@
 
 #include "VelodynePacket.h"
 #include "ThreadException.h"
+#include "IOException.h"
 
 #include <boost/shared_ptr.hpp>
 
@@ -40,7 +41,7 @@ public:
   ~PacketsBuffer();
 
   void pushPacket(boost::shared_ptr<VelodynePacket> packet);
-  boost::shared_ptr<VelodynePacket> popPacket();
+  boost::shared_ptr<VelodynePacket> popPacket() throw(IOException);
 
 protected:
 

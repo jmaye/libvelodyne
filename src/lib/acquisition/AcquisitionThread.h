@@ -3,6 +3,9 @@
 
 #include "ThreadException.h"
 #include "IOException.h"
+#include "PacketsBuffer.h"
+
+#include <boost/shared_ptr.hpp>
 
 #include <pthread.h>
 
@@ -18,6 +21,7 @@ class AcquisitionThread {
   pthread_cond_t mCondition;
   pthread_attr_t mThreadAttr;
   bool bRun;
+  PacketsBuffer mPacketsBuffer;
 
 public:
   AcquisitionThread() throw(ThreadException);
@@ -25,6 +29,7 @@ public:
 
   void run();
   void stop();
+  boost::shared_ptr<VelodynePacket> getPacket() throw(IOException);
 
 protected:
 

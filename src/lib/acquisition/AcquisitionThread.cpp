@@ -2,9 +2,11 @@
 
 #include "UDPConnection.h"
 #include "VelodynePacket.h"
+#include "PacketsBuffer.h"
 
 #include <stdlib.h>
 
+using namespace boost;
 using namespace std;
 
 AcquisitionThread::AcquisitionThread() throw(ThreadException) {
@@ -84,8 +86,9 @@ void* AcquisitionThread::threadFunction(void *arg)
       pthread_testcancel();
     }
     pthread_mutex_unlock(&(classHandle->mMutex));
-    VelodynePacket vdynePacket;
-    com >> vdynePacket;
+    shared_ptr<VelodynePacket> vdynePacket(new VelodynePacket());
+    com >> *vdynePacket;
+    classHandle->mPacketsBuffer.pushPacket(vdynePacket);
     pthread_testcancel();
   }
   com.close();
@@ -106,4 +109,8 @@ void AcquisitionThread::stop() {
 }
 
 void AcquisitionThread::threadCleanupFunction(void *arg) {
+}
+
+shared_ptr<VelodynePacket> AcquisitionThread::getPacket() throw(IOException) {
+  return mPacketsBuffer.popPacket();
 }
