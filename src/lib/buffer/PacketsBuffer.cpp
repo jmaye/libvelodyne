@@ -40,46 +40,35 @@ void PacketsBuffer::pushPacket(shared_ptr<VelodynePacket> packet) {
 shared_ptr<VelodynePacket> PacketsBuffer::popPacket() throw(IOException) {
   shared_ptr<VelodynePacket> packet;
   pthread_mutex_lock(&mMutex);
-  if (mu32Content == 0)
+  if (mu32Content == 0) {
+    pthread_mutex_unlock(&mMutex);
     throw IOException("PacketsBuffer::popPacket: empty queue");
+  }
   packet = mBuffer.front();
   mBuffer.pop_front();
   mu32Content--;
   pthread_mutex_unlock(&mMutex);
+  return packet;
 }
 
-void PacketsBuffer::read(istream &stream) {
+uint32_t PacketsBuffer::getCapacity() {
+  uint32_t u32Capacity;
+  pthread_mutex_lock(&mMutex);
+  u32Capacity = mu32Capacity;
+  pthread_mutex_unlock(&mMutex);
+  return u32Capacity;
 }
 
-void PacketsBuffer::write(ostream &stream) const {
+void PacketsBuffer::setCapacity(uint32_t u32Capacity) {
+  pthread_mutex_lock(&mMutex);
+  mu32Capacity = u32Capacity;
+  pthread_mutex_unlock(&mMutex);
 }
 
-void PacketsBuffer::read(ifstream &stream) {
-}
-
-void PacketsBuffer::write(ofstream &stream) const {
-}
-
-ostream& operator << (ostream &stream,
-  const PacketsBuffer &obj) {
-  obj.write(stream);
-  return stream;
-}
-
-istream& operator >> (istream &stream,
-  PacketsBuffer &obj) {
-  obj.read(stream);
-  return stream;
-}
-
-ofstream& operator << (ofstream &stream,
-  const PacketsBuffer &obj) {
-  obj.write(stream);
-  return stream;
-}
-
-ifstream& operator >> (ifstream &stream,
-  PacketsBuffer &obj) {
-  obj.read(stream);
-  return stream;
+uint32_t PacketsBuffer::getContent() {
+  uint32_t u32Content;
+  pthread_mutex_lock(&mMutex);
+  u32Content = mu32Content;
+  pthread_mutex_unlock(&mMutex);
+  return u32Content;
 }

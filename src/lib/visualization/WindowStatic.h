@@ -1,30 +1,17 @@
-#ifndef WINDOW_H
-#define WINDOW_H
+#ifndef WINDOWSTATIC_H
+#define WINDOWSTATIC_H
 
-#include <VelodynePointCloud.h>
+#include "VelodynePointCloud.h"
+#include "AcquisitionThread.h"
+#include "VelodyneCalibration.h"
 
-#include <iosfwd>
 #include <vector>
 
 #include <stdint.h>
 
-class Window {
-  friend std::ostream& operator << (std::ostream &stream,
-    const Window &obj);
-  friend std::istream& operator >> (std::istream &stream,
-    Window &obj);
-  friend std::ofstream& operator << (std::ofstream &stream,
-    const Window &obj);
-  friend std::ifstream& operator >> (std::ifstream &stream,
-    Window &obj);
-
-  Window(const Window &other);
-  Window& operator = (const Window &other);
-
-  virtual void read(std::istream &stream);
-  virtual void write(std::ostream &stream) const;
-  virtual void read(std::ifstream &stream);
-  virtual void write(std::ofstream &stream) const;
+class WindowStatic {
+  WindowStatic(const WindowStatic &other);
+  WindowStatic& operator = (const WindowStatic &other);
 
   void drawBackground(float f32Red, float f32Green, float f32Blue) const;
   void drawAxes(float f32Length) const;
@@ -59,9 +46,9 @@ class Window {
   std::vector<Point3D> mPointCloudVector;
 
 public:
-  Window();
-  Window(int argc, char **argv, int i32Width = 640, int i32Height = 480);
-  ~Window();
+  WindowStatic();
+  WindowStatic(int argc, char **argv, int i32Width = 640, int i32Height = 480);
+  ~WindowStatic();
 
   void show() const;
   void redraw() const;
@@ -76,4 +63,4 @@ protected:
 
 };
 
-#endif // WINDOW_H
+#endif // WINDOWSTATIC_H

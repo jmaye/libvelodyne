@@ -1,7 +1,4 @@
-#include "VelodyneCalibration.h"
-#include "VelodynePacket.h"
-#include "VelodynePointCloud.h"
-#include "Window.h"
+#include "WindowLive.h"
 
 #include <iostream>
 #include <fstream>
@@ -9,22 +6,12 @@
 using namespace std;
 
 int main(int argc, char **argv) {
-  if (argc != 3) {
-    cerr << "Usage: " << argv[0] << " <logFile> <calibrationFile>"
+  if (argc != 2) {
+    cerr << "Usage: " << argv[0] << "<calibrationFile>"
          << endl;
     return -1;
   }
-  Window window(argc, argv);
-  ifstream logFile(argv[1], ios::in | ios::binary);
-  VelodyneCalibration vdyneCalibration;
-  ifstream calibFile(argv[2]);
-  calibFile >> vdyneCalibration;
-  while (logFile.eof() != true) {
-    VelodynePacket vdynePacket;
-    logFile >> vdynePacket;
-    VelodynePointCloud pointCloud(vdynePacket, vdyneCalibration);
-    window.addPointCloud(pointCloud);
-  }
+  WindowLive window(argc, argv);
   window.setTranslation(0, -10, -60);
   window.setRotation(0, 30, 0);
   window.setVisibility(true);

@@ -7,29 +7,14 @@
 
 #include <boost/shared_ptr.hpp>
 
-#include <iosfwd>
 #include <deque>
 
 #include <pthread.h>
 #include <stdint.h>
 
 class PacketsBuffer {
-  friend std::ostream& operator << (std::ostream &stream,
-    const PacketsBuffer &obj);
-  friend std::istream& operator >> (std::istream &stream,
-    PacketsBuffer &obj);
-  friend std::ofstream& operator << (std::ofstream &stream,
-    const PacketsBuffer &obj);
-  friend std::ifstream& operator >> (std::ifstream &stream,
-    PacketsBuffer &obj);
-
   PacketsBuffer(const PacketsBuffer &other);
   PacketsBuffer& operator = (const PacketsBuffer &other);
-
-  virtual void read(std::istream &stream);
-  virtual void write(std::ostream &stream) const;
-  virtual void read(std::ifstream &stream);
-  virtual void write(std::ofstream &stream) const;
 
   std::deque<boost::shared_ptr<VelodynePacket> > mBuffer;
   pthread_mutex_t mMutex;
@@ -42,6 +27,9 @@ public:
 
   void pushPacket(boost::shared_ptr<VelodynePacket> packet);
   boost::shared_ptr<VelodynePacket> popPacket() throw(IOException);
+  uint32_t getCapacity();
+  uint32_t getContent();
+  void setCapacity(uint32_t u32Capacity);
 
 protected:
 

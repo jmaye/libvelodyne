@@ -1,6 +1,5 @@
 #include "AcquisitionThread.h"
-
-#include <boost/shared_ptr.hpp>
+#include "IOException.h"
 
 #include <iostream>
 #include <fstream>
@@ -19,8 +18,12 @@ int main(int argc, char **argv) {
   AcquisitionThread acqThread;
   acqThread.run();
   for (uint32_t i = 0; i < atoi(argv[2]); i++) {
-    shared_ptr<VelodynePacket> vdynePacket = acqThread.getPacket();
-    logFile << *vdynePacket;
+    try {
+      logFile << *(acqThread.getPacket());
+    }
+    catch(IOException &e) {
+     i--;
+    }
   }
   acqThread.stop();
   return 0;

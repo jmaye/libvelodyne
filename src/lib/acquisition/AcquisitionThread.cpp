@@ -4,6 +4,8 @@
 #include "VelodynePacket.h"
 #include "PacketsBuffer.h"
 
+#include <iostream>
+
 #include <stdlib.h>
 
 using namespace boost;

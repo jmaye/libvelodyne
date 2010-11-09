@@ -1,4 +1,4 @@
-#include "Window.h"
+#include "WindowLive.h"
 
 #include <GL/glut.h>
 #include <GL/glu.h>
@@ -9,10 +9,10 @@
 
 using namespace std;
 
-Window::Window() {
+WindowLive::WindowLive() {
 }
 
-Window::Window(int argc, char **argv, int i32Width, int i32Height) :
+WindowLive::WindowLive(int argc, char **argv, int i32Width, int i32Height) :
   mi32Width(i32Width),
   mi32Height(i32Height),
   mf64Scale(1.0),
@@ -32,52 +32,57 @@ Window::Window(int argc, char **argv, int i32Width, int i32Height) :
   glutKeyboardFunc(keyboardCallback);
   glutMouseFunc(mouseCallback);
   glutMotionFunc(motionCallback);
+  mAcqThread.run();
+  glutTimerFunc(10, timerCallback, 0);
+  ifstream calibFile(argv[1]);
+  calibFile >> mVelodyneCalibration;
 }
 
-Window::Window(const Window &other) {
+WindowLive::WindowLive(const WindowLive &other) {
 }
 
-Window& Window::operator = (const Window &other) {
+WindowLive& WindowLive::operator = (const WindowLive &other) {
 }
 
-Window::~Window() {
+WindowLive::~WindowLive() {
+  mAcqThread.stop();
 }
 
-void Window::show() const {
+void WindowLive::show() const {
   glutSetWindow(mi32ID);
   glutMainLoop();
 }
 
-void Window::redraw() const {
+void WindowLive::redraw() const {
   glutSetWindow(mi32ID);
   glutPostRedisplay();
 }
 
-void Window::setTranslation(double f64X, double f64Y, double f64Z) {
+void WindowLive::setTranslation(double f64X, double f64Y, double f64Z) {
   mTranslation.mf64X = f64X;
   mTranslation.mf64Y = f64Y;
   mTranslation.mf64Z = f64Z;
   glutPostRedisplay();
 }
 
-void Window::setRotation(double f64Yaw, double f64Pitch, double f64Roll) {
+void WindowLive::setRotation(double f64Yaw, double f64Pitch, double f64Roll) {
   mRotation.mf64X = f64Pitch;
   mRotation.mf64Y = f64Yaw;
   mRotation.mf64Z = f64Roll;
   glutPostRedisplay();
 }
 
-void Window::setScale(double f64Scale) {
+void WindowLive::setScale(double f64Scale) {
   mf64Scale = f64Scale;
   glutPostRedisplay();
 }
 
-void Window::setVisibility(bool bShowAxes) {
+void WindowLive::setVisibility(bool bShowAxes) {
   mbShowAxes = bShowAxes;
   glutPostRedisplay();
 }
 
-void Window::drawScene() const {
+void WindowLive::drawScene() const {
   glShadeModel(GL_SMOOTH);
   glEnable(GL_DEPTH_TEST);
   glDepthFunc(GL_LEQUAL);
@@ -104,13 +109,14 @@ void Window::drawScene() const {
   glFlush();
 }
 
-void Window::drawBackground(float f32Red, float f32Green, float f32Blue) const {
+void WindowLive::drawBackground(float f32Red, float f32Green, float f32Blue)
+  const {
   glClearColor(f32Red, f32Green, f32Blue, 0.0f);
   glClearDepth(1.0f);
   glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 }
 
-void Window::drawAxes(float f32Length) const {
+void WindowLive::drawAxes(float f32Length) const {
   glBegin(GL_LINES);
   glColor3f(1, 0, 0);
   glVertex3f(0, 0, 0);
@@ -124,13 +130,13 @@ void Window::drawAxes(float f32Length) const {
   glEnd();
 }
 
-void Window::displayCallback() {
-  Window* window = (Window*)glutGetWindowData();
+void WindowLive::displayCallback() {
+  WindowLive* window = (WindowLive*)glutGetWindowData();
   window->drawScene();
 }
 
-void Window::reshapeCallback(int i32Width, int i32Height) {
-  Window* window = (Window*)glutGetWindowData();
+void WindowLive::reshapeCallback(int i32Width, int i32Height) {
+  WindowLive* window = (WindowLive*)glutGetWindowData();
   if (i32Height == 0)
     i32Height = 1;
   window->mi32Width = i32Width;
@@ -144,8 +150,8 @@ void Window::reshapeCallback(int i32Width, int i32Height) {
   glLoadIdentity();
 }
 
-void Window::motionCallback(int i32X, int i32Y) {
-  Window* window = (Window*)glutGetWindowData();
+void WindowLive::motionCallback(int i32X, int i32Y) {
+  WindowLive* window = (WindowLive*)glutGetWindowData();
   if (window->mi32MouseState == GLUT_DOWN) {
     if (window->mi32MouseButton == GLUT_LEFT_BUTTON) {
       window->mRotation.mf64Y += (i32X - window->mi32StartX);
@@ -166,8 +172,9 @@ void Window::motionCallback(int i32X, int i32Y) {
   }
 }
 
-void Window::mouseCallback(int i32Button, int i32State, int i32X, int i32Y) {
-  Window* window = (Window*)glutGetWindowData();
+void WindowLive::mouseCallback(int i32Button, int i32State, int i32X,
+  int i32Y) {
+  WindowLive* window = (WindowLive*)glutGetWindowData();
   float f32DScale = 1.1;
   if (i32Button == mci32GlutWheelUp) {
     window->mf64Scale *= f32DScale;
@@ -184,7 +191,7 @@ void Window::mouseCallback(int i32Button, int i32State, int i32X, int i32Y) {
   window->redraw();
 }
 
-void Window::addPointCloud(const VelodynePointCloud &pointCloud) {
+void WindowLive::addPointCloud(const VelodynePointCloud &pointCloud) {
   vector<Point3D>::const_iterator itStart = pointCloud.getStartIterator();
   vector<Point3D>::const_iterator itEnd = pointCloud.getEndIterator();
   vector<Point3D>::const_iterator it;
@@ -193,41 +200,10 @@ void Window::addPointCloud(const VelodynePointCloud &pointCloud) {
   }
 }
 
-void Window::keyboardCallback(unsigned char u8Key, int i32X, int i32Y) {
+void WindowLive::keyboardCallback(unsigned char u8Key, int i32X, int i32Y) {
 }
 
-void Window::read(istream &stream) {
-}
-
-void Window::write(ostream &stream) const {
-}
-
-void Window::read(ifstream &stream) {
-}
-
-void Window::write(ofstream &stream) const {
-}
-
-ostream& operator << (ostream &stream,
-  const Window &obj) {
-  obj.write(stream);
-  return stream;
-}
-
-istream& operator >> (istream &stream,
-  Window &obj) {
-  obj.read(stream);
-  return stream;
-}
-
-ofstream& operator << (ofstream &stream,
-  const Window &obj) {
-  obj.write(stream);
-  return stream;
-}
-
-ifstream& operator >> (ifstream &stream,
-  Window &obj) {
-  obj.read(stream);
-  return stream;
+void WindowLive::timerCallback(int i32Value) {
+  WindowLive* window = (WindowLive*)glutGetWindowData();
+  *(window->mAcqThread.getPacket());
 }
