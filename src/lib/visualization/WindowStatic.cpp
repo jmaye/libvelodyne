@@ -4,9 +4,6 @@
 #include <GL/glu.h>
 #include <GL/freeglut.h>
 
-#include <iostream>
-#include <fstream>
-
 using namespace std;
 
 WindowStatic::WindowStatic() {
@@ -41,6 +38,7 @@ WindowStatic& WindowStatic::operator = (const WindowStatic &other) {
 }
 
 WindowStatic::~WindowStatic() {
+  glDeleteLists(mListIndex, 1);
 }
 
 void WindowStatic::show() const {
@@ -92,14 +90,7 @@ void WindowStatic::drawScene() const {
   drawBackground(1.0f, 1.0f, 1.0f);
   if (mbShowAxes)
     drawAxes(3.0);
-  for (uint32_t i = 0; i < mPointCloudVector.size(); i++) {
-    glColor3f(1,0,0);
-    glPointSize(2.0);
-    glBegin(GL_POINTS);
-    glVertex3f(mPointCloudVector[i].mf64X, mPointCloudVector[i].mf64Y,
-      mPointCloudVector[i].mf64Z);
-    glEnd();
-  }
+  glCallList(mListIndex);
   glutSwapBuffers();
   glFlush();
 }
@@ -126,12 +117,12 @@ void WindowStatic::drawAxes(float f32Length) const {
 }
 
 void WindowStatic::displayCallback() {
-  WindowStatic* window = (WindowStatic*)glutGetWindowData();
+  WindowStatic *window = (WindowStatic*)glutGetWindowData();
   window->drawScene();
 }
 
 void WindowStatic::reshapeCallback(int i32Width, int i32Height) {
-  WindowStatic* window = (WindowStatic*)glutGetWindowData();
+  WindowStatic *window = (WindowStatic*)glutGetWindowData();
   if (i32Height == 0)
     i32Height = 1;
   window->mi32Width = i32Width;
@@ -146,7 +137,7 @@ void WindowStatic::reshapeCallback(int i32Width, int i32Height) {
 }
 
 void WindowStatic::motionCallback(int i32X, int i32Y) {
-  WindowStatic* window = (WindowStatic*)glutGetWindowData();
+  WindowStatic *window = (WindowStatic*)glutGetWindowData();
   if (window->mi32MouseState == GLUT_DOWN) {
     if (window->mi32MouseButton == GLUT_LEFT_BUTTON) {
       window->mRotation.mf64Y += (i32X - window->mi32StartX);
@@ -169,7 +160,7 @@ void WindowStatic::motionCallback(int i32X, int i32Y) {
 
 void WindowStatic::mouseCallback(int i32Button, int i32State, int i32X,
   int i32Y) {
-  WindowStatic* window = (WindowStatic*)glutGetWindowData();
+  WindowStatic *window = (WindowStatic*)glutGetWindowData();
   float f32DScale = 1.1;
   if (i32Button == mci32GlutWheelUp) {
     window->mf64Scale *= f32DScale;
@@ -196,4 +187,22 @@ void WindowStatic::addPointCloud(const VelodynePointCloud &pointCloud) {
 }
 
 void WindowStatic::keyboardCallback(unsigned char u8Key, int i32X, int i32Y) {
+  WindowStatic *window = (WindowStatic*)glutGetWindowData();
+  if (u8Key == 'q') {
+    glutDestroyWindow(window->mi32ID);
+  }
+}
+
+void WindowStatic::createGlList() {
+  mListIndex = glGenLists(1);
+  glNewList(mListIndex, GL_COMPILE);
+  glColor3f(1,0,0);
+  glPointSize(2.0);
+  glBegin(GL_POINTS);
+  for (uint32_t i = 0; i < mPointCloudVector.size(); i++) {
+    glVertex3f(mPointCloudVector[i].mf64X, mPointCloudVector[i].mf64Y,
+      mPointCloudVector[i].mf64Z);
+  }
+  glEnd();
+  glEndList();
 }

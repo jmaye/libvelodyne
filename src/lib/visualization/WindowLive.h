@@ -60,7 +60,6 @@ public:
   void setScale(double f64Scale);
   void setVisibility(bool bShowAxes);
   void drawScene() const;
-  void addPointCloud(const VelodynePointCloud &pointCloud);
 
 protected:
 

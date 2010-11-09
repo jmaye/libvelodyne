@@ -131,12 +131,12 @@ void WindowLive::drawAxes(float f32Length) const {
 }
 
 void WindowLive::displayCallback() {
-  WindowLive* window = (WindowLive*)glutGetWindowData();
+  WindowLive *window = (WindowLive*)glutGetWindowData();
   window->drawScene();
 }
 
 void WindowLive::reshapeCallback(int i32Width, int i32Height) {
-  WindowLive* window = (WindowLive*)glutGetWindowData();
+  WindowLive *window = (WindowLive*)glutGetWindowData();
   if (i32Height == 0)
     i32Height = 1;
   window->mi32Width = i32Width;
@@ -151,7 +151,7 @@ void WindowLive::reshapeCallback(int i32Width, int i32Height) {
 }
 
 void WindowLive::motionCallback(int i32X, int i32Y) {
-  WindowLive* window = (WindowLive*)glutGetWindowData();
+  WindowLive *window = (WindowLive*)glutGetWindowData();
   if (window->mi32MouseState == GLUT_DOWN) {
     if (window->mi32MouseButton == GLUT_LEFT_BUTTON) {
       window->mRotation.mf64Y += (i32X - window->mi32StartX);
@@ -174,7 +174,7 @@ void WindowLive::motionCallback(int i32X, int i32Y) {
 
 void WindowLive::mouseCallback(int i32Button, int i32State, int i32X,
   int i32Y) {
-  WindowLive* window = (WindowLive*)glutGetWindowData();
+  WindowLive *window = (WindowLive*)glutGetWindowData();
   float f32DScale = 1.1;
   if (i32Button == mci32GlutWheelUp) {
     window->mf64Scale *= f32DScale;
@@ -191,19 +191,26 @@ void WindowLive::mouseCallback(int i32Button, int i32State, int i32X,
   window->redraw();
 }
 
-void WindowLive::addPointCloud(const VelodynePointCloud &pointCloud) {
-  vector<Point3D>::const_iterator itStart = pointCloud.getStartIterator();
-  vector<Point3D>::const_iterator itEnd = pointCloud.getEndIterator();
-  vector<Point3D>::const_iterator it;
-  for (it = itStart; it != itEnd; it++) {
-    mPointCloudVector.push_back((*it));
+void WindowLive::keyboardCallback(unsigned char u8Key, int i32X, int i32Y) {
+  WindowLive *window = (WindowLive*)glutGetWindowData();
+  if (u8Key == 'q') {
+    glutDestroyWindow(window->mi32ID);
   }
 }
 
-void WindowLive::keyboardCallback(unsigned char u8Key, int i32X, int i32Y) {
-}
-
 void WindowLive::timerCallback(int i32Value) {
-  WindowLive* window = (WindowLive*)glutGetWindowData();
-  *(window->mAcqThread.getPacket());
+  WindowLive *window = (WindowLive*)glutGetWindowData();
+  VelodynePointCloud pointCloud(*(window->mAcqThread.getPacket()),
+    window->mVelodyneCalibration);
+  vector<Point3D>::const_iterator itStart = pointCloud.getStartIterator();
+  vector<Point3D>::const_iterator itEnd = pointCloud.getEndIterator();
+  vector<Point3D>::const_iterator it;
+  GLuint index = glGenLists(1);
+  glNewList(index, GL_COMPILE);
+  glBegin(GL_POINTS);
+  for (it = itStart; it != itEnd; it++) {
+    glVertex3f((*it).mf64X, (*it).mf64Y, (*it).mf64Z);
+  }
+  glEnd();
+  glEndList();
 }

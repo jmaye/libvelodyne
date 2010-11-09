@@ -25,6 +25,7 @@ int main(int argc, char **argv) {
     VelodynePointCloud pointCloud(vdynePacket, vdyneCalibration);
     window.addPointCloud(pointCloud);
   }
+  window.createGlList();
   window.setTranslation(0, -10, -60);
   window.setRotation(0, 30, 0);
   window.setVisibility(true);

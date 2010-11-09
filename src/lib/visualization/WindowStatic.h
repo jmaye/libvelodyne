@@ -2,8 +2,9 @@
 #define WINDOWSTATIC_H
 
 #include "VelodynePointCloud.h"
-#include "AcquisitionThread.h"
 #include "VelodyneCalibration.h"
+
+#include <GL/gl.h>
 
 #include <vector>
 
@@ -45,6 +46,8 @@ class WindowStatic {
 
   std::vector<Point3D> mPointCloudVector;
 
+  GLuint mListIndex;
+
 public:
   WindowStatic();
   WindowStatic(int argc, char **argv, int i32Width = 640, int i32Height = 480);
@@ -58,6 +61,7 @@ public:
   void setVisibility(bool bShowAxes);
   void drawScene() const;
   void addPointCloud(const VelodynePointCloud &pointCloud);
+  void createGlList();
 
 protected:
 
