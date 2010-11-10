@@ -1,1 +1,2 @@
-remake_add_directories(exceptions com sensor acquisition buffer visualization)
+remake_include(*)
+remake_add_directories()
