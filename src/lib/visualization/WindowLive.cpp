@@ -22,7 +22,7 @@ WindowLive::WindowLive(int argc, char **argv, int i32Width, int i32Height) :
   mi32MouseState(-1),
   mi32StartX(0),
   mi32StartY(0),
-  mu16OldRotationalInfo(0),
+  mf64OldRotationalInfo(0),
   mu32Content(0) {
   glutInit(&argc, argv);
   glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB | GLUT_DEPTH);
@@ -109,10 +109,20 @@ void WindowLive::drawScene() {
     vector<Point3D>::const_iterator itStart = pointCloud.getStartIterator();
     vector<Point3D>::const_iterator itEnd = pointCloud.getEndIterator();
     vector<Point3D>::const_iterator it;
+    if (pointCloud.getEndRotationAngle() < mf64OldRotationalInfo) {
+      for (uint32_t i = 0; i < mListQueue.size(); i++) {
+        GLuint index = mListQueue.front();
+        glDeleteLists(index, 1);
+        mListQueue.pop_front();
+        mu32Content--;
+      }
+    }
+    mf64OldRotationalInfo = pointCloud.getEndRotationAngle();
     GLuint index = glGenLists(1);
     glNewList(index, GL_COMPILE);
     glBegin(GL_POINTS);
     for (it = itStart; it != itEnd; it++) {
+      glColor3f(0, 0, (*it).mu8Intensity);
       glVertex3f((*it).mf64X, (*it).mf64Y, (*it).mf64Z);
     }
     glEnd();

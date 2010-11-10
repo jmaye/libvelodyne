@@ -35,6 +35,7 @@ WindowStatic::WindowStatic(const WindowStatic &other) {
 }
 
 WindowStatic& WindowStatic::operator = (const WindowStatic &other) {
+  return *this;
 }
 
 WindowStatic::~WindowStatic() {
@@ -197,10 +198,10 @@ void WindowStatic::keyboardCallback(unsigned char u8Key, int i32X, int i32Y) {
 void WindowStatic::createGlList() {
   mListIndex = glGenLists(1);
   glNewList(mListIndex, GL_COMPILE);
-  glColor3f(1,0,0);
   glPointSize(2.0);
   glBegin(GL_POINTS);
   for (uint32_t i = 0; i < mPointCloudVector.size(); i++) {
+    glColor3f(0, 0, mPointCloudVector[i].mu8Intensity);
     glVertex3f(mPointCloudVector[i].mf64X, mPointCloudVector[i].mf64Y,
       mPointCloudVector[i].mf64Z);
   }

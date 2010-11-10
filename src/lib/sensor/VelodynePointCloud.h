@@ -56,6 +56,8 @@ class VelodynePointCloud {
 
   double mf64Timestamp;
   std::vector<Point3D> mPointCloudVector;
+  double mf64StartRotationAngle;
+  double mf64EndRotationAngle;
 
 public:
   VelodynePointCloud();
@@ -64,10 +66,14 @@ public:
   ~VelodynePointCloud();
 
   double getTimestamp() const;
+  double getStartRotationAngle() const;
+  double getEndRotationAngle() const;
   std::vector<Point3D>::const_iterator getStartIterator() const;
   std::vector<Point3D>::const_iterator getEndIterator() const;
   uint32_t getSize() const;
   void setTimestamp(double f64Timestamp);
+  void setStartRotationAngle(double f64Angle);
+  void setEndRotationAngle(double f64Angle);
   void pushPoint(const Point3D &point);
 
 protected:

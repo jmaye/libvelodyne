@@ -7,7 +7,9 @@
 
 using namespace std;
 
-VelodynePointCloud::VelodynePointCloud() : mf64Timestamp(0) {
+VelodynePointCloud::VelodynePointCloud() : mf64Timestamp(0),
+                                           mf64StartRotationAngle(0),
+                                           mf64EndRotationAngle(0) {
 }
 
 VelodynePointCloud::VelodynePointCloud(const VelodynePacket &vdynePacket,
@@ -22,6 +24,11 @@ VelodynePointCloud::VelodynePointCloud(const VelodynePacket &vdynePacket,
     double f64Rotation =
       vdyneCalibration.deg2rad((double)data.mu16RotationalInfo /
       (double)vdynePacket.mcu16RotationResolution);
+
+    if (i == 0)
+      mf64StartRotationAngle = f64Rotation;
+    else if (i == vdynePacket.mcu16DataChunkNbr -1)
+      mf64EndRotationAngle = f64Rotation;
 
     for (uint32_t j = 0; j < data.mcu16LasersPerPacket; j++) {
       uint32_t u32LaserIdx = u32IdxOffs + j;
@@ -124,6 +131,22 @@ void VelodynePointCloud::pushPoint(const Point3D &point) {
 
 uint32_t VelodynePointCloud::getSize() const {
   return mPointCloudVector.size();
+}
+
+double VelodynePointCloud::getStartRotationAngle() const {
+  return mf64StartRotationAngle;
+}
+
+double VelodynePointCloud::getEndRotationAngle() const {
+  return mf64EndRotationAngle;
+}
+
+void VelodynePointCloud::setStartRotationAngle(double f64Angle) {
+  mf64StartRotationAngle = f64Angle;
+}
+
+void VelodynePointCloud::setEndRotationAngle(double f64Angle) {
+  mf64EndRotationAngle = f64Angle;
 }
 
 ostream& operator << (ostream &stream,

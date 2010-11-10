@@ -16,7 +16,7 @@ int main(int argc, char **argv) {
   ofstream logFile (argv[1], ios::out | ios::binary);
   UDPConnection com;
   com.open();
-  for (uint32_t i = 0; i < atoi(argv[2]); i++) {
+  for (uint32_t i = 0; i < (uint32_t)atoi(argv[2]); i++) {
     VelodynePacket vdynePacket;
     com >> vdynePacket;
     logFile << vdynePacket;
