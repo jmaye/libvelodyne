@@ -13,9 +13,9 @@
 using namespace std;
 
 UDPConnection::UDPConnection(uint16_t u16Port, double f64Timeout)
- : mu16Port(u16Port),
-   mf64Timeout(f64Timeout),
-   mi32Socket(0) {
+  : mu16Port(u16Port),
+    mf64Timeout(f64Timeout),
+    mi32Socket(0) {
 }
 
 UDPConnection::~UDPConnection() {
