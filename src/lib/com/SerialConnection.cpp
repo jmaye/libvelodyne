@@ -218,8 +218,8 @@ void SerialConnection::readBuffer(uint8_t *au8Buffer, uint32_t u32NbBytes)
   }
 }
 
-void SerialConnection::writeBuffer(uint8_t *au8Buffer, uint32_t u32NbBytes)
-  throw(IOException) {
+void SerialConnection::writeBuffer(const uint8_t *au8Buffer,
+  uint32_t u32NbBytes) throw(IOException) {
   if (isOpen() == false)
     open();
   double f64IntPart;

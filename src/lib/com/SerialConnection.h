@@ -47,7 +47,8 @@ public:
   void close() throw(IOException);
   bool isOpen() const;
   void readBuffer(uint8_t *au8Buffer, uint32_t u32NbBytes) throw(IOException);
-  void writeBuffer(uint8_t *au8Buffer, uint32_t u32NbBytes) throw(IOException);
+  void writeBuffer(const uint8_t *au8Buffer, uint32_t u32NbBytes)
+    throw(IOException);
 
 protected:
 
