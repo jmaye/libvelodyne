@@ -1,4 +1,5 @@
 #include "WindowLive.h"
+#include "IOException.h"
 
 #include <GL/glut.h>
 #include <GL/glu.h>
@@ -20,7 +21,9 @@ WindowLive::WindowLive(int argc, char **argv, int i32Width, int i32Height) :
   mi32MouseButton(-1),
   mi32MouseState(-1),
   mi32StartX(0),
-  mi32StartY(0) {
+  mi32StartY(0),
+  mu32Content(0),
+  mu32Capacity(2000) {
   glutInit(&argc, argv);
   glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB | GLUT_DEPTH);
   glutInitWindowSize(i32Width, i32Height);
@@ -33,7 +36,7 @@ WindowLive::WindowLive(int argc, char **argv, int i32Width, int i32Height) :
   glutMouseFunc(mouseCallback);
   glutMotionFunc(motionCallback);
   mAcqThread.run();
-  glutTimerFunc(10, timerCallback, 0);
+  glutTimerFunc(40, timerCallback, 0);
   ifstream calibFile(argv[1]);
   calibFile >> mVelodyneCalibration;
 }
@@ -46,6 +49,8 @@ WindowLive& WindowLive::operator = (const WindowLive &other) {
 
 WindowLive::~WindowLive() {
   mAcqThread.stop();
+  for (uint32_t i = 0; i < mListQueue.size(); i++)
+    glDeleteLists(mListQueue[i], 1);
 }
 
 void WindowLive::show() const {
@@ -82,7 +87,7 @@ void WindowLive::setVisibility(bool bShowAxes) {
   glutPostRedisplay();
 }
 
-void WindowLive::drawScene() const {
+void WindowLive::drawScene() {
   glShadeModel(GL_SMOOTH);
   glEnable(GL_DEPTH_TEST);
   glDepthFunc(GL_LEQUAL);
@@ -97,14 +102,33 @@ void WindowLive::drawScene() const {
   drawBackground(1.0f, 1.0f, 1.0f);
   if (mbShowAxes)
     drawAxes(3.0);
-  for (uint32_t i = 0; i < mPointCloudVector.size(); i++) {
-    glColor3f(1,0,0);
-    glPointSize(2.0);
+  try {
+    VelodynePointCloud pointCloud(*(mAcqThread.getPacket()),
+      mVelodyneCalibration);
+    vector<Point3D>::const_iterator itStart = pointCloud.getStartIterator();
+    vector<Point3D>::const_iterator itEnd = pointCloud.getEndIterator();
+    vector<Point3D>::const_iterator it;
+    GLuint index = glGenLists(1);
+    glNewList(index, GL_COMPILE);
     glBegin(GL_POINTS);
-    glVertex3f(mPointCloudVector[i].mf64X, mPointCloudVector[i].mf64Y,
-      mPointCloudVector[i].mf64Z);
+    for (it = itStart; it != itEnd; it++) {
+      glVertex3f((*it).mf64X, (*it).mf64Y, (*it).mf64Z);
+    }
     glEnd();
+    glEndList();
+    mListQueue.push_back(index);
+    mu32Content++;
+    if (mu32Content > mu32Capacity) {
+      GLuint index = mListQueue.front();
+      glDeleteLists(index, 1);
+      mListQueue.pop_front();
+      mu32Content--;
+    }
   }
+  catch (IOException &e) {
+  }
+  for (uint32_t i = 0; i < mListQueue.size(); i++)
+    glCallList(mListQueue[i]);
   glutSwapBuffers();
   glFlush();
 }
@@ -195,22 +219,12 @@ void WindowLive::keyboardCallback(unsigned char u8Key, int i32X, int i32Y) {
   WindowLive *window = (WindowLive*)glutGetWindowData();
   if (u8Key == 'q') {
     glutDestroyWindow(window->mi32ID);
+    exit(0);
   }
 }
 
 void WindowLive::timerCallback(int i32Value) {
   WindowLive *window = (WindowLive*)glutGetWindowData();
-  VelodynePointCloud pointCloud(*(window->mAcqThread.getPacket()),
-    window->mVelodyneCalibration);
-  vector<Point3D>::const_iterator itStart = pointCloud.getStartIterator();
-  vector<Point3D>::const_iterator itEnd = pointCloud.getEndIterator();
-  vector<Point3D>::const_iterator it;
-  GLuint index = glGenLists(1);
-  glNewList(index, GL_COMPILE);
-  glBegin(GL_POINTS);
-  for (it = itStart; it != itEnd; it++) {
-    glVertex3f((*it).mf64X, (*it).mf64Y, (*it).mf64Z);
-  }
-  glEnd();
-  glEndList();
+  glutTimerFunc(40, timerCallback, 0);
+  window->redraw();
 }

@@ -1,11 +1,13 @@
 #ifndef WINDOWLIVE_H
 #define WINDOWLIVE_H
 
-#include "VelodynePointCloud.h"
 #include "AcquisitionThread.h"
 #include "VelodyneCalibration.h"
+#include "VelodynePointCloud.h"
 
-#include <vector>
+#include <GL/gl.h>
+
+#include <deque>
 
 #include <stdint.h>
 
@@ -44,9 +46,11 @@ class WindowLive {
   int mi32StartX;
   int mi32StartY;
 
-  std::vector<Point3D> mPointCloudVector;
   AcquisitionThread mAcqThread;
   VelodyneCalibration mVelodyneCalibration;
+  std::deque<GLuint> mListQueue;
+  uint32_t mu32Capacity;
+  uint32_t mu32Content;
 
 public:
   WindowLive();
@@ -59,7 +63,7 @@ public:
   void setRotation(double f64Yaw, double f64Pitch, double f64Roll);
   void setScale(double f64Scale);
   void setVisibility(bool bShowAxes);
-  void drawScene() const;
+  void drawScene();
 
 protected:
 
