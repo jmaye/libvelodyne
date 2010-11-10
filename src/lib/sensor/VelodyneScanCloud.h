@@ -58,8 +58,8 @@ class VelodyneScanCloud {
 
   double normalizeAngle(double f64Angle) const;
 
-  std::vector<Scan> mScanCloudVector;
   double mf64Timestamp;
+  std::vector<Scan> mScanCloudVector;
 
 public:
   VelodyneScanCloud();

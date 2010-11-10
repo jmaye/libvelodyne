@@ -29,6 +29,8 @@ class WindowLive {
   static const int32_t mci32InitY = 100;
   static const int32_t mci32GlutWheelUp = 3;
   static const int32_t mci32GlutWheelDown = 4;
+  static const uint32_t mcu32Capacity = 1000;
+  static const uint32_t mcu32TimerShot = 40;
 
   int mi32ID;
   int mi32Width;
@@ -45,11 +47,11 @@ class WindowLive {
   int mi32MouseState;
   int mi32StartX;
   int mi32StartY;
+  uint16_t mu16OldRotationalInfo;
 
   AcquisitionThread mAcqThread;
   VelodyneCalibration mVelodyneCalibration;
   std::deque<GLuint> mListQueue;
-  uint32_t mu32Capacity;
   uint32_t mu32Content;
 
 public:

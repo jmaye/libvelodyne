@@ -22,8 +22,8 @@ WindowLive::WindowLive(int argc, char **argv, int i32Width, int i32Height) :
   mi32MouseState(-1),
   mi32StartX(0),
   mi32StartY(0),
-  mu32Content(0),
-  mu32Capacity(2000) {
+  mu16OldRotationalInfo(0),
+  mu32Content(0) {
   glutInit(&argc, argv);
   glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB | GLUT_DEPTH);
   glutInitWindowSize(i32Width, i32Height);
@@ -36,7 +36,7 @@ WindowLive::WindowLive(int argc, char **argv, int i32Width, int i32Height) :
   glutMouseFunc(mouseCallback);
   glutMotionFunc(motionCallback);
   mAcqThread.run();
-  glutTimerFunc(40, timerCallback, 0);
+  glutTimerFunc(mcu32TimerShot, timerCallback, 0);
   ifstream calibFile(argv[1]);
   calibFile >> mVelodyneCalibration;
 }
@@ -118,7 +118,7 @@ void WindowLive::drawScene() {
     glEndList();
     mListQueue.push_back(index);
     mu32Content++;
-    if (mu32Content > mu32Capacity) {
+    if (mu32Content > mcu32Capacity) {
       GLuint index = mListQueue.front();
       glDeleteLists(index, 1);
       mListQueue.pop_front();
@@ -225,6 +225,6 @@ void WindowLive::keyboardCallback(unsigned char u8Key, int i32X, int i32Y) {
 
 void WindowLive::timerCallback(int i32Value) {
   WindowLive *window = (WindowLive*)glutGetWindowData();
-  glutTimerFunc(40, timerCallback, 0);
+  glutTimerFunc(mcu32TimerShot, timerCallback, 0);
   window->redraw();
 }

@@ -26,6 +26,7 @@ UDPConnection::UDPConnection(const UDPConnection &other) {
 }
 
 UDPConnection& UDPConnection::operator = (const UDPConnection &other) {
+  return *this;
 }
 
 uint16_t UDPConnection::getPort() const {

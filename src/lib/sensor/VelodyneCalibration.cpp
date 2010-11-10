@@ -21,6 +21,7 @@ VelodyneCalibration& VelodyneCalibration::operator =
   for (uint32_t i = 0; i < mcu16LasersNbr; i++) {
     mCorr[i] = other.mCorr[i];
   }
+  return *this;
 }
 
 VelodyneCalibration::~VelodyneCalibration() {

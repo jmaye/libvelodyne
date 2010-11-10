@@ -16,6 +16,7 @@ PacketsBuffer::PacketsBuffer(const PacketsBuffer &other) {
 }
 
 PacketsBuffer& PacketsBuffer::operator = (const PacketsBuffer &other) {
+  return *this;
 }
 
 PacketsBuffer::~PacketsBuffer() {
