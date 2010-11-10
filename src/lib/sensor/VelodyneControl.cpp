@@ -18,7 +18,8 @@ VelodyneControl& VelodyneControl::operator = (const VelodyneControl &other) {
 VelodyneControl::~VelodyneControl() {
 }
 
-void VelodyneControl::setRPM(uint32_t u32RPM) throw(OutOfBoundException) {
+void VelodyneControl::setRPM(uint32_t u32RPM) throw(OutOfBoundException,
+  IOException) {
   if (u32RPM > mcu32MaxRPM || u32RPM < mcu32MinRPM)
     throw OutOfBoundException("VelodyneControl::setRPM: RPM should be in [300,900]");
   stringstream ss(stringstream::in | stringstream::out);

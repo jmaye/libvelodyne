@@ -3,6 +3,7 @@
 
 #include "SerialConnection.h"
 #include "OutOfBoundException.h"
+#include "IOException.h"
 
 #include <string>
 
@@ -23,7 +24,7 @@ public:
   VelodyneControl();
   ~VelodyneControl();
 
-  void setRPM(uint32_t u32RPM) throw(OutOfBoundException);
+  void setRPM(uint32_t u32RPM) throw(OutOfBoundException, IOException);
 
 protected:
 
