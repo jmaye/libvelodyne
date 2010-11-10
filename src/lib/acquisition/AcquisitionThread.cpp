@@ -7,8 +7,7 @@
 using namespace boost;
 using namespace std;
 
-AcquisitionThread::AcquisitionThread() throw(ThreadException) {
-  bRun = false;
+AcquisitionThread::AcquisitionThread() throw(ThreadException) : bRun(false) {
   mThreadHandle = (pthread_t*)malloc(sizeof(pthread_t));
   if (mThreadHandle == NULL) {
     throw ThreadException("AcquisitionThread::AcquisitionThread: malloc failed");

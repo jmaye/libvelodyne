@@ -190,6 +190,7 @@ void WindowStatic::keyboardCallback(unsigned char u8Key, int i32X, int i32Y) {
   WindowStatic *window = (WindowStatic*)glutGetWindowData();
   if (u8Key == 'q') {
     glutDestroyWindow(window->mi32ID);
+    exit(0);
   }
 }
 

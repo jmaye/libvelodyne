@@ -18,17 +18,11 @@ public:
   ~UDPConnection();
 
   double getTimeout() const;
-
   uint16_t getPort() const;
-
   void setTimeout(double f64Time);
-
   void open() throw(IOException);
-
   void close() throw(IOException);
-
   bool isOpen() const;
-
   void readBuffer(uint8_t *au8Buffer, uint32_t u32NbBytes) throw(IOException);
 
 protected:
