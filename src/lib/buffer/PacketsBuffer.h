@@ -20,6 +20,7 @@ class PacketsBuffer {
   pthread_mutex_t mMutex;
   uint32_t mu32Capacity;
   uint32_t mu32Content;
+  uint32_t mu32DroppedPackages;
 
 public:
   PacketsBuffer(uint32_t u32Capacity = 1000) throw(ThreadException);
@@ -29,6 +30,7 @@ public:
   boost::shared_ptr<VelodynePacket> popPacket() throw(IOException);
   uint32_t getCapacity();
   uint32_t getContent();
+  uint32_t getDroppedPackages();
   void setCapacity(uint32_t u32Capacity);
 
 protected:

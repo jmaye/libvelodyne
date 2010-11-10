@@ -81,7 +81,7 @@ double VelodyneScanCloud::normalizeAnglePositive(double f64Angle) const {
 double VelodyneScanCloud::normalizeAngle(double f64Angle) const {
   double f64Value = normalizeAnglePositive(f64Angle);
   if (f64Value > M_PI)
-  f64Value -= 2.0 * M_PI;
+    f64Value -= 2.0 * M_PI;
   return f64Value;
 }
 

@@ -1,10 +1,6 @@
 #include "AcquisitionThread.h"
 
 #include "UDPConnection.h"
-#include "VelodynePacket.h"
-#include "PacketsBuffer.h"
-
-#include <iostream>
 
 #include <stdlib.h>
 
@@ -115,4 +111,20 @@ void AcquisitionThread::threadCleanupFunction(void *arg) {
 
 shared_ptr<VelodynePacket> AcquisitionThread::getPacket() throw(IOException) {
   return mPacketsBuffer.popPacket();
+}
+
+uint32_t AcquisitionThread::getQueueCapacity() {
+  return mPacketsBuffer.getCapacity();
+}
+
+uint32_t AcquisitionThread::getQueueContent() {
+  return mPacketsBuffer.getContent();
+}
+
+uint32_t AcquisitionThread::getQueueDroppedPackages() {
+  return mPacketsBuffer.getDroppedPackages();
+}
+
+void AcquisitionThread::setQueueCapacity(uint32_t u32Capacity) {
+  mPacketsBuffer.setCapacity(u32Capacity);
 }

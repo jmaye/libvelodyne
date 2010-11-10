@@ -1,14 +1,12 @@
 #include "PacketsBuffer.h"
 
-#include <iostream>
-#include <fstream>
-
 using namespace boost;
 using namespace std;
 
 PacketsBuffer::PacketsBuffer(uint32_t u32Capacity) throw(ThreadException)
   : mu32Capacity(u32Capacity),
-    mu32Content(0) {
+    mu32Content(0),
+    mu32DroppedPackages(0) {
   if (pthread_mutex_init(&mMutex, NULL)) {
     throw ThreadException("PacketsBuffer::PacketsBuffer: mutex init failed");
   }
@@ -33,6 +31,7 @@ void PacketsBuffer::pushPacket(shared_ptr<VelodynePacket> packet) {
   if (mu32Content > mu32Capacity) {
     mBuffer.pop_front();
     mu32Content--;
+    mu32DroppedPackages++;
   }
   pthread_mutex_unlock(&mMutex);
 }
@@ -71,4 +70,12 @@ uint32_t PacketsBuffer::getContent() {
   u32Content = mu32Content;
   pthread_mutex_unlock(&mMutex);
   return u32Content;
+}
+
+uint32_t PacketsBuffer::getDroppedPackages() {
+  uint32_t u32DroppedPackages;
+  pthread_mutex_lock(&mMutex);
+  u32DroppedPackages = mu32DroppedPackages;
+  pthread_mutex_unlock(&mMutex);
+  return u32DroppedPackages;
 }

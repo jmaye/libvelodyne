@@ -4,6 +4,7 @@
 #include "ThreadException.h"
 #include "IOException.h"
 #include "PacketsBuffer.h"
+#include "VelodynePacket.h"
 
 #include <boost/shared_ptr.hpp>
 
@@ -30,6 +31,10 @@ public:
   void run();
   void stop();
   boost::shared_ptr<VelodynePacket> getPacket() throw(IOException);
+  uint32_t getQueueCapacity();
+  uint32_t getQueueContent();
+  uint32_t getQueueDroppedPackages();
+  void setQueueCapacity(uint32_t u32Capacity);
 
 protected:
 
