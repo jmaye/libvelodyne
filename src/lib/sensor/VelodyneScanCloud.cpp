@@ -106,6 +106,10 @@ void VelodyneScanCloud::pushScan(const Scan &scan) {
   mScanCloudVector.push_back(scan);
 }
 
+uint32_t VelodyneScanCloud::getSize() const {
+  return mScanCloudVector.size();
+}
+
 ostream& operator << (ostream &stream,
   const VelodyneScanCloud &obj) {
   obj.write(stream);

@@ -66,7 +66,7 @@ public:
   double getTimestamp() const;
   std::vector<Point3D>::const_iterator getStartIterator() const;
   std::vector<Point3D>::const_iterator getEndIterator() const;
-  uint32_t getPointCloudSize() const;
+  uint32_t getSize() const;
   void setTimestamp(double f64Timestamp);
   void pushPoint(const Point3D &point);
 

@@ -70,6 +70,7 @@ public:
   double getTimestamp() const;
   std::vector<Scan>::const_iterator getStartIterator() const;
   std::vector<Scan>::const_iterator getEndIterator() const;
+  uint32_t getSize() const;
   void setTimestamp(double f64Timestamp);
   void pushScan(const Scan &scan);
 

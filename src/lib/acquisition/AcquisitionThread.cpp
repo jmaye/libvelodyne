@@ -43,6 +43,7 @@ AcquisitionThread::AcquisitionThread(const AcquisitionThread &other) {
 
 AcquisitionThread& AcquisitionThread::operator =
   (const AcquisitionThread &other) {
+  return *this;
 }
 
 AcquisitionThread::~AcquisitionThread() throw(ThreadException) {

@@ -45,6 +45,7 @@ WindowLive::WindowLive(const WindowLive &other) {
 }
 
 WindowLive& WindowLive::operator = (const WindowLive &other) {
+  return *this;
 }
 
 WindowLive::~WindowLive() {

@@ -122,7 +122,7 @@ void VelodynePointCloud::pushPoint(const Point3D &point) {
   mPointCloudVector.push_back(point);
 }
 
-uint32_t VelodynePointCloud::getPointCloudSize() const {
+uint32_t VelodynePointCloud::getSize() const {
   return mPointCloudVector.size();
 }
 
