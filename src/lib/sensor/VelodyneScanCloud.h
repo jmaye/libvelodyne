@@ -11,19 +11,23 @@ struct Scan {
   double mf64Range;
   double mf64Heading;
   double mf64Pitch;
+  uint8_t mu8Intensity;
   Scan() : mf64Range(0),
            mf64Heading(0),
-           mf64Pitch(0) {
+           mf64Pitch(0),
+           mu8Intensity(0) {
   }
   Scan(const Scan &other) : mf64Range(other.mf64Range),
                             mf64Heading(other.mf64Heading),
-                            mf64Pitch(other.mf64Pitch) {
+                            mf64Pitch(other.mf64Pitch),
+                            mu8Intensity(other.mu8Intensity) {
   }
   Scan& operator = (const Scan &other) {
     if (this != &other) {
       mf64Range = other.mf64Range;
       mf64Heading = other.mf64Heading;
       mf64Pitch = other.mf64Pitch;
+      mu8Intensity = other.mu8Intensity;
     }
     return *this;
   }

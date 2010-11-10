@@ -11,19 +11,23 @@ struct Point3D {
   double mf64X;
   double mf64Y;
   double mf64Z;
+  uint8_t mu8Intensity;
   Point3D() : mf64X(0),
               mf64Y(0),
-              mf64Z(0) {
+              mf64Z(0),
+              mu8Intensity(0) {
   }
   Point3D(const Point3D &other) : mf64X(other.mf64X),
                                   mf64Y(other.mf64Y),
-                                  mf64Z(other.mf64Z) {
+                                  mf64Z(other.mf64Z),
+                                  mu8Intensity(other.mu8Intensity) {
   }
   Point3D& operator = (const Point3D &other) {
     if (this != &other) {
       mf64X = other.mf64X;
       mf64Y = other.mf64Y;
       mf64Z = other.mf64Z;
+      mu8Intensity = other.mu8Intensity;
     }
     return *this;
   }

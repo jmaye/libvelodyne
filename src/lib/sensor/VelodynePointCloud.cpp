@@ -58,6 +58,7 @@ VelodynePointCloud::VelodynePointCloud(const VelodynePacket &vdynePacket,
       point.mf64Z = f64Distance *
         vdyneCalibration.getSinVertCorr(u32LaserIdx) + f64VertOffsCorr *
         vdyneCalibration.getCosVertCorr(u32LaserIdx);
+      point.mu8Intensity = data.maLaserData[j].mu8Intensity;
       mPointCloudVector.push_back(point);
     }
   }

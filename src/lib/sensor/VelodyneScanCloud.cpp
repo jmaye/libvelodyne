@@ -40,6 +40,7 @@ VelodyneScanCloud::VelodyneScanCloud(const VelodynePacket &vdynePacket,
       scan.mf64Heading = normalizeAngle(-(f64Rotation -
         vdyneCalibration.getRotCorr(u32LaserIdx)));
       scan.mf64Pitch = vdyneCalibration.getVertCorr(u32LaserIdx);
+      scan.mu8Intensity = data.maLaserData[j].mu8Intensity;
       mScanCloudVector.push_back(scan);
     }
   }
