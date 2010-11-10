@@ -21,7 +21,10 @@ class VelodyneControl {
   SerialConnection mSerialConnection;
 
 public:
-  VelodyneControl();
+  VelodyneControl(std::string devicePathStr = "/dev/ttyUSB0",
+    uint32_t u32Baudrate = 9600, uint32_t u32Databits = 8,
+    uint32_t u32Stopbits = 1, SerialParity parity = none,
+    double f64Timeout = 2.5);
   ~VelodyneControl();
 
   void setRPM(uint32_t u32RPM) throw(OutOfBoundException, IOException);

@@ -5,7 +5,11 @@
 
 using namespace std;
 
-VelodyneControl::VelodyneControl() : mCommandString("#HDLRPMnnn$") {
+VelodyneControl::VelodyneControl(string devicePathStr, uint32_t u32Baudrate,
+  uint32_t u32Databits, uint32_t u32Stopbits, SerialParity parity,
+  double f64Timeout) : mCommandString("#HDLRPMnnn$"),
+                       mSerialConnection(devicePathStr, u32Baudrate,
+                         u32Databits, u32Stopbits, parity, f64Timeout) {
 }
 
 VelodyneControl::VelodyneControl(const VelodyneControl &other) {
