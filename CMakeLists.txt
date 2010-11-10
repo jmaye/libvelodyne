@@ -17,7 +17,7 @@ remake_project(
 
 remake_doc(
   html
-  pdf
+  vendor
 )
 
 remake_pack_deb(
