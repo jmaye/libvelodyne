@@ -34,6 +34,11 @@ struct Point3D {
 };
 
 class VelodynePointCloud {
+public:
+  typedef std::vector<Point3D> Point3DVector;
+  typedef Point3DVector::const_iterator Point3DVectorConstIterator;
+  
+private:
   friend std::ostream& operator << (std::ostream &stream,
     const VelodynePointCloud &obj);
   friend std::istream& operator >> (std::istream &stream,
@@ -55,7 +60,7 @@ class VelodynePointCloud {
   virtual void write(std::ofstream &stream) const;
 
   double mf64Timestamp;
-  std::vector<Point3D> mPointCloudVector;
+  Point3DVector mPointCloudVector;
   double mf64StartRotationAngle;
   double mf64EndRotationAngle;
 
@@ -68,8 +73,8 @@ public:
   double getTimestamp() const;
   double getStartRotationAngle() const;
   double getEndRotationAngle() const;
-  std::vector<Point3D>::const_iterator getStartIterator() const;
-  std::vector<Point3D>::const_iterator getEndIterator() const;
+  Point3DVectorConstIterator getStartIterator() const;
+  Point3DVectorConstIterator getEndIterator() const;
   uint32_t getSize() const;
   void setTimestamp(double f64Timestamp);
   void setStartRotationAngle(double f64Angle);
