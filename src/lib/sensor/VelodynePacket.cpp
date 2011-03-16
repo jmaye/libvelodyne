@@ -56,7 +56,7 @@ void VelodynePacket::read(UDPConnection &stream) throw(IOException) {
 }
 
 void VelodynePacket::read(istream &stream) {
-//   stream.read((char*)&mf64Timestamp, sizeof(double));
+  stream.read((char*)&mf64Timestamp, sizeof(double));
   stream.read((char*)mau8Packet, mcu16PacketSize);
   read(mau8Packet);
 }
