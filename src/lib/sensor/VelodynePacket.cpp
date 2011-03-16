@@ -49,10 +49,27 @@ double VelodynePacket::seconds() const {
     (double)mcu32TimeResolution));
 }
 
+void VelodynePacket::read(UDPConnection &stream) throw(IOException) {
+  stream.readBuffer(mau8Packet, mcu16PacketSize);
+  mf64Timestamp = seconds();
+  read(mau8Packet);
+}
+
 void VelodynePacket::read(istream &stream) {
+//   stream.read((char*)&mf64Timestamp, sizeof(double));
+  stream.read((char*)mau8Packet, mcu16PacketSize);
+  read(mau8Packet);
 }
 
 void VelodynePacket::write(ostream &stream) const {
+  stream.write((char*)&mf64Timestamp, sizeof(double));
+  stream.write((char*)mau8Packet, mcu16PacketSize);
+}
+
+void VelodynePacket::readFormatted(istream &stream) {
+}
+
+void VelodynePacket::writeFormatted(ostream &stream) const {
   stream << fixed << "Time: " << mf64Timestamp << endl;
   for (uint32_t i = 0; i < mcu16DataChunkNbr; i++) {
     stream << "Row: ";
@@ -83,23 +100,6 @@ void VelodynePacket::write(ostream &stream) const {
     double f64Temperature = (double)u8IntTemp + f64FracTemp;
     stream << "Temperature: " << f64Temperature << endl;
   }
-}
-
-void VelodynePacket::read(ifstream &stream) {
-  stream.read((char*)&mf64Timestamp, sizeof(double));
-  stream.read((char*)mau8Packet, mcu16PacketSize);
-  read(mau8Packet);
-}
-
-void VelodynePacket::write(ofstream &stream) const {
-  stream.write((char*)&mf64Timestamp, sizeof(double));
-  stream.write((char*)mau8Packet, mcu16PacketSize);
-}
-
-void VelodynePacket::read(UDPConnection &stream) throw(IOException) {
-  stream.readBuffer(mau8Packet, mcu16PacketSize);
-  mf64Timestamp = seconds();
-  read(mau8Packet);
 }
 
 void VelodynePacket::read(uint8_t au8Packet[]) {
@@ -169,25 +169,13 @@ void VelodynePacket::setRawPacket(const uint8_t *au8Data) {
 
 ostream& operator << (ostream &stream,
   const VelodynePacket &obj) {
-  obj.write(stream);
+  obj.writeFormatted(stream);
   return stream;
 }
 
 istream& operator >> (istream &stream,
   VelodynePacket &obj) {
-  obj.read(stream);
-  return stream;
-}
-
-ofstream& operator << (ofstream &stream,
-  const VelodynePacket &obj) {
-  obj.write(stream);
-  return stream;
-}
-
-ifstream& operator >> (ifstream &stream,
-  VelodynePacket &obj) {
-  obj.read(stream);
+  obj.readFormatted(stream);
   return stream;
 }
 

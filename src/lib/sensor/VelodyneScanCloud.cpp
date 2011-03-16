@@ -69,10 +69,10 @@ void VelodyneScanCloud::read(istream &stream) {
 void VelodyneScanCloud::write(ostream &stream) const {
 }
 
-void VelodyneScanCloud::read(ifstream &stream) {
+void VelodyneScanCloud::readFormatted(istream &stream) {
 }
 
-void VelodyneScanCloud::write(ofstream &stream) const {
+void VelodyneScanCloud::writeFormatted(ostream &stream) const {
 }
 
 double VelodyneScanCloud::normalizeAnglePositive(double f64Angle) const {
@@ -112,24 +112,12 @@ uint32_t VelodyneScanCloud::getSize() const {
 
 ostream& operator << (ostream &stream,
   const VelodyneScanCloud &obj) {
-  obj.write(stream);
+  obj.writeFormatted(stream);
   return stream;
 }
 
 istream& operator >> (istream &stream,
   VelodyneScanCloud &obj) {
-  obj.read(stream);
-  return stream;
-}
-
-ofstream& operator << (ofstream &stream,
-  const VelodyneScanCloud &obj) {
-  obj.write(stream);
-  return stream;
-}
-
-ifstream& operator >> (ifstream &stream,
-  VelodyneScanCloud &obj) {
-  obj.read(stream);
+  obj.readFormatted(stream);
   return stream;
 }

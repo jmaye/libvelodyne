@@ -13,18 +13,12 @@ class VelodyneCalibration {
     const VelodyneCalibration &obj);
   friend std::istream& operator >> (std::istream &stream,
     VelodyneCalibration &obj);
-  friend std::ofstream& operator << (std::ofstream &stream,
-    const VelodyneCalibration &obj);
-  friend std::ifstream& operator >> (std::ifstream &stream,
-    VelodyneCalibration &obj) throw(IOException);
 
   VelodyneCalibration(const VelodyneCalibration &other);
   VelodyneCalibration& operator = (const VelodyneCalibration &other);
 
-  virtual void read(std::istream &stream);
-  virtual void write(std::ostream &stream) const;
-  virtual void read(std::ifstream &stream) throw(IOException);
-  virtual void write(std::ofstream &stream) const;
+  virtual void readFormatted(std::istream &stream) throw(IOException);
+  virtual void writeFormatted(std::ostream &stream) const;
 
   static const uint16_t mcu16LasersNbr = 64;
 
@@ -105,6 +99,9 @@ public:
 
   double deg2rad(double f64Deg) const;
   double rad2deg(double f64Rad) const;
+
+  virtual void read(std::istream &stream);
+  virtual void write(std::ostream &stream) const;
 
 protected:
 

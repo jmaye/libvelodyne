@@ -38,10 +38,6 @@ class VelodyneScanCloud {
     const VelodyneScanCloud &obj);
   friend std::istream& operator >> (std::istream &stream,
     VelodyneScanCloud &obj);
-  friend std::ofstream& operator << (std::ofstream &stream,
-    const VelodyneScanCloud &obj);
-  friend std::ifstream& operator >> (std::ifstream &stream,
-    VelodyneScanCloud &obj);
 
   VelodyneScanCloud(const VelodyneScanCloud &other);
   VelodyneScanCloud& operator = (const VelodyneScanCloud &other);
@@ -49,10 +45,8 @@ class VelodyneScanCloud {
   static const double mcf64MinDistance = 150.0;
   static const uint16_t mcu16MeterConversion = 100;
 
-  virtual void read(std::istream &stream);
-  virtual void write(std::ostream &stream) const;
-  virtual void read(std::ifstream &stream);
-  virtual void write(std::ofstream &stream) const;
+  virtual void readFormatted(std::istream &stream);
+  virtual void writeFormatted(std::ostream &stream) const;
 
   double normalizeAnglePositive(double f64Angle) const;
 
@@ -74,6 +68,9 @@ public:
   void setTimestamp(double f64Timestamp);
   void pushScan(const Scan &scan);
 
+  virtual void read(std::istream &stream);
+  virtual void write(std::ostream &stream) const;
+  
 protected:
 
 };

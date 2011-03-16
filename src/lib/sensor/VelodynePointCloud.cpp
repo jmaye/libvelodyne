@@ -92,17 +92,13 @@ void VelodynePointCloud::read(istream &stream) {
 }
 
 void VelodynePointCloud::write(ostream &stream) const {
+}
+
+void VelodynePointCloud::readFormatted(istream &stream) {
+}
+
+void VelodynePointCloud::writeFormatted(ostream &stream) const {
   stream << "Timestamp: " << mf64Timestamp << endl;
-  for (uint32_t i = 0; i < mPointCloudVector.size(); i++)
-    stream << mPointCloudVector[i].mf64X << " "
-           << mPointCloudVector[i].mf64Y << " "
-           << mPointCloudVector[i].mf64Z << endl;
-}
-
-void VelodynePointCloud::read(ifstream &stream) {
-}
-
-void VelodynePointCloud::write(ofstream &stream) const {
   for (uint32_t i = 0; i < mPointCloudVector.size(); i++)
     stream << mPointCloudVector[i].mf64X << " "
            << mPointCloudVector[i].mf64Y << " "
@@ -151,24 +147,12 @@ void VelodynePointCloud::setEndRotationAngle(double f64Angle) {
 
 ostream& operator << (ostream &stream,
   const VelodynePointCloud &obj) {
-  obj.write(stream);
+  obj.writeFormatted(stream);
   return stream;
 }
 
 istream& operator >> (istream &stream,
   VelodynePointCloud &obj) {
-  obj.read(stream);
-  return stream;
-}
-
-ofstream& operator << (ofstream &stream,
-  const VelodynePointCloud &obj) {
-  obj.write(stream);
-  return stream;
-}
-
-ifstream& operator >> (ifstream &stream,
-  VelodynePointCloud &obj) {
-  obj.read(stream);
+  obj.readFormatted(stream);
   return stream;
 }

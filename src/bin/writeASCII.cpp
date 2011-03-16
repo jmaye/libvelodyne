@@ -20,7 +20,7 @@ int main(int argc, char **argv) {
   ofstream asciiFile(argv[3]);
   while (logFile.eof() != true) {
     VelodynePacket vdynePacket;
-    logFile >> vdynePacket;
+    vdynePacket.read(logFile);
     VelodynePointCloud pointCloud(vdynePacket, vdyneCalibration);
     asciiFile << pointCloud;
   }

@@ -72,21 +72,12 @@ private:
     const VelodynePacket &obj);
   friend std::istream& operator >> (std::istream &stream,
     VelodynePacket &obj);
-  friend std::ofstream& operator << (std::ofstream &stream,
-    const VelodynePacket &obj);
-  friend std::ifstream& operator >> (std::ifstream &stream,
-    VelodynePacket &obj);
-  friend UDPConnection& operator >> (UDPConnection &stream,
-    VelodynePacket &obj) throw(IOException);
 
   VelodynePacket(const VelodynePacket &other);
   VelodynePacket& operator = (const VelodynePacket &other);
 
-  virtual void read(std::istream &stream);
-  virtual void write(std::ostream &stream) const;
-  virtual void read(std::ifstream &stream);
-  virtual void write(std::ofstream &stream) const;
-  virtual void read(UDPConnection &stream) throw(IOException);
+  virtual void readFormatted(std::istream &stream);
+  virtual void writeFormatted(std::ostream &stream) const;
   virtual void read(uint8_t au8Packet[]);
 
   double seconds() const;
@@ -115,6 +106,10 @@ public:
   void setDataChunk(const DataChunk &data, uint16_t u16DataChunkIdx)
     throw(OutOfBoundException);
   void setRawPacket(const uint8_t *au8Data);
+
+  virtual void read(UDPConnection &stream) throw(IOException);
+  virtual void read(std::istream &stream);
+  virtual void write(std::ostream &stream) const;
 
 protected:
 

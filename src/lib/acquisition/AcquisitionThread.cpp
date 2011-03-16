@@ -85,7 +85,7 @@ void* AcquisitionThread::threadFunction(void *arg)
     }
     pthread_mutex_unlock(&(classHandle->mMutex));
     shared_ptr<VelodynePacket> vdynePacket(new VelodynePacket());
-    com >> *vdynePacket;
+    vdynePacket->read(com);
     classHandle->mPacketsBuffer.pushPacket(vdynePacket);
     pthread_testcancel();
   }

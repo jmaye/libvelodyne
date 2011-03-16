@@ -25,7 +25,7 @@ int main(int argc, char **argv) {
            << "         point [" << endl;
   while (logFile.eof() != true) {
     VelodynePacket vdynePacket;
-    logFile >> vdynePacket;
+    vdynePacket.read(logFile);
     VelodynePointCloud pointCloud(vdynePacket, vdyneCalibration);
     wrmlFile << pointCloud;
   }

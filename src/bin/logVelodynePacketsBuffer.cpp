@@ -19,7 +19,7 @@ int main(int argc, char **argv) {
   acqThread.run();
   for (uint32_t i = 0; i < (uint32_t)atoi(argv[2]); i++) {
     try {
-      logFile << *(acqThread.getPacket());
+      acqThread.getPacket()->write(logFile);
     }
     catch(IOException &e) {
      i--;

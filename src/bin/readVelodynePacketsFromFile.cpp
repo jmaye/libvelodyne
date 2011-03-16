@@ -13,7 +13,7 @@ int main(int argc, char **argv) {
   ifstream logFile(argv[1], ios::in | ios::binary);
   while (logFile.eof() != true) {
     VelodynePacket vdynePacket;
-    logFile >> vdynePacket;
+    vdynePacket.read(logFile);
     cout << vdynePacket;
   }
   return 0;

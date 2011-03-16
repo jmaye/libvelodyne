@@ -31,17 +31,9 @@ void VelodyneCalibration::read(istream &stream) {
 }
 
 void VelodyneCalibration::write(ostream &stream) const {
-  for (uint32_t i = 0; i < mcu16LasersNbr; i++) {
-    stream << "Laser " << i << ": "
-                       << mCorr[i].mf64RotCorr << " "
-                       << mCorr[i].mf64VertCorr << " "
-                       << mCorr[i].mf64DistCorr << " "
-                       << mCorr[i].mf64VertOffsCorr << " "
-                       << mCorr[i].mf64HorizOffsCorr << endl;
-  }
 }
 
-void VelodyneCalibration::read(ifstream &stream) throw(IOException) {
+void VelodyneCalibration::readFormatted(istream &stream) throw(IOException) {
   for (uint32_t i = 0; i < mcu16LasersNbr; i++) {
     string strKey;
     double f64Value;
@@ -83,7 +75,7 @@ void VelodyneCalibration::read(ifstream &stream) throw(IOException) {
   }
 }
 
-void VelodyneCalibration::write(ofstream &stream) const {
+void VelodyneCalibration::writeFormatted(ostream &stream) const {
   for (uint32_t i = 0; i < mcu16LasersNbr; i++) {
     stream << "id " << i << endl
            << "rotCorrection " << rad2deg(mCorr[i].mf64RotCorr) << endl
@@ -207,24 +199,12 @@ void VelodyneCalibration::setHorizOffsCorr(uint16_t u16LaserNbr,
 
 ostream& operator << (ostream &stream,
   const VelodyneCalibration &obj) {
-  obj.write(stream);
+  obj.writeFormatted(stream);
   return stream;
 }
 
 istream& operator >> (istream &stream,
   VelodyneCalibration &obj) {
-  obj.read(stream);
-  return stream;
-}
-
-ofstream& operator << (ofstream &stream,
-  const VelodyneCalibration &obj) {
-  obj.write(stream);
-  return stream;
-}
-
-ifstream& operator >> (ifstream &stream,
-  VelodyneCalibration &obj) throw(IOException) {
-  obj.read(stream);
+  obj.readFormatted(stream);
   return stream;
 }

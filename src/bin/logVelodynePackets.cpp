@@ -18,8 +18,8 @@ int main(int argc, char **argv) {
   com.open();
   for (uint32_t i = 0; i < (uint32_t)atoi(argv[2]); i++) {
     VelodynePacket vdynePacket;
-    com >> vdynePacket;
-    logFile << vdynePacket;
+    vdynePacket.read(com);
+    vdynePacket.write(logFile);
   }
   com.close();
   return 0;
