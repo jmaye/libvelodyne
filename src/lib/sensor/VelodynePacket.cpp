@@ -135,7 +135,7 @@ uint32_t VelodynePacket::getReserved() const {
 
 const DataChunk& VelodynePacket::getDataChunk(uint16_t u16DataChunkIdx) const
   throw(OutOfBoundException) {
-  if (u16DataChunkIdx > mcu16DataChunkNbr)
+  if (u16DataChunkIdx >= mcu16DataChunkNbr)
     throw OutOfBoundException("VelodynePacket::getDataChunk: Out of bound");
   return mData[u16DataChunkIdx];
 }
@@ -158,7 +158,7 @@ void VelodynePacket::setReserved(uint32_t u32Reserved) {
 
 void VelodynePacket::setDataChunk(const DataChunk &data,
   uint16_t u16DataChunkIdx) throw(OutOfBoundException) {
-  if (u16DataChunkIdx > mcu16DataChunkNbr)
+  if (u16DataChunkIdx >= mcu16DataChunkNbr)
     throw OutOfBoundException("VelodynePacket::getDataChunk: Out of bound");
   mData[u16DataChunkIdx] = data;
 }
