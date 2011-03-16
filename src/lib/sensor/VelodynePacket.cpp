@@ -62,6 +62,7 @@ void VelodynePacket::read(istream &stream) {
 }
 
 void VelodynePacket::write(ostream &stream) const {
+  write(mau8Packet);
   stream.write((char*)&mf64Timestamp, sizeof(double));
   stream.write((char*)mau8Packet, mcu16PacketSize);
 }
@@ -119,6 +120,25 @@ void VelodynePacket::read(uint8_t au8Packet[]) {
   mu16SpinCount = *(uint16_t*)&au8Packet[u32Index];
   u32Index += sizeof(uint16_t);
   mu32Reserved = *(uint32_t*)&au8Packet[u32Index];
+}
+
+void VelodynePacket::write(uint8_t au8Packet[]) const {
+  uint32_t u32Index = 0;
+  for (uint32_t i = 0; i < mcu16DataChunkNbr; i++) {
+    *(uint16_t*)&au8Packet[u32Index] = mData[i].mu16HeaderInfo;
+    u32Index += sizeof(uint16_t);
+    *(uint16_t*)&au8Packet[u32Index] = mData[i].mu16RotationalInfo;
+    u32Index += sizeof(uint16_t);
+    for (uint32_t j = 0; j < DataChunk::mcu16LasersPerPacket; j++) {
+      *(uint16_t*)&au8Packet[u32Index] = mData[i].maLaserData[j].mu16Distance;
+      u32Index += sizeof(uint16_t);
+      *(uint8_t*)&au8Packet[u32Index] = mData[i].maLaserData[j].mu8Intensity;
+      u32Index += sizeof(uint8_t);
+    }
+  }
+  *(uint16_t*)&au8Packet[u32Index] = mu16SpinCount;
+  u32Index += sizeof(uint16_t);
+  *(uint32_t*)&au8Packet[u32Index] = mu32Reserved;
 }
 
 double VelodynePacket::getTimestamp() const {

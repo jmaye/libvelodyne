@@ -79,6 +79,7 @@ private:
   virtual void readFormatted(std::istream &stream);
   virtual void writeFormatted(std::ostream &stream) const;
   virtual void read(uint8_t au8Packet[]);
+  virtual void write(uint8_t au8Packet[]) const;
 
   double seconds() const;
 
@@ -87,7 +88,7 @@ private:
   uint16_t mu16SpinCount;
   uint32_t mu32Reserved;
 
-  uint8_t mau8Packet[mcu16PacketSize];
+  mutable uint8_t mau8Packet[mcu16PacketSize];
 
 public:
   VelodynePacket();
