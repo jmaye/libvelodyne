@@ -54,6 +54,8 @@ class VelodyneScanCloud {
 
   double mf64Timestamp;
   std::vector<Scan> mScanCloudVector;
+  double mf64StartRotationAngle;
+  double mf64EndRotationAngle;
 
 public:
   VelodyneScanCloud();
@@ -62,10 +64,14 @@ public:
   ~VelodyneScanCloud();
 
   double getTimestamp() const;
+  double getStartRotationAngle() const;
+  double getEndRotationAngle() const;
   std::vector<Scan>::const_iterator getStartIterator() const;
   std::vector<Scan>::const_iterator getEndIterator() const;
   uint32_t getSize() const;
   void setTimestamp(double f64Timestamp);
+  void setStartRotationAngle(double f64Angle);
+  void setEndRotationAngle(double f64Angle);
   void pushScan(const Scan &scan);
 
   virtual void read(std::istream &stream);
