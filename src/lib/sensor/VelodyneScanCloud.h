@@ -42,7 +42,8 @@ class VelodyneScanCloud {
   VelodyneScanCloud(const VelodyneScanCloud &other);
   VelodyneScanCloud& operator = (const VelodyneScanCloud &other);
 
-  static const double mcf64MinDistance = 150.0;
+  static const double mcf64MinDistance = 1.5;
+  static const double mcf64MaxDistance = 120.0;
   static const uint16_t mcu16MeterConversion = 100;
 
   virtual void readFormatted(std::istream &stream);
@@ -60,7 +61,9 @@ class VelodyneScanCloud {
 public:
   VelodyneScanCloud();
   VelodyneScanCloud(const VelodynePacket &vdynePacket,
-    const VelodyneCalibration &vdyneCalibration);
+    const VelodyneCalibration &vdyneCalibration,
+    double mcf64MinDistance = VelodyneScanCloud::mcf64MinDistance,
+    double mcf64MaxDistance = VelodyneScanCloud::mcf64MaxDistance);
   ~VelodyneScanCloud();
 
   double getTimestamp() const;
