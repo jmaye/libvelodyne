@@ -98,7 +98,7 @@ class VelodyneScanCloud {
     @{
     */
   /// Minimum distance for representing points
-  static const double mMinDistance = 1.5;
+  static const double mMinDistance = 0.9;
   /// Maximum distance for representing points
   static const double mMaxDistance = 120.0;
   /// Conversion in meters
