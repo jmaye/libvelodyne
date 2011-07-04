@@ -22,7 +22,6 @@ remake_doc(
 
 remake_pack_deb(
   DESCRIPTION "Main library"
-  libglut3
 )
 
 remake_pack_deb(
@@ -30,7 +29,6 @@ remake_pack_deb(
   DESCRIPTION "Development headers"
   libvelodyne
   libboost-dev
-  libglut3-dev
 )
 
 remake_pack_deb(
