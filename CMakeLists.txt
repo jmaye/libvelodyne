@@ -6,7 +6,7 @@ remake_project(
   libvelodyne
   VERSION 0.1
   RELEASE alpha
-  SUMMARY "Velodyne HDL-64E S2 driver"
+  SUMMARY "A C++ based Velodyne HDL-64E S2 interfacing library"
   AUTHOR "Jerome Maye"
   CONTACT "jerome.maye@mavt.ethz.ch"
   HOME "http://aslforge.ethz.ch/projects/libvelodyne"
