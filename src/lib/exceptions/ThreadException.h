@@ -44,9 +44,9 @@ public:
     @{
     */
   /// Constructs exception from message
-  ThreadException(const std::string &msg = "");
+  ThreadException(const std::string& msg = "");
   /// Copy constructor
-  ThreadException(const ThreadException &other);
+  ThreadException(const ThreadException& other);
   /** @}
     */
 

@@ -47,7 +47,7 @@ public:
   /// Constructs exception from message
   IOException(const std::string& msg = "");
   // Copy constructor
-  IOException(const IOException &other);
+  IOException(const IOException& other);
   /** @}
     */
 
