@@ -1,5 +1,23 @@
-#include "WindowLive.h"
-#include "IOException.h"
+/******************************************************************************
+ * Copyright (C) 2011 by Jerome Maye                                          *
+ * jerome.maye@gmail.com                                                      *
+ *                                                                            *
+ * This program is free software; you can redistribute it and/or modify       *
+ * it under the terms of the Lesser GNU General Public License as published by*
+ * the Free Software Foundation; either version 3 of the License, or          *
+ * (at your option) any later version.                                        *
+ *                                                                            *
+ * This program is distributed in the hope that it will be useful,            *
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of             *
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the              *
+ * Lesser GNU General Public License for more details.                        *
+ *                                                                            *
+ * You should have received a copy of the Lesser GNU General Public License   *
+ * along with this program. If not, see <http://www.gnu.org/licenses/>.       *
+ ******************************************************************************/
+
+#include "visualization/WindowLive.h"
+#include "exceptions/IOException.h"
 
 #include <GL/glut.h>
 #include <GL/glu.h>
@@ -65,16 +83,16 @@ void WindowLive::redraw() const {
 }
 
 void WindowLive::setTranslation(double f64X, double f64Y, double f64Z) {
-  mTranslation.mf64X = f64X;
-  mTranslation.mf64Y = f64Y;
-  mTranslation.mf64Z = f64Z;
+  mTranslation.mX = f64X;
+  mTranslation.mY = f64Y;
+  mTranslation.mZ = f64Z;
   glutPostRedisplay();
 }
 
 void WindowLive::setRotation(double f64Yaw, double f64Pitch, double f64Roll) {
-  mRotation.mf64X = f64Pitch;
-  mRotation.mf64Y = f64Yaw;
-  mRotation.mf64Z = f64Roll;
+  mRotation.mX = f64Pitch;
+  mRotation.mY = f64Yaw;
+  mRotation.mZ = f64Roll;
   glutPostRedisplay();
 }
 
@@ -95,10 +113,10 @@ void WindowLive::drawScene() {
   glEnable(GL_LINE_SMOOTH);
   glHint(GL_PERSPECTIVE_CORRECTION_HINT, GL_NICEST);
   glLoadIdentity();
-  glTranslatef(mTranslation.mf64X, mTranslation.mf64Y, mTranslation.mf64Z);
-  glRotatef(mRotation.mf64Y, 0, 1, 0);
-  glRotatef(mRotation.mf64X, 1, 0, 0);
-  glRotatef(mRotation.mf64Z, 0, 0, 1);
+  glTranslatef(mTranslation.mX, mTranslation.mY, mTranslation.mZ);
+  glRotatef(mRotation.mY, 0, 1, 0);
+  glRotatef(mRotation.mX, 1, 0, 0);
+  glRotatef(mRotation.mZ, 0, 0, 1);
   glScalef(mf64Scale, mf64Scale, mf64Scale);
   drawBackground(1.0f, 1.0f, 1.0f);
   if (mbShowAxes)
@@ -122,8 +140,8 @@ void WindowLive::drawScene() {
     glNewList(index, GL_COMPILE);
     glBegin(GL_POINTS);
     for (it = itStart; it != itEnd; it++) {
-      glColor3f(0, 0, (*it).mu8Intensity);
-      glVertex3f((*it).mf64X, (*it).mf64Y, (*it).mf64Z);
+      glColor3f(0, 0, (*it).mIntensity);
+      glVertex3f((*it).mX, (*it).mY, (*it).mZ);
     }
     glEnd();
     glEndList();
@@ -189,16 +207,16 @@ void WindowLive::motionCallback(int i32X, int i32Y) {
   WindowLive *window = (WindowLive*)glutGetWindowData();
   if (window->mi32MouseState == GLUT_DOWN) {
     if (window->mi32MouseButton == GLUT_LEFT_BUTTON) {
-      window->mRotation.mf64Y += (i32X - window->mi32StartX);
-      window->mRotation.mf64X += (i32Y - window->mi32StartY);
+      window->mRotation.mY += (i32X - window->mi32StartX);
+      window->mRotation.mX += (i32Y - window->mi32StartY);
       window->mi32StartX = i32X;
       window->mi32StartY = i32Y;
       window->redraw();
     }
     else if (window->mi32MouseButton == GLUT_RIGHT_BUTTON) {
-      window->mTranslation.mf64X += (i32X - window->mi32StartX) /
+      window->mTranslation.mX += (i32X - window->mi32StartX) /
         window->mf64Scale;
-      window->mTranslation.mf64Y -= (i32Y - window->mi32StartY) /
+      window->mTranslation.mY -= (i32Y - window->mi32StartY) /
         window->mf64Scale;
       window->mi32StartX = i32X;
       window->mi32StartY = i32Y;

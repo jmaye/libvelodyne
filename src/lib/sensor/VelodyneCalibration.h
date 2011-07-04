@@ -1,107 +1,211 @@
+/******************************************************************************
+ * Copyright (C) 2011 by Jerome Maye                                          *
+ * jerome.maye@gmail.com                                                      *
+ *                                                                            *
+ * This program is free software; you can redistribute it and/or modify       *
+ * it under the terms of the Lesser GNU General Public License as published by*
+ * the Free Software Foundation; either version 3 of the License, or          *
+ * (at your option) any later version.                                        *
+ *                                                                            *
+ * This program is distributed in the hope that it will be useful,            *
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of             *
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the              *
+ * Lesser GNU General Public License for more details.                        *
+ *                                                                            *
+ * You should have received a copy of the Lesser GNU General Public License   *
+ * along with this program. If not, see <http://www.gnu.org/licenses/>.       *
+ ******************************************************************************/
+
+/** \file VelodyneCalibration.h
+    \brief This file defines the VelodyneCalibration class, which represents the
+           calibration structure for the Velodyne
+  */
+
 #ifndef VELODYNECALIBRATION_H
 #define VELODYNECALIBRATION_H
 
-#include "IOException.h"
-#include "OutOfBoundException.h"
+#include "exceptions/IOException.h"
+#include "exceptions/OutOfBoundException.h"
 
 #include <iosfwd>
 
-#include <stdint.h>
-
+/** The class VelodyneCalibration represents the calibration structure for the
+    Velodyne.
+    \brief Velodyne calibration
+  */
 class VelodyneCalibration {
-  friend std::ostream& operator << (std::ostream &stream,
-    const VelodyneCalibration &obj);
-  friend std::istream& operator >> (std::istream &stream,
-    VelodyneCalibration &obj);
+  /** \name Stream methods
+    @{
+    */
+  /// Read interface to std::ostream
+  friend std::ostream& operator << (std::ostream& stream,
+    const VelodyneCalibration& obj);
+  /// Write interface to std::ostream
+  friend std::istream& operator >> (std::istream& stream,
+    VelodyneCalibration& obj);
+  /** @}
+    */
 
-  VelodyneCalibration(const VelodyneCalibration &other);
-  VelodyneCalibration& operator = (const VelodyneCalibration &other);
+  /** \name Private constructors
+    @{
+    */
+  /// Copy constructor
+  VelodyneCalibration(const VelodyneCalibration& other);
+  /// Assignment operator
+  VelodyneCalibration& operator = (const VelodyneCalibration& other);
+  /** @}
+    */
 
-  virtual void readFormatted(std::istream &stream) throw(IOException);
-  virtual void writeFormatted(std::ostream &stream) const;
+  /** \name Stream methods
+    @{
+    */
+  /// Read formatted data from istream
+  void readFormatted(std::istream& stream) throw (IOException);
+  /// Write formatted data to ostream
+  void writeFormatted(std::ostream& stream) const;
+  /** @}
+    */
 
-  static const uint16_t mcu16LasersNbr = 64;
+  /// Number of lasers in the Velodyne
+  static const size_t mLasersNbr = 64;
 
+  /// The VelodyneLaserCorrection struct defines the laser correction.
+  /// \brief Laser correction
   struct VelodyneLaserCorrection {
-    double mf64RotCorr;
-    double mf64SinRotCorr;
-    double mf64CosRotCorr;
-    double mf64VertCorr;
-    double mf64SinVertCorr;
-    double mf64CosVertCorr;
-    double mf64DistCorr;
-    double mf64VertOffsCorr;
-    double mf64HorizOffsCorr;
-    VelodyneLaserCorrection() : mf64RotCorr(0),
-                                mf64SinRotCorr(0),
-                                mf64CosRotCorr(0),
-                                mf64VertCorr(0),
-                                mf64SinVertCorr(0),
-                                mf64CosVertCorr(0),
-                                mf64DistCorr(0),
-                                mf64VertOffsCorr(0),
-                                mf64HorizOffsCorr(0) {
+    /// Rotation correction
+    double mRotCorr;
+    /// Sinus of rotation correction
+    double mSinRotCorr;
+    /// Cosinus of rotation correction
+    double mCosRotCorr;
+    /// Vertical correction
+    double mVertCorr;
+    /// Sinus of vertical correction
+    double mSinVertCorr;
+    /// Cosinus of vertical correction
+    double mCosVertCorr;
+    /// Distortion correction
+    double mDistCorr;
+    /// Vertical offset correction
+    double mVertOffsCorr;
+    /// Horizontal offset correction
+    double mHorizOffsCorr;
+    /// Default constructor
+    VelodyneLaserCorrection() :
+      mRotCorr(0),
+      mSinRotCorr(0),
+      mCosRotCorr(0),
+      mVertCorr(0),
+      mSinVertCorr(0),
+      mCosVertCorr(0),
+      mDistCorr(0),
+      mVertOffsCorr(0),
+      mHorizOffsCorr(0) {
     }
-    VelodyneLaserCorrection(const VelodyneLaserCorrection &other)
-      : mf64RotCorr(other.mf64RotCorr),
-        mf64SinRotCorr(other.mf64SinRotCorr),
-        mf64CosRotCorr(other.mf64CosRotCorr),
-        mf64VertCorr(other.mf64VertCorr),
-        mf64SinVertCorr(other.mf64SinVertCorr),
-        mf64CosVertCorr(other.mf64CosVertCorr),
-        mf64DistCorr(other.mf64DistCorr),
-        mf64VertOffsCorr(other.mf64VertOffsCorr),
-        mf64HorizOffsCorr(other.mf64HorizOffsCorr) {
+    /// Copy constructor
+    VelodyneLaserCorrection(const VelodyneLaserCorrection& other) :
+      mRotCorr(other.mRotCorr),
+      mSinRotCorr(other.mSinRotCorr),
+      mCosRotCorr(other.mCosRotCorr),
+      mVertCorr(other.mVertCorr),
+      mSinVertCorr(other.mSinVertCorr),
+      mCosVertCorr(other.mCosVertCorr),
+      mDistCorr(other.mDistCorr),
+      mVertOffsCorr(other.mVertOffsCorr),
+      mHorizOffsCorr(other.mHorizOffsCorr) {
     }
-    VelodyneLaserCorrection& operator = (const VelodyneLaserCorrection &other) {
+    // Assignment operator
+    VelodyneLaserCorrection& operator = (const VelodyneLaserCorrection& other) {
       if (this != &other) {
-        mf64RotCorr = other.mf64RotCorr;
-        mf64SinRotCorr = other.mf64SinRotCorr;
-        mf64CosRotCorr =other.mf64CosRotCorr;
-        mf64VertCorr = other.mf64VertCorr;
-        mf64SinVertCorr = other.mf64SinVertCorr;
-        mf64CosVertCorr = other.mf64CosVertCorr;
-        mf64DistCorr =other.mf64DistCorr;
-        mf64VertOffsCorr = other.mf64VertOffsCorr;
-        mf64HorizOffsCorr = other.mf64HorizOffsCorr;
+        mRotCorr = other.mRotCorr;
+        mSinRotCorr = other.mSinRotCorr;
+        mCosRotCorr =other.mCosRotCorr;
+        mVertCorr = other.mVertCorr;
+        mSinVertCorr = other.mSinVertCorr;
+        mCosVertCorr = other.mCosVertCorr;
+        mDistCorr =other.mDistCorr;
+        mVertOffsCorr = other.mVertOffsCorr;
+        mHorizOffsCorr = other.mHorizOffsCorr;
       }
       return *this;
     }
   };
 
-  VelodyneLaserCorrection mCorr[mcu16LasersNbr];
+  /** \name Private members
+    @{
+    */
+  /// Laser corrections
+  VelodyneLaserCorrection mCorr[mLasersNbr];
+  /** @}
+    */
 
 public:
+  /** \name Constructors/destructor
+    @{
+    */
+  /// Default constructor
   VelodyneCalibration();
+  /// Destructor
   ~VelodyneCalibration();
+  /** @}
+    */
 
-  double getRotCorr(uint16_t u16LaserNbr) const throw(OutOfBoundException);
-  double getSinRotCorr(uint16_t u16LaserNbr) const throw(OutOfBoundException);
-  double getCosRotCorr(uint16_t u16LaserNbr) const throw(OutOfBoundException);
-  double getVertCorr(uint16_t u16LaserNbr) const throw(OutOfBoundException);
-  double getSinVertCorr(uint16_t u16LaserNbr) const throw(OutOfBoundException);
-  double getCosVertCorr(uint16_t u16LaserNbr) const throw(OutOfBoundException);
-  double getDistCorr(uint16_t u16LaserNbr) const throw(OutOfBoundException);
-  double getVertOffsCorr(uint16_t u16LaserNbr) const throw(OutOfBoundException);
-  double getHorizOffsCorr(uint16_t u16LaserNbr) const
-    throw(OutOfBoundException);
+  /** \name Accessors
+    @{
+    */
+  /// Returns the rotation correction
+  double getRotCorr(size_t laserNbr) const throw(OutOfBoundException);
+  /// Returns the sinus of rotation correction
+  double getSinRotCorr(size_t laserNbr) const throw(OutOfBoundException);
+  /// Returns the cosinus of rotation correction
+  double getCosRotCorr(size_t laserNbr) const throw(OutOfBoundException);
+  /// Returns the vertical correction
+  double getVertCorr(size_t laserNbr) const throw(OutOfBoundException);
+  /// Returns the sinus of vertical correction
+  double getSinVertCorr(size_t laserNbr) const throw(OutOfBoundException);
+  /// Returns the cosinus of vertical correction
+  double getCosVertCorr(size_t laserNbr) const throw(OutOfBoundException);
+  /// Returns the distortion correction
+  double getDistCorr(size_t laserNbr) const throw(OutOfBoundException);
+  /// Returns the vertical offset correction
+  double getVertOffsCorr(size_t laserNbr) const throw(OutOfBoundException);
+  /// Returns the horizontal offset correction
+  double getHorizOffsCorr(size_t laserNbr) const throw(OutOfBoundException);
 
-  void setRotCorr(uint16_t u16LaserNbr, double mf64Value)
+  /// Sets the rotation correction
+  void setRotCorr(size_t laserNbr, double value) throw(OutOfBoundException);
+  /// Sets the vertical correction
+  void setVertCorr(size_t laserNbr, double value) throw(OutOfBoundException);
+  /// Sets the distortion correction
+  void setDistCorr(size_t laserNbr, double value) throw(OutOfBoundException);
+  /// Sets the vertical offset correction
+  void setVertOffsCorr(size_t laserNbr, double value)
     throw(OutOfBoundException);
-  void setVertCorr(uint16_t u16LaserNbr, double mf64Value)
+  /// Sets the horizontal offset correction
+  void setHorizOffsCorr(size_t laserNbr, double value)
     throw(OutOfBoundException);
-  void setDistCorr(uint16_t u16LaserNbr, double mf64Value)
-    throw(OutOfBoundException);
-  void setVertOffsCorr(uint16_t u16LaserNbr, double mf64Value)
-    throw(OutOfBoundException);
-  void setHorizOffsCorr(uint16_t u16LaserNbr, double mf64Value)
-    throw(OutOfBoundException);
+  /** @}
+    */
 
-  double deg2rad(double f64Deg) const;
-  double rad2deg(double f64Rad) const;
+  /** \name Methods
+    @{
+    */
+  /// Converts degree to radian
+  double deg2rad(double deg) const;
+  /// Converts radian to degree
+  double rad2deg(double rad) const;
+  /** @}
+    */
 
-  virtual void read(std::istream &stream);
-  virtual void write(std::ostream &stream) const;
+  /** \name Stream methods
+    @{
+    */
+  /// Reads from stream
+  void read(std::istream& stream);
+  /// Writes to stream
+  void write(std::ostream& stream) const;
+  /** @}
+    */
 
 protected:
 

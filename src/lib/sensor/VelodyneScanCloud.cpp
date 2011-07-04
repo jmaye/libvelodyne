@@ -1,67 +1,88 @@
-#include "VelodyneScanCloud.h"
+/******************************************************************************
+ * Copyright (C) 2011 by Jerome Maye                                          *
+ * jerome.maye@gmail.com                                                      *
+ *                                                                            *
+ * This program is free software; you can redistribute it and/or modify       *
+ * it under the terms of the Lesser GNU General Public License as published by*
+ * the Free Software Foundation; either version 3 of the License, or          *
+ * (at your option) any later version.                                        *
+ *                                                                            *
+ * This program is distributed in the hope that it will be useful,            *
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of             *
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the              *
+ * Lesser GNU General Public License for more details.                        *
+ *                                                                            *
+ * You should have received a copy of the Lesser GNU General Public License   *
+ * along with this program. If not, see <http://www.gnu.org/licenses/>.       *
+ ******************************************************************************/
+
+#include "sensor/VelodyneScanCloud.h"
 
 #include <iostream>
 #include <fstream>
 
-#include <math.h>
+#include <cmath>
 
-using namespace std;
+/******************************************************************************/
+/* Constructors and Destructor                                                */
+/******************************************************************************/
 
-VelodyneScanCloud::VelodyneScanCloud() : mf64Timestamp(0),
-                                         mf64StartRotationAngle(0),
-                                         mf64EndRotationAngle(0) {
+VelodyneScanCloud::VelodyneScanCloud() :
+  mTimestamp(0),
+  mStartRotationAngle(0),
+  mEndRotationAngle(0) {
 }
 
-VelodyneScanCloud::VelodyneScanCloud(const VelodynePacket &vdynePacket,
-    const VelodyneCalibration &vdyneCalibration, double mcf64MinDistance,
-    double mcf64MaxDistance) {
-  mf64Timestamp = vdynePacket.getTimestamp();
-  for (uint32_t i = 0; i < vdynePacket.mcu16DataChunkNbr; i++) {
-    uint32_t u32IdxOffs = 0;
-    const DataChunk &data = vdynePacket.getDataChunk(i);
-    if (data.mu16HeaderInfo == vdynePacket.mcu16LowerBank)
-      u32IdxOffs = data.mcu16LasersPerPacket;
+VelodyneScanCloud::VelodyneScanCloud(const VelodynePacket& vdynePacket,
+  const VelodyneCalibration& vdyneCalibration, double minDistance,
+  double maxDistance) {
+  mTimestamp = vdynePacket.getTimestamp();
+  for (size_t i = 0; i < vdynePacket.mDataChunkNbr; i++) {
+    size_t idxOffs = 0;
+    const DataChunk& data = vdynePacket.getDataChunk(i);
+    if (data.mHeaderInfo == vdynePacket.mLowerBank)
+      idxOffs = data.mLasersPerPacket;
 
-    double f64Rotation =
-      vdyneCalibration.deg2rad((double)data.mu16RotationalInfo /
-      (double)vdynePacket.mcu16RotationResolution);
+    double rotation =
+      vdyneCalibration.deg2rad((double)data.mRotationalInfo /
+      (double)vdynePacket.mRotationResolution);
 
     if (i == 0)
-      mf64StartRotationAngle = f64Rotation;
-    else if (i == vdynePacket.mcu16DataChunkNbr -1)
-      mf64EndRotationAngle = f64Rotation;
+      mStartRotationAngle = rotation;
+    else if (i == vdynePacket.mDataChunkNbr -1)
+      mEndRotationAngle = rotation;
 
-    for (uint32_t j = 0; j < data.mcu16LasersPerPacket; j++) {
-      uint32_t u32LaserIdx = u32IdxOffs + j;
+    for (size_t j = 0; j < data.mLasersPerPacket; j++) {
+      size_t laserIdx = idxOffs + j;
 
-      double f64Distance = (vdyneCalibration.getDistCorr(u32LaserIdx)
-        + (double)data.maLaserData[j].mu16Distance /
-        (double)vdynePacket.mcu16DistanceResolution) /
-        (double)mcu16MeterConversion;
+      double distance = (vdyneCalibration.getDistCorr(laserIdx)
+        + (double)data.maLaserData[j].mDistance /
+        (double)vdynePacket.mDistanceResolution) /
+        (double)mMeterConversion;
 
-      if ((f64Distance < mcf64MinDistance) || (f64Distance > mcf64MaxDistance))
+      if ((distance < mMinDistance) || (distance > mMaxDistance))
         continue;
 
       Scan scan;
-      scan.mf64Range = f64Distance;
-      scan.mf64Heading = normalizeAngle(-(f64Rotation -
-        vdyneCalibration.getRotCorr(u32LaserIdx)));
-      scan.mf64Pitch = vdyneCalibration.getVertCorr(u32LaserIdx);
-      scan.mu8Intensity = data.maLaserData[j].mu8Intensity;
+      scan.mRange = distance;
+      scan.mHeading = normalizeAngle(-(rotation -
+        vdyneCalibration.getRotCorr(laserIdx)));
+      scan.mPitch = vdyneCalibration.getVertCorr(laserIdx);
+      scan.mIntensity = data.maLaserData[j].mIntensity;
       mScanCloudVector.push_back(scan);
     }
   }
 }
 
-VelodyneScanCloud::VelodyneScanCloud(const VelodyneScanCloud &other)
-  : mf64Timestamp(other.mf64Timestamp),
-    mScanCloudVector(other.mScanCloudVector) {
+VelodyneScanCloud::VelodyneScanCloud(const VelodyneScanCloud& other) :
+  mTimestamp(other.mTimestamp),
+  mScanCloudVector(other.mScanCloudVector) {
 }
 
 VelodyneScanCloud& VelodyneScanCloud::operator =
   (const VelodyneScanCloud &other) {
   if (this != &other) {
-    mf64Timestamp = other.mf64Timestamp;
+    mTimestamp = other.mTimestamp;
     mScanCloudVector = other.mScanCloudVector;
   }
   return *this;
@@ -70,77 +91,83 @@ VelodyneScanCloud& VelodyneScanCloud::operator =
 VelodyneScanCloud::~VelodyneScanCloud() {
 }
 
-void VelodyneScanCloud::read(istream &stream) {
+/******************************************************************************/
+/* Methods                                                                    */
+/******************************************************************************/
+
+void VelodyneScanCloud::read(std::istream& stream) {
 }
 
-void VelodyneScanCloud::write(ostream &stream) const {
+void VelodyneScanCloud::write(std::ostream& stream) const {
 }
 
-void VelodyneScanCloud::readFormatted(istream &stream) {
+void VelodyneScanCloud::readFormatted(std::istream& stream) {
 }
 
-void VelodyneScanCloud::writeFormatted(ostream &stream) const {
+void VelodyneScanCloud::writeFormatted(std::ostream& stream) const {
 }
 
-double VelodyneScanCloud::normalizeAnglePositive(double f64Angle) const {
-  return fmod(fmod(f64Angle, 2.0 * M_PI) + 2.0 * M_PI, 2.0 * M_PI);
+std::ostream& operator << (std::ostream& stream, const VelodyneScanCloud& obj) {
+  obj.writeFormatted(stream);
+  return stream;
 }
 
-double VelodyneScanCloud::normalizeAngle(double f64Angle) const {
-  double f64Value = normalizeAnglePositive(f64Angle);
-  if (f64Value > M_PI)
-    f64Value -= 2.0 * M_PI;
-  return f64Value;
+std::istream& operator >> (std::istream& stream, VelodyneScanCloud& obj) {
+  obj.readFormatted(stream);
+  return stream;
 }
+
+double VelodyneScanCloud::normalizeAnglePositive(double angle) const {
+  return fmod(fmod(angle, 2.0 * M_PI) + 2.0 * M_PI, 2.0 * M_PI);
+}
+
+double VelodyneScanCloud::normalizeAngle(double angle) const {
+  double value = normalizeAnglePositive(angle);
+  if (value > M_PI)
+    value -= 2.0 * M_PI;
+  return value;
+}
+
+/******************************************************************************/
+/* Accessors                                                                  */
+/******************************************************************************/
 
 double VelodyneScanCloud::getTimestamp() const {
-  return mf64Timestamp;
+  return mTimestamp;
 }
 
-vector<Scan>::const_iterator VelodyneScanCloud::getStartIterator() const {
+std::vector<Scan>::const_iterator VelodyneScanCloud::getStartIterator() const {
   return mScanCloudVector.begin();
 }
 
-vector<Scan>::const_iterator VelodyneScanCloud::getEndIterator() const {
+std::vector<Scan>::const_iterator VelodyneScanCloud::getEndIterator() const {
   return mScanCloudVector.end();
 }
 
-void VelodyneScanCloud::setTimestamp(double f64Timestamp) {
-  mf64Timestamp = f64Timestamp;
+void VelodyneScanCloud::setTimestamp(double timestamp) {
+  mTimestamp = timestamp;
 }
 
 void VelodyneScanCloud::pushScan(const Scan &scan) {
   mScanCloudVector.push_back(scan);
 }
 
-uint32_t VelodyneScanCloud::getSize() const {
+size_t VelodyneScanCloud::getSize() const {
   return mScanCloudVector.size();
 }
 
 double VelodyneScanCloud::getStartRotationAngle() const {
-  return mf64StartRotationAngle;
+  return mStartRotationAngle;
 }
 
 double VelodyneScanCloud::getEndRotationAngle() const {
-  return mf64EndRotationAngle;
+  return mEndRotationAngle;
 }
 
-void VelodyneScanCloud::setStartRotationAngle(double f64Angle) {
-  mf64StartRotationAngle = f64Angle;
+void VelodyneScanCloud::setStartRotationAngle(double angle) {
+  mStartRotationAngle = angle;
 }
 
-void VelodyneScanCloud::setEndRotationAngle(double f64Angle) {
-  mf64EndRotationAngle = f64Angle;
-}
-
-ostream& operator << (ostream &stream,
-  const VelodyneScanCloud &obj) {
-  obj.writeFormatted(stream);
-  return stream;
-}
-
-istream& operator >> (istream &stream,
-  VelodyneScanCloud &obj) {
-  obj.readFormatted(stream);
-  return stream;
+void VelodyneScanCloud::setEndRotationAngle(double angle) {
+  mEndRotationAngle = angle;
 }

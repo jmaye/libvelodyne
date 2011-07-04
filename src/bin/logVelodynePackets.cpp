@@ -1,5 +1,27 @@
-#include "UDPConnection.h"
-#include "VelodynePacket.h"
+/******************************************************************************
+ * Copyright (C) 2011 by Jerome Maye                                          *
+ * jerome.maye@gmail.com                                                      *
+ *                                                                            *
+ * This program is free software; you can redistribute it and/or modify       *
+ * it under the terms of the Lesser GNU General Public License as published by*
+ * the Free Software Foundation; either version 3 of the License, or          *
+ * (at your option) any later version.                                        *
+ *                                                                            *
+ * This program is distributed in the hope that it will be useful,            *
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of             *
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the              *
+ * Lesser GNU General Public License for more details.                        *
+ *                                                                            *
+ * You should have received a copy of the Lesser GNU General Public License   *
+ * along with this program. If not, see <http://www.gnu.org/licenses/>.       *
+ ******************************************************************************/
+
+/** \file logVelodynePackets.cpp
+    \brief This file is a testing binary for logging Velodyne packets.
+  */
+
+#include "com/UDPConnection.h"
+#include "sensor/VelodynePacket.h"
 
 #include <iostream>
 #include <fstream>
@@ -10,13 +32,13 @@ using namespace std;
 
 int main(int argc, char **argv) {
   if (argc != 3) {
-    cerr << "Usage: " << argv[0] << " <LogFile> <PktNbr>" << endl;
+    std::cerr << "Usage: " << argv[0] << " <LogFile> <PktNbr>" << std::endl;
     return -1;
   }
-  ofstream logFile (argv[1], ios::out | ios::binary);
+  std::ofstream logFile (argv[1], std::ios::out | std::ios::binary);
   UDPConnection com;
   com.open();
-  for (uint32_t i = 0; i < (uint32_t)atoi(argv[2]); i++) {
+  for (size_t i = 0; i < (size_t)atoi(argv[2]); i++) {
     VelodynePacket vdynePacket;
     vdynePacket.read(com);
     vdynePacket.write(logFile);

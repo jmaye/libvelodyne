@@ -1,8 +1,31 @@
+/******************************************************************************
+ * Copyright (C) 2011 by Jerome Maye                                          *
+ * jerome.maye@gmail.com                                                      *
+ *                                                                            *
+ * This program is free software; you can redistribute it and/or modify       *
+ * it under the terms of the Lesser GNU General Public License as published by*
+ * the Free Software Foundation; either version 3 of the License, or          *
+ * (at your option) any later version.                                        *
+ *                                                                            *
+ * This program is distributed in the hope that it will be useful,            *
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of             *
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the              *
+ * Lesser GNU General Public License for more details.                        *
+ *                                                                            *
+ * You should have received a copy of the Lesser GNU General Public License   *
+ * along with this program. If not, see <http://www.gnu.org/licenses/>.       *
+ ******************************************************************************/
+
+/** \file VelodynePacket.h
+    \brief This file defines the VelodynePacket class, which represents a
+           Velodyne packet
+  */
+
 #ifndef VELODYNEPACKET_H
 #define VELODYNEPACKET_H
 
-#include "IOException.h"
-#include "OutOfBoundException.h"
+#include "exceptions/IOException.h"
+#include "exceptions/OutOfBoundException.h"
 
 #include <iosfwd>
 
@@ -10,45 +33,65 @@
 
 class UDPConnection;
 
+/** The struct LaserData represents the actual laser data.
+    \brief Laser data
+  */
 struct LaserData {
-  uint16_t mu16Distance;
-  uint8_t mu8Intensity;
-  LaserData() : mu16Distance(0),
-                mu8Intensity(0) {
+  /// Distance measure
+  uint16_t mDistance;
+  /// Intensity of the measure
+  uint8_t mIntensity;
+  /// Default constructor
+  LaserData() :
+    mDistance(0),
+    mIntensity(0) {
   }
-  LaserData(const LaserData &other) : mu16Distance(other.mu16Distance),
-                                      mu8Intensity(other.mu8Intensity) {
+  /// Copy constructor
+  LaserData(const LaserData& other) :
+    mDistance(other.mDistance),
+    mIntensity(other.mIntensity) {
   }
-  LaserData& operator = (const LaserData &other) {
+  /// Assignment operator
+  LaserData& operator = (const LaserData& other) {
     if (this != &other) {
-      mu16Distance = other.mu16Distance;
-      mu8Intensity = other.mu8Intensity;
+      mDistance = other.mDistance;
+      mIntensity = other.mIntensity;
     }
     return *this;
   }
 };
 
+/** The struct DataChunk represents a data chunk
+    \brief Data chunk
+  */
 struct DataChunk {
-  static const uint16_t mcu16LasersPerPacket = 32;
-
-  uint16_t mu16HeaderInfo;
-  uint16_t mu16RotationalInfo;
-  LaserData maLaserData[mcu16LasersPerPacket];
-  DataChunk() : mu16HeaderInfo(0),
-                mu16RotationalInfo(0) {
+  /// Number of lasers per packet
+  static const size_t mLasersPerPacket = 32;
+  /// Header info
+  uint16_t mHeaderInfo;
+  /// Rotational info
+  uint16_t mRotationalInfo;
+  /// Actual laser data
+  LaserData maLaserData[mLasersPerPacket];
+  /// Default constructor
+  DataChunk() :
+    mHeaderInfo(0),
+    mRotationalInfo(0) {
   }
-  DataChunk(const DataChunk &other)
-    : mu16HeaderInfo(other.mu16HeaderInfo),
-      mu16RotationalInfo(other.mu16RotationalInfo) {
-    for (uint32_t i = 0; i < mcu16LasersPerPacket; i++) {
+  /// Copy constructor
+  DataChunk(const DataChunk& other) :
+    mHeaderInfo(other.mHeaderInfo),
+    mRotationalInfo(other.mRotationalInfo) {
+    for (size_t i = 0; i < mLasersPerPacket; i++) {
       maLaserData[i] = other.maLaserData[i];
     }
   }
-  DataChunk& operator = (const DataChunk &other) {
+  /// Assignment operator
+  DataChunk& operator = (const DataChunk& other) {
     if (this != &other) {
-      mu16HeaderInfo = other.mu16HeaderInfo;
-      mu16RotationalInfo = other.mu16RotationalInfo;
-      for (uint32_t i = 0; i < mcu16LasersPerPacket; i++) {
+      mHeaderInfo = other.mHeaderInfo;
+      mRotationalInfo = other.mRotationalInfo;
+      for (size_t i = 0; i < mLasersPerPacket; i++) {
         maLaserData[i] = other.maLaserData[i];
       }
     }
@@ -56,61 +99,138 @@ struct DataChunk {
   }
 };
 
+/** The class VelodynePacket represents a Velodyne packet.
+    \brief Velodyne packet
+  */
 class VelodynePacket {
 public:
-  static const uint16_t mcu16UpperBank = 0xeeff;
-  static const uint16_t mcu16LowerBank = 0xddff;
-  static const uint16_t mcu16RotationResolution = 100;
-  static const uint16_t mcu16DistanceResolution = 5;
-  static const uint16_t mcu16TemperatureResolution = 256;
-  static const uint32_t mcu32TimeResolution = 1000000;
-  static const uint16_t mcu16PacketSize = 1206;
-  static const uint16_t mcu16DataChunkNbr = 12;
+  /** \name Constants
+    @{
+    */
+  /// Upper bank encoding
+  static const size_t mUpperBank = 0xeeff;
+  /// Lower bank encoding
+  static const size_t mLowerBank = 0xddff;
+  /// Rotation resolution
+  static const size_t mRotationResolution = 100;
+  /// Distance resolution
+  static const size_t mDistanceResolution = 5;
+  /// Temperature resolution
+  static const size_t mTemperatureResolution = 256;
+  /// Time resolution
+  static const size_t mTimeResolution = 1000000;
+  /// Packet size
+  static const size_t mPacketSize = 1206;
+  /// Number of data chunks
+  static const size_t mDataChunkNbr = 12;
+  /** @}
+    */
 
 private:
-  friend std::ostream& operator << (std::ostream &stream,
+  /** \name Stream methods
+    @{
+    */
+  /// Writes to std::ostream
+  friend std::ostream& operator << (std::ostream& stream,
     const VelodynePacket &obj);
-  friend std::istream& operator >> (std::istream &stream,
-    VelodynePacket &obj);
+  /// Reads from std::istream
+  friend std::istream& operator >> (std::istream& stream, VelodynePacket& obj);
+  /** @}
+    */
 
-  VelodynePacket(const VelodynePacket &other);
-  VelodynePacket& operator = (const VelodynePacket &other);
+  /** \name Private constructors
+    @{
+    */
+  /// Copy constructor
+  VelodynePacket(const VelodynePacket& other);
+  /// Assignment operator
+  VelodynePacket& operator = (const VelodynePacket& other);
+  /** @}
+    */
 
-  virtual void readFormatted(std::istream &stream);
-  virtual void writeFormatted(std::ostream &stream) const;
-  virtual void read(uint8_t au8Packet[]);
-  virtual void write(uint8_t au8Packet[]) const;
+  /** \name Stream methods
+    @{
+    */
+  /// Reads formatted from istream
+  void readFormatted(std::istream &stream);
+  /// Writes formatted to ostream
+  void writeFormatted(std::ostream &stream) const;
+  /// Read to buffer
+  void read(uint8_t au8Packet[]);
+  /// Write to buffer
+  void write(uint8_t au8Packet[]) const;
+  /** @}
+    */
 
+  /** \name Private methods
+    @{
+    */
+  /// Returns the time in seconds
   double seconds() const;
+  /** @}
+    */
 
-  double mf64Timestamp;
-  DataChunk mData[mcu16DataChunkNbr];
-  uint16_t mu16SpinCount;
-  uint32_t mu32Reserved;
-
-  mutable uint8_t mau8Packet[mcu16PacketSize];
+  /** \name Private members
+    @{
+    */
+  double mTimestamp;
+  DataChunk mData[mDataChunkNbr];
+  uint16_t mSpinCount;
+  uint32_t mReserved;
+  mutable uint8_t mau8Packet[mPacketSize];
+  /** @}
+    */
 
 public:
+  /** \name Constructors/Destructor
+    @{
+    */
+  /// Default constructor
   VelodynePacket();
+  /// Destructor
   ~VelodynePacket();
+  /** @}
+    */
 
+  /** \name Accessors
+    @{
+    */
+  /// Returns the timestamp of the acquisition
   double getTimestamp() const;
+  /// Returns the spin count
   uint16_t getSpinCount() const;
+  /// Returns the reserved stuff
   uint32_t getReserved() const;
-  const DataChunk& getDataChunk(uint16_t u16DataChunkIdx) const
+  //// Returns a data chunk
+  const DataChunk& getDataChunk(size_t dataChunkIdx) const
     throw(OutOfBoundException);
+  /// Returns the raw packet
   const uint8_t* getRawPacket() const;
-
-  void setTimestamp(double f64Timestamp);
-  void setSpinCount(uint16_t u16SpinCount);
-  void setReserved(uint32_t u32Reserved);
-  void setDataChunk(const DataChunk &data, uint16_t u16DataChunkIdx)
+  /// Sets the timestamp
+  void setTimestamp(double timestamp);
+  /// Sets the spin count
+  void setSpinCount(uint16_t spinCount);
+  /// Sets the reserved stuff
+  void setReserved(uint32_t reserved);
+  /// Sets the data chunk
+  void setDataChunk(const DataChunk& data, size_t dataChunkIdx)
     throw(OutOfBoundException);
-  void setRawPacket(const uint8_t *au8Data);
+  /// Sets the raw packet
+  void setRawPacket(const uint8_t* au8Data);
+  /** @}
+    */
 
-  virtual void read(UDPConnection &stream) throw(IOException);
-  virtual void read(std::istream &stream);
-  virtual void write(std::ostream &stream) const;
+  /** \name Methods
+    @{
+    */
+  /// Reads from UDP
+  void read(UDPConnection& stream);
+  /// Reads from istream
+  void read(std::istream& stream);
+  /// Writews to ostream
+  void write(std::ostream& stream) const;
+  /** @}
+    */
 
 protected:
 

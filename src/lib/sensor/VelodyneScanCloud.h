@@ -1,85 +1,195 @@
+/******************************************************************************
+ * Copyright (C) 2011 by Jerome Maye                                          *
+ * jerome.maye@gmail.com                                                      *
+ *                                                                            *
+ * This program is free software; you can redistribute it and/or modify       *
+ * it under the terms of the Lesser GNU General Public License as published by*
+ * the Free Software Foundation; either version 3 of the License, or          *
+ * (at your option) any later version.                                        *
+ *                                                                            *
+ * This program is distributed in the hope that it will be useful,            *
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of             *
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the              *
+ * Lesser GNU General Public License for more details.                        *
+ *                                                                            *
+ * You should have received a copy of the Lesser GNU General Public License   *
+ * along with this program. If not, see <http://www.gnu.org/licenses/>.       *
+ ******************************************************************************/
+
+/** \file VelodyneScanCloud.h
+    \brief This file defines the VelodyneScanCloud class, which represents a
+           Velodyne scan cloud
+  */
+
 #ifndef VELODYNESCANCLOUD_H
 #define VELODYNESCANCLOUD_H
 
-#include "VelodynePacket.h"
-#include "VelodyneCalibration.h"
+#include "sensor/VelodynePacket.h"
+#include "sensor/VelodyneCalibration.h"
 
 #include <vector>
 #include <iosfwd>
 
+/** The struct Scan represents a Velodyne scan.
+    \brief Velodyne scan
+  */
 struct Scan {
-  double mf64Range;
-  double mf64Heading;
-  double mf64Pitch;
-  uint8_t mu8Intensity;
-  Scan() : mf64Range(0),
-           mf64Heading(0),
-           mf64Pitch(0),
-           mu8Intensity(0) {
+  /// Range
+  double mRange;
+  /// Heading angle
+  double mHeading;
+  /// Pitch angle
+  double mPitch;
+  /// Intensity
+  uint8_t mIntensity;
+  /// Default constructor
+  Scan() :
+    mRange(0),
+    mHeading(0),
+    mPitch(0),
+    mIntensity(0) {
   }
-  Scan(const Scan &other) : mf64Range(other.mf64Range),
-                            mf64Heading(other.mf64Heading),
-                            mf64Pitch(other.mf64Pitch),
-                            mu8Intensity(other.mu8Intensity) {
+  /// Copy constructor
+  Scan(const Scan& other) :
+    mRange(other.mRange),
+    mHeading(other.mHeading),
+    mPitch(other.mPitch),
+    mIntensity(other.mIntensity) {
   }
-  Scan& operator = (const Scan &other) {
+  /// Assignment operator
+  Scan& operator = (const Scan& other) {
     if (this != &other) {
-      mf64Range = other.mf64Range;
-      mf64Heading = other.mf64Heading;
-      mf64Pitch = other.mf64Pitch;
-      mu8Intensity = other.mu8Intensity;
+      mRange = other.mRange;
+      mHeading = other.mHeading;
+      mPitch = other.mPitch;
+      mIntensity = other.mIntensity;
     }
     return *this;
   }
 };
 
+/** The class VelodyneScanCloud represents a Velodyne scan cloud.
+    \brief Velodyne scan cloud
+  */
 class VelodyneScanCloud {
-  friend std::ostream& operator << (std::ostream &stream,
-    const VelodyneScanCloud &obj);
-  friend std::istream& operator >> (std::istream &stream,
-    VelodyneScanCloud &obj);
+  /** \name Stream methods
+    @{
+    */
+  /// Writes to ostream
+  friend std::ostream& operator << (std::ostream& stream,
+    const VelodyneScanCloud& obj);
+  /// Reads from istream
+  friend std::istream& operator >> (std::istream& stream,
+    VelodyneScanCloud& obj);
+  /** @}
+    */
 
-  VelodyneScanCloud(const VelodyneScanCloud &other);
-  VelodyneScanCloud& operator = (const VelodyneScanCloud &other);
+  /** \name Private constructors
+    @{
+    */
+  /// Copy constructor
+  VelodyneScanCloud(const VelodyneScanCloud& other);
+  /// Assignment operator
+  VelodyneScanCloud& operator = (const VelodyneScanCloud& other);
+  /** @}
+    */
 
-  static const double mcf64MinDistance = 1.5;
-  static const double mcf64MaxDistance = 120.0;
-  static const uint16_t mcu16MeterConversion = 100;
+  /** \name Constants
+    @{
+    */
+  /// Minimum distance for representing points
+  static const double mMinDistance = 1.5;
+  /// Maximum distance for representing points
+  static const double mMaxDistance = 120.0;
+  /// Conversion in meters
+  static const size_t mMeterConversion = 100;
+  /** @}
+    */
 
-  virtual void readFormatted(std::istream &stream);
-  virtual void writeFormatted(std::ostream &stream) const;
+  /** \name Stream method
+    @{
+    */
+  /// Reads from formatted input
+  void readFormatted(std::istream& stream);
+  /// Writes to formatted output
+  void writeFormatted(std::ostream& stream) const;
+  /** @}
+    */
 
-  double normalizeAnglePositive(double f64Angle) const;
+  /** \name Private methods
+    @{
+    */
+  /// Normalize the angle positive
+  double normalizeAnglePositive(double angle) const;
+  /// Normalize the angle
+  double normalizeAngle(double angle) const;
+  /** @}
+    */
 
-  double normalizeAngle(double f64Angle) const;
-
-  double mf64Timestamp;
+  /** \name Private members
+    @{
+    */
+  /// Timestamp of the cloud
+  double mTimestamp;
+  /// Points in the cloud
   std::vector<Scan> mScanCloudVector;
-  double mf64StartRotationAngle;
-  double mf64EndRotationAngle;
+  /// Start angle of the cloud
+  double mStartRotationAngle;
+  /// End angle of the cloud
+  double mEndRotationAngle;
+  /** @}
+    */
 
 public:
+  /** \name Constructors/Destructor
+    @{
+    */
+  /// Default constructor
   VelodyneScanCloud();
-  VelodyneScanCloud(const VelodynePacket &vdynePacket,
-    const VelodyneCalibration &vdyneCalibration,
-    double mcf64MinDistance = VelodyneScanCloud::mcf64MinDistance,
-    double mcf64MaxDistance = VelodyneScanCloud::mcf64MaxDistance);
+  /// Constructs from packet
+  VelodyneScanCloud(const VelodynePacket& vdynePacket,
+    const VelodyneCalibration& vdyneCalibration,
+    double minDistance = VelodyneScanCloud::mMinDistance,
+    double maxDistance = VelodyneScanCloud::mMaxDistance);
+  /// Destructor
   ~VelodyneScanCloud();
 
+  /** \name Accessors
+    @{
+    */
+  // Returns the timestamp
   double getTimestamp() const;
+  // Returns the starting rotational angle
   double getStartRotationAngle() const;
+  // Returns the ending rotational angle
   double getEndRotationAngle() const;
+  // Returns starting iterator on the vector
   std::vector<Scan>::const_iterator getStartIterator() const;
+  // Returns end iterator on the cloud
   std::vector<Scan>::const_iterator getEndIterator() const;
-  uint32_t getSize() const;
-  void setTimestamp(double f64Timestamp);
-  void setStartRotationAngle(double f64Angle);
-  void setEndRotationAngle(double f64Angle);
-  void pushScan(const Scan &scan);
+  // Returns the size of the cloud
+  size_t getSize() const;
+  // Sets the timestamp
+  void setTimestamp(double timestamp);
+  // Sets the starting rotational angle
+  void setStartRotationAngle(double angle);
+  // Sets the ending rotational angle
+  void setEndRotationAngle(double angle);
+  // Push a scan in the cloud
+  void pushScan(const Scan& scan);
+  /** @}
+    */
 
-  virtual void read(std::istream &stream);
-  virtual void write(std::ostream &stream) const;
-  
+  /** \name Methods
+    @{
+    */
+  /// Reads from istream
+  void read(std::istream& stream);
+  /// Writes to ostream
+  void write(std::ostream& stream) const;
+  /** @}
+    */
+
 protected:
 
 };
