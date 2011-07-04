@@ -9,9 +9,7 @@ endif(NOT ${CMAKE_USE_PTHREADS_INIT})
 
 remake_project_header(config.h.remake)
 
-remake_include(${Boost_INCLUDE_DIR})
-remake_include(${GLUT_HEADERS})
-remake_include(${OPENGL_INCLUDE_DIR})
+remake_include(${Boost_INCLUDE_DIR} ${GLUT_HEADERS} ${OPENGL_INCLUDE_DIR})
 
 remake_add_directories(lib)
 remake_add_directories(bin COMPONENT test)
