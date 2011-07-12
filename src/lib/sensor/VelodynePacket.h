@@ -201,7 +201,7 @@ public:
   uint16_t getSpinCount() const;
   /// Returns the reserved stuff
   uint32_t getReserved() const;
-  //// Returns a data chunk
+  /// Returns a data chunk
   const DataChunk& getDataChunk(size_t dataChunkIdx) const
     throw(OutOfBoundException);
   /// Returns the raw packet

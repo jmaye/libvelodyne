@@ -27,27 +27,21 @@
 #include <stdexcept>
 #include <string>
 
-/** The class IOException represents all kinds of I/O exceptions.
+/** The class IOException represents I/O exceptions.
     \brief I/O exception
   */
 class IOException :
   public std::runtime_error {
-  /** \name Private constructors
-    @{
-    */
-  /// Assignment operator
-  IOException& operator = (const IOException &other);
-  /** @}
-    */
-
 public:
   /** \name Constructors/Destructor
     @{
     */
   /// Constructs exception from message
   IOException(const std::string& msg = "");
-  // Copy constructor
-  IOException(const IOException& other);
+  /// Copy constructor
+  IOException(const IOException& other) throw ();
+  /// Destructor
+  virtual ~IOException() throw ();
   /** @}
     */
 

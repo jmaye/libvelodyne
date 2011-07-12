@@ -68,8 +68,11 @@ public:
   /** \name Accessors
     @{
     */
+  /// Returns the timeout
   double getTimeout() const;
+  /// Returns the port number
   uint16_t getPort() const;
+  /// Sets the timeout
   void setTimeout(double f64Time);
  /** @}
     */

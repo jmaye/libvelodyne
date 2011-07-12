@@ -161,25 +161,25 @@ public:
   /** \name Accessors
     @{
     */
-  // Returns the timestamp
+  /// Returns the timestamp
   double getTimestamp() const;
-  // Returns the starting rotational angle
+  /// Returns the starting rotational angle
   double getStartRotationAngle() const;
-  // Returns the ending rotational angle
+  /// Returns the ending rotational angle
   double getEndRotationAngle() const;
-  // Returns starting iterator on the vector
+  /// Returns starting iterator on the vector
   Point3DVectorConstIterator getStartIterator() const;
-  // Returns end iterator on the cloud
+  /// Returns end iterator on the cloud
   Point3DVectorConstIterator getEndIterator() const;
-  // Returns the size of the cloud
+  /// Returns the size of the cloud
   size_t getSize() const;
-  // Sets the timestamp
+  /// Sets the timestamp
   void setTimestamp(double timestamp);
-  // Sets the starting rotational angle
+  /// Sets the starting rotational angle
   void setStartRotationAngle(double angle);
-  // Sets the ending rotational angle
+  /// Sets the ending rotational angle
   void setEndRotationAngle(double angle);
-  // Push a point in the cloud
+  /// Push a point in the cloud
   void pushPoint(const Point3D& point);
   /** @}
     */

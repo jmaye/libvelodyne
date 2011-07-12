@@ -120,10 +120,15 @@ public:
   /** \name Methods
     @{
     */
+  /// Opens the serial port
   void open() throw (IOException);
+  /// Closes the serial port
   void close() throw (IOException);
+  /// Check if the port is open
   bool isOpen() const;
+  /// Reads a buffer of bytes from the serial port
   void readBuffer(uint8_t* au8Buffer, size_t nbBytes) throw (IOException);
+  /// Writes a buffer of bytes to the serial port
   void writeBuffer(const uint8_t* au8Buffer, size_t nbBytes)
     throw (IOException);
   /** @}
