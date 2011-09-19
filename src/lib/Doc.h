@@ -20,7 +20,7 @@
     \brief Contains main page for Doxygen documentation
   */
 
-/** \mainpage Reference manual for libvelodyne - A free/open source C++ library for interacting with the Velodyne HDL-64E S2
+/** \mainpage Reference manual for libvelodyne - A free/open source C++ library for interacting with the Velodyne HDL-64E S2 and HDL-32E
     \author Jerome Maye <jerome.maye@gmail.com>
     \version 0.1.44
     \date July 4, 2011
