@@ -24,6 +24,8 @@
 #ifndef VDYNEPOINTCLOUD_H
 #define VDYNEPOINTCLOUD_H
 
+#include <stdint.h>
+
 #include <vector>
 
 #include "base/Serializable.h"

@@ -24,6 +24,8 @@
 #ifndef VDYNESCANCLOUD_H
 #define VDYNESCANCLOUD_H
 
+#include <stdint.h>
+
 #include <vector>
 
 #include "base/Serializable.h"
