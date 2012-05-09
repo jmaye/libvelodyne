@@ -16,19 +16,18 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.       *
  ******************************************************************************/
 
-/** \file logVelodynePackets.cpp
-    \brief This file is a testing binary for logging Velodyne packets.
+/** \file logDataPacketsBuffer.cpp
+    \brief This file is a testing binary for logging Velodyne data packets
+           buffer.
   */
 
-#include "com/UDPConnection.h"
-#include "sensor/VelodynePacket.h"
+#include <cstdlib>
 
 #include <iostream>
 #include <fstream>
 
-#include <stdlib.h>
-
-using namespace std;
+#include "sensor/AcquisitionThread.h"
+#include "sensor/DataPacket.h"
 
 int main(int argc, char **argv) {
   if (argc != 3) {
@@ -36,13 +35,10 @@ int main(int argc, char **argv) {
     return -1;
   }
   std::ofstream logFile (argv[1], std::ios::out | std::ios::binary);
-  UDPConnection com;
-  com.open();
-  for (size_t i = 0; i < (size_t)atoi(argv[2]); i++) {
-    VelodynePacket vdynePacket;
-    vdynePacket.read(com);
-    vdynePacket.write(logFile);
-  }
-  com.close();
+  UDPConnectionServer connection(2368);
+  AcquisitionThread<DataPacket> acqThread(connection);
+  acqThread.start();
+  for (size_t i = 0; i < (size_t)atoi(argv[2]); i++)
+     acqThread.getBuffer().dequeue()->writeBinary(logFile);
   return 0;
 }

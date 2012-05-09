@@ -16,34 +16,26 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.       *
  ******************************************************************************/
 
-/** \file logVelodynePacketsBuffer.cpp
-    \brief This file is a testing binary for logging Velodyne packets buffer.
+/** \file readDataPacketsFromFile.cpp
+    \brief This file is a testing binary for reading Velodyne data packets
+           from file.
   */
-
-#include "acquisition/AcquisitionThread.h"
-#include "exceptions/IOException.h"
 
 #include <iostream>
 #include <fstream>
 
-#include <stdlib.h>
+#include "sensor/DataPacket.h"
 
 int main(int argc, char **argv) {
-  if (argc != 3) {
-    std::cerr << "Usage: " << argv[0] << " <LogFile> <PktNbr>" << std::endl;
+  if (argc != 2) {
+    std::cerr << "Usage: " << argv[0] << " <LogFile>" << std::endl;
     return -1;
   }
-  std::ofstream logFile (argv[1], std::ios::out | std::ios::binary);
-  AcquisitionThread acqThread;
-  acqThread.run();
-  for (size_t i = 0; i < (size_t)atoi(argv[2]); i++) {
-    try {
-      acqThread.getPacket()->write(logFile);
-    }
-    catch(IOException &e) {
-     i--;
-    }
+  std::ifstream logFile(argv[1], std::ios::in | std::ios::binary);
+  while (logFile.eof() != true) {
+    DataPacket dataPacket;
+    dataPacket.readBinary(logFile);
+    std::cout << dataPacket;
   }
-  acqThread.stop();
   return 0;
 }

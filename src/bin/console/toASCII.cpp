@@ -16,25 +16,36 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.       *
  ******************************************************************************/
 
-/** \file readVelodynePacketsFromFile.cpp
-    \brief This file is a testing binary for reading Velodyne packets from file.
+/** \file toASCII.cpp
+    \brief This file is a testing binary for writing Velodyne data packets to
+           ASCII.
   */
-
-#include "sensor/VelodynePacket.h"
 
 #include <iostream>
 #include <fstream>
 
+#include "sensor/Calibration.h"
+#include "sensor/DataPacket.h"
+#include "sensor/Converter.h"
+#include "data-structures/VdynePointCloud.h"
+
 int main(int argc, char **argv) {
-  if (argc != 2) {
-    std::cerr << "Usage: " << argv[0] << " <LogFile>" << std::endl;
+  if (argc != 4) {
+    std::cerr << "Usage: " << argv[0]
+      << " <logFile> <calibrationFile> <asciiFile>" << std::endl;
     return -1;
   }
   std::ifstream logFile(argv[1], std::ios::in | std::ios::binary);
+  Calibration calibration;
+  std::ifstream calibFile(argv[2]);
+  calibFile >> calibration;
+  std::ofstream asciiFile(argv[3]);
   while (logFile.eof() != true) {
-    VelodynePacket vdynePacket;
-    vdynePacket.read(logFile);
-    std::cout << vdynePacket;
+    DataPacket dataPacket;
+    dataPacket.readBinary(logFile);
+    VdynePointCloud pointCloud;
+    Converter::toPointCloud(dataPacket, calibration, pointCloud);
+    asciiFile << pointCloud;
   }
   return 0;
 }

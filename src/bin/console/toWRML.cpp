@@ -16,39 +16,45 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.       *
  ******************************************************************************/
 
-/** \file viewLog.cpp
-    \brief This file is a testing binary for viewing a log file.
+/** \file toWRML.cpp
+    \brief This file is a testing binary for writing Velodyne data packet to
+           WRML.
   */
-
-#include "sensor/VelodyneCalibration.h"
-#include "sensor/VelodynePacket.h"
-#include "sensor/VelodynePointCloud.h"
-#include "visualization/WindowStatic.h"
 
 #include <iostream>
 #include <fstream>
 
+#include "sensor/Calibration.h"
+#include "sensor/DataPacket.h"
+#include "sensor/Converter.h"
+#include "data-structures/VdynePointCloud.h"
+
 int main(int argc, char **argv) {
-  if (argc != 3) {
-    std::cerr << "Usage: " << argv[0] << " <logFile> <calibrationFile>"
-      << std::endl;
+  if (argc != 4) {
+    std::cerr << "Usage: " << argv[0]
+      << " <logFile> <calibrationFile> <wrmlFile>" << std::endl;
     return -1;
   }
-  WindowStatic window(argc, argv);
   std::ifstream logFile(argv[1], std::ios::in | std::ios::binary);
-  VelodyneCalibration vdyneCalibration;
+  Calibration calibration;
   std::ifstream calibFile(argv[2]);
-  calibFile >> vdyneCalibration;
+  calibFile >> calibration;
+  std::ofstream wrmlFile(argv[3]);
+  wrmlFile << "#VRML V2.0 utf8" << std::endl
+           << "Shape {" << std::endl
+           << "   geometry PointSet {" << std::endl
+           << "      coord Coordinate {" << std::endl
+           << "         point [" <<std:: endl;
   while (logFile.eof() != true) {
-    VelodynePacket vdynePacket;
-    vdynePacket.read(logFile);
-    VelodynePointCloud pointCloud(vdynePacket, vdyneCalibration);
-    window.addPointCloud(pointCloud);
+    DataPacket dataPacket;
+    dataPacket.readBinary(logFile);
+    VdynePointCloud pointCloud;
+    Converter::toPointCloud(dataPacket, calibration, pointCloud);
+    wrmlFile << pointCloud;
   }
-  window.createGlList();
-  window.setTranslation(0, -10, -60);
-  window.setRotation(0, 30, 0);
-  window.setVisibility(true);
-  window.show();
+  wrmlFile << "         ]" << std::endl
+           << "      }" << std::endl
+           << "   }" << std::endl
+           << "}" << std::endl;
   return 0;
 }

@@ -16,23 +16,26 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.       *
  ******************************************************************************/
 
-/** \file readCalibration.cpp
-    \brief This file is a testing binary for reading Velodyne calibration.
+/** \file readPositionPacketsFromFile.cpp
+    \brief This file is a testing binary for reading Velodyne position packets
+           from file.
   */
-
-#include "sensor/VelodyneCalibration.h"
 
 #include <iostream>
 #include <fstream>
 
+#include "sensor/PositionPacket.h"
+
 int main(int argc, char **argv) {
   if (argc != 2) {
-    std::cerr << "Usage: " << argv[0] << " <calibrationFile>" << std::endl;
+    std::cerr << "Usage: " << argv[0] << " <LogFile>" << std::endl;
     return -1;
   }
-  VelodyneCalibration vdyneCalibration;
-  std::ifstream calibFile(argv[1]);
-  calibFile >> vdyneCalibration;
-  std::cout << vdyneCalibration;
+  std::ifstream logFile(argv[1], std::ios::in | std::ios::binary);
+  while (logFile.eof() != true) {
+    PositionPacket posPacket;
+    posPacket.readBinary(logFile);
+    std::cout << posPacket;
+  }
   return 0;
 }

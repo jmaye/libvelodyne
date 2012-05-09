@@ -16,24 +16,23 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.       *
  ******************************************************************************/
 
-/** \file setRPM.cpp
-    \brief This file is a testing binary for setting RPM of Velodyne.
+/** \file readCalibration.cpp
+    \brief This file is a testing binary for reading Velodyne calibration.
   */
-
-#include "sensor/VelodyneControl.h"
 
 #include <iostream>
 #include <fstream>
 
-#include <stdlib.h>
+#include "sensor/Calibration.h"
 
 int main(int argc, char **argv) {
   if (argc != 2) {
-    std::cerr << "Usage: " << argv[0] << " <RPM value between 300 and 900>"
-      << std::endl;
+    std::cerr << "Usage: " << argv[0] << " <calibrationFile>" << std::endl;
     return -1;
   }
-  VelodyneControl controller;
-  controller.setRPM((size_t)atoi(argv[1]));
+  Calibration calibration;
+  std::ifstream calibFile(argv[1]);
+  calibFile >> calibration;
+  std::cout << calibration;
   return 0;
 }

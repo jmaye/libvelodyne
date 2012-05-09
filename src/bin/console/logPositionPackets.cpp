@@ -16,25 +16,31 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.       *
  ******************************************************************************/
 
-/** \file liveView.cpp
-    \brief This file is a testing binary for Velodyne point cloud live view.
+/** \file logDataPackets.cpp
+    \brief This file is a testing binary for logging Velodyne position packets.
   */
 
-#include "visualization/WindowLive.h"
+#include <cstdlib>
 
 #include <iostream>
 #include <fstream>
 
-int main(int argc, char** argv) {
-  if (argc != 2) {
-    std::cerr << "Usage: " << argv[0] << " <calibrationFile>"
-      << std::endl;
+#include "com/UDPConnectionServer.h"
+#include "sensor/PositionPacket.h"
+
+int main(int argc, char **argv) {
+  if (argc != 3) {
+    std::cerr << "Usage: " << argv[0] << " <LogFile> <PktNbr>" << std::endl;
     return -1;
   }
-  WindowLive window(argc, argv);
-  window.setTranslation(0, -10, -60);
-  window.setRotation(0, 30, 0);
-  window.setVisibility(true);
-  window.show();
+  std::ofstream logFile(argv[1], std::ios::out | std::ios::binary);
+  UDPConnectionServer com(8308);
+  com.open();
+  for (size_t i = 0; i < (size_t)atoi(argv[2]); ++i) {
+    PositionPacket posPacket;
+    posPacket.readBinary(com);
+    posPacket.writeBinary(logFile);
+  }
+  com.close();
   return 0;
 }

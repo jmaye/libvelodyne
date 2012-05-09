@@ -16,42 +16,25 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.       *
  ******************************************************************************/
 
-/** \file writeWRML.cpp
-    \brief This file is a testing binary for writing Velodyne packet to WRML.
+/** \file setRPM.cpp
+    \brief This file is a testing binary for setting RPM of Velodyne.
   */
 
-#include "sensor/VelodyneCalibration.h"
-#include "sensor/VelodynePacket.h"
-#include "sensor/VelodynePointCloud.h"
+#include <cstdlib>
 
 #include <iostream>
 #include <fstream>
 
+#include "sensor/Controller.h"
+
 int main(int argc, char **argv) {
-  if (argc != 4) {
-    std::cerr << "Usage: " << argv[0] << " <logFile> <calibrationFile> <wrmlFile>"
-         << std::endl;
+  if (argc != 2) {
+    std::cerr << "Usage: " << argv[0] << " <RPM value between 300 and 900>"
+      << std::endl;
     return -1;
   }
-  std::ifstream logFile(argv[1], std::ios::in | std::ios::binary);
-  VelodyneCalibration vdyneCalibration;
-  std::ifstream calibFile(argv[2]);
-  calibFile >> vdyneCalibration;
-  std::ofstream wrmlFile(argv[3]);
-  wrmlFile << "#VRML V2.0 utf8" << std::endl
-           << "Shape {" << std::endl
-           << "   geometry PointSet {" << std::endl
-           << "      coord Coordinate {" << std::endl
-           << "         point [" <<std:: endl;
-  while (logFile.eof() != true) {
-    VelodynePacket vdynePacket;
-    vdynePacket.read(logFile);
-    VelodynePointCloud pointCloud(vdynePacket, vdyneCalibration);
-    wrmlFile << pointCloud;
-  }
-  wrmlFile << "         ]" << std::endl
-           << "      }" << std::endl
-           << "   }" << std::endl
-           << "}" << std::endl;
+  SerialConnection serialConnection;
+  Controller control(serialConnection);
+  control.setRPM((size_t)atoi(argv[1]));
   return 0;
 }

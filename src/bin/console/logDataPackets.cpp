@@ -16,33 +16,29 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.       *
  ******************************************************************************/
 
-/** \file writeASCII.cpp
-    \brief This file is a testing binary for writing Velodyne packet to ASCII.
+/** \file logDataPackets.cpp
+    \brief This file is a testing binary for logging Velodyne data packets.
   */
 
-#include "sensor/VelodyneCalibration.h"
-#include "sensor/VelodynePacket.h"
-#include "sensor/VelodynePointCloud.h"
+#include <cstdlib>
 
 #include <iostream>
 #include <fstream>
 
+#include "com/UDPConnectionServer.h"
+#include "sensor/DataPacket.h"
+
 int main(int argc, char **argv) {
-  if (argc != 4) {
-    std::cerr << "Usage: " << argv[0] << " <logFile> <calibrationFile> <asciiFile>"
-      << std::endl;
+  if (argc != 3) {
+    std::cerr << "Usage: " << argv[0] << " <LogFile> <PktNbr>" << std::endl;
     return -1;
   }
-  std::ifstream logFile(argv[1], std::ios::in | std::ios::binary);
-  VelodyneCalibration vdyneCalibration;
-  std::ifstream calibFile(argv[2]);
-  calibFile >> vdyneCalibration;
-  std::ofstream asciiFile(argv[3]);
-  while (logFile.eof() != true) {
-    VelodynePacket vdynePacket;
-    vdynePacket.read(logFile);
-    VelodynePointCloud pointCloud(vdynePacket, vdyneCalibration);
-    asciiFile << pointCloud;
+  std::ofstream logFile(argv[1], std::ios::out | std::ios::binary);
+  UDPConnectionServer com(2368);
+  for (size_t i = 0; i < (size_t)atoi(argv[2]); ++i) {
+    DataPacket dataPacket;
+    dataPacket.readBinary(com);
+    dataPacket.writeBinary(logFile);
   }
   return 0;
 }
