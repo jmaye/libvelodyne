@@ -28,18 +28,25 @@
 
 VelodyneControl::VelodyneControl(bool showVelodyne) :
     mUi(new Ui_VelodyneControl()),
-    mVelodyneDisplayList(-1) {
+    mVelodyneBaseDisplayList(-1),
+    mVelodyneSpinDisplayList(-1),
+    mAngle(0) {
   mUi->setupUi(this);
   connect(&View3d::getInstance().getScene(), SIGNAL(render(View3d&, Scene3d&)),
     this, SLOT(render(View3d&, Scene3d&)));
   connect(&View3d::getInstance(), SIGNAL(createDisplayLists()),
     this, SLOT(createDisplayLists()));
+  connect(&mRotateTimer, SIGNAL(timeout()), this, SLOT(timerTimeout()));
   setShowVelodyne(showVelodyne);
+  mRotateTimer.setInterval(50);
+  mRotateTimer.start();
 }
 
 VelodyneControl::~VelodyneControl() {
-  if (mVelodyneDisplayList != -1)
-    glDeleteLists(mVelodyneDisplayList, 1);
+  if (mVelodyneBaseDisplayList != -1)
+    glDeleteLists(mVelodyneBaseDisplayList, 1);
+  if (mVelodyneSpinDisplayList != -1)
+    glDeleteLists(mVelodyneSpinDisplayList, 1);
   delete mUi;
 }
 
@@ -65,7 +72,11 @@ void VelodyneControl::renderVelodyne() {
   glEnable(GL_CULL_FACE);
   glCullFace(GL_BACK);
   glLightModeli(GL_LIGHT_MODEL_TWO_SIDE, true);
-  glCallList(mVelodyneDisplayList);
+  glCallList(mVelodyneBaseDisplayList);
+  glPushMatrix();
+  glRotatef(mAngle, 0, 0, 1);
+  glCallList(mVelodyneSpinDisplayList);
+  glPopMatrix();
   glPopAttrib();
 }
 
@@ -79,5 +90,12 @@ void VelodyneControl::render(View3d& view, Scene3d& scene) {
 }
 
 void VelodyneControl::createDisplayLists() {
-  mVelodyneDisplayList = genVelodyneDisplayList();
+  mVelodyneSpinDisplayList = genVelodyneSpinDisplayList();
+  mVelodyneBaseDisplayList = genVelodyneBaseDisplayList();
+}
+
+void VelodyneControl::timerTimeout() {
+  mAngle += 66;
+  mAngle = (int)mAngle % 360;
+  View3d::getInstance().update();
 }

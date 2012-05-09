@@ -261,10 +261,10 @@ void Calibration::setHorizOffsCorr(size_t laserNbr, double value) {
 /* Methods                                                                    */
 /******************************************************************************/
 
-double Calibration::deg2rad(double deg) const {
+double Calibration::deg2rad(double deg) {
   return deg * M_PI / 180.0;
 }
 
-double Calibration::rad2deg(double rad) const {
+double Calibration::rad2deg(double rad) {
   return rad * 180.0 / M_PI;
 }

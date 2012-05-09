@@ -16,6 +16,8 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.       *
  ******************************************************************************/
 
+#include "exceptions/IOException.h"
+
 /******************************************************************************/
 /* Constructors and Destructor                                                */
 /******************************************************************************/
@@ -53,6 +55,11 @@ typename AcquisitionThread<P>::Buffer& AcquisitionThread<P>::getBuffer() {
 template <typename P>
 void AcquisitionThread<P>::process() {
   boost::shared_ptr<P> p(new P());
-  p->readBinary(mConnection);
-  mBuffer.enqueue(p);
+  try {
+    p->readBinary(mConnection);
+    mBuffer.enqueue(p);
+  }
+  catch (IOException& e) {
+    std::cerr << e.what() << std::endl;
+  }
 }

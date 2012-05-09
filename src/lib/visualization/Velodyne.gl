@@ -23103,7 +23103,7 @@ static const GLfloat velodyne_part_4_emission[4] = {
 
 static const double velodyne_part_4_shininess = 0.0976562;
 
-GLint genVelodyneDisplayList()
+GLint genVelodyneSpinDisplayList()
 {
   GLint id = glGenLists(1);
   glNewList(id, GL_COMPILE);
@@ -23159,6 +23159,16 @@ GLint genVelodyneDisplayList()
     }
   }
   glEnd();
+  glDisable(GL_COLOR_MATERIAL);
+  glEndList();
+  return id;
+};
+
+GLint genVelodyneBaseDisplayList()
+{
+  GLint id = glGenLists(1);
+  glNewList(id, GL_COMPILE);
+  glEnable(GL_COLOR_MATERIAL);
   glColorMaterial(GL_FRONT_AND_BACK, GL_DIFFUSE);
   glColor4fv(velodyne_part_3_color);
   glColorMaterial(GL_FRONT_AND_BACK, GL_AMBIENT);

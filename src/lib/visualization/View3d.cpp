@@ -236,3 +236,8 @@ void View3d::sceneRotationChanged(const std::vector<double>& rotation) {
 void View3d::sceneScaleChanged(double scale) {
   update();
 }
+
+void View3d::resizeEvent(QResizeEvent* event) {
+  QGLWidget::resizeEvent(event);
+  emit resized();
+}

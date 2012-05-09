@@ -23,6 +23,8 @@
 #ifndef VELODYNECONTROL_H
 #define VELODYNECONTROL_H
 
+#include <QtCore/QTimer>
+
 #include "visualization/Control.h"
 #include "base/Singleton.h"
 #include "visualization/View3d.h"
@@ -82,8 +84,14 @@ protected:
     */
   /// Qt user interface
   Ui_VelodyneControl* mUi;
-  /// GL display list for the Velodyne
-  GLint mVelodyneDisplayList;
+  /// GL display list for the Velodyne base
+  GLint mVelodyneBaseDisplayList;
+  /// GL display list for the Velodyne spinning part
+  GLint mVelodyneSpinDisplayList;
+  /// Velodyne angle
+  double mAngle;
+  /// Rotate timer
+  QTimer mRotateTimer;
   /** @}
     */
 
@@ -97,6 +105,8 @@ protected slots:
   void render(View3d& view, Scene3d& scene);
   /// Clients should create display lists
   void createDisplayLists();
+  /// Timeout of the timer
+  void timerTimeout();
   /** @}
     */
 

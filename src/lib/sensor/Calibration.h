@@ -153,9 +153,9 @@ public:
     @{
     */
   /// Converts degree to radian
-  double deg2rad(double deg) const;
+  static double deg2rad(double deg);
   /// Converts radian to degree
-  double rad2deg(double rad) const;
+  static double rad2deg(double rad);
   /** @}
     */
 

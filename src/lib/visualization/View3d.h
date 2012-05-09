@@ -119,6 +119,8 @@ protected:
   virtual void paintGL();
   /// Paint event
   virtual void paintEvent(QPaintEvent* event);
+  /// Resize event
+  virtual void resizeEvent(QResizeEvent* event);
   /** @}
     */
 
@@ -173,6 +175,8 @@ signals:
   void updated();
   /// Clients should create display lists
   void createDisplayLists();
+ /// Resized signal
+  void resized();
   /** @}
     */
 

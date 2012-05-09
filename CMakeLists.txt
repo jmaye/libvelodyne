@@ -35,9 +35,19 @@ remake_pack_deb(
 )
 
 remake_pack_deb(
-  COMPONENT test
-  DESCRIPTION "Test programs"
+  COMPONENT console-tools
+  DESCRIPTION "Console tools"
   libvelodyne
+)
+
+remake_pack_deb(
+  COMPONENT gui-tools
+  DESCRIPTION "GUI tools"
+  libvelodyne
+  libqt4-gui
+  libqt4-opengl
+  libfreetype6
+  libftgl2
 )
 
 remake_pack_deb(

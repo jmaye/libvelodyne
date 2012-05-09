@@ -178,6 +178,8 @@ protected slots:
   void sceneScaleChanged(double scale);
   /// Render the scene
   void render(View3d& view, Scene3d& scene);
+  /// View resized
+  void resized();
   /** @}
     */
 

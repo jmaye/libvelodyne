@@ -62,6 +62,7 @@ View3dControl::View3dControl(bool showFog, bool showGround, bool showAxes) :
   connect(&View3d::getInstance().getScene(), SIGNAL(render(View3d&, Scene3d&)),
     this, SLOT(render(View3d&, Scene3d&)));
   connect(&View3d::getInstance(), SIGNAL(updated()), this, SLOT(dumpFrame()));
+  connect(&View3d::getInstance(), SIGNAL(resized()), this, SLOT(resized()));
   setBackgroundColor(Qt::white);
   setFogColor(Qt::white);
   setGroundColor(Qt::lightGray);
@@ -420,4 +421,9 @@ void View3dControl::render(View3d& view, Scene3d& scene) {
       5.0);
   if (mUi->showAxesCheckBox->isChecked())
     renderAxes(2.5);
+}
+
+void View3dControl::resized() {
+  setDumpFrameSize(View3d::getInstance().rect().width(),
+    View3d::getInstance().rect().height());
 }

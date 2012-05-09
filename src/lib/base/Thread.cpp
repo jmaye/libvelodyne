@@ -335,7 +335,7 @@ void* Thread::run() {
     mTimer.stop();
     mMutex.lock();
     ++mNumCycles;
-    if (mCycle <= 0.0)
+    if (mCycle < 0.0)
       break;
   }
   mMutex.unlock();
