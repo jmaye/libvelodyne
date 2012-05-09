@@ -16,64 +16,88 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.       *
  ******************************************************************************/
 
-/** \file OutOfBoundException.h
-    \brief This file defines the OutOfBoundException class, which represents any
-           exceptions occuring when trying to access unallocated memory
+/** \file Threads.h
+    \brief This file defines the Threads class, which provides threads
+           manager facilities
   */
 
-#ifndef OUTOFBOUNDEXCEPTION_H
-#define OUTOFBOUNDEXCEPTION_H
+#ifndef THREADS_H
+#define THREADS_H
 
-#include <stdexcept>
-#include <string>
+#include <map>
 
-/** The class OutOfBoundException represents any exceptions occuring when trying
-    to access unallocated memory.
-    \brief Out of bounds exception
+#include "base/Singleton.h"
+#include "base/Thread.h"
+
+/** The class Threads implements threads manager facilities.
+    \brief Threads manager facilities
   */
-template <typename X> class OutOfBoundException :
-  public std::exception {
-public:
-  /** \name Constructors/destructor
+class Threads :
+  public Singleton<Threads> {
+friend class Singleton<Threads>;
+friend class Thread;
+  /** \name Private constructors
     @{
     */
-  /// Constructs exception from argument and string
-  OutOfBoundException(const X& argument, const std::string& msg, const
-    std::string& filename = " ", size_t line = 0);
   /// Copy constructor
-  OutOfBoundException(const OutOfBoundException& other) throw();
+  Threads(const Threads& other);
   /// Assignment operator
-  OutOfBoundException& operator = (const OutOfBoundException& other) throw();
-  /// Destructor
-  virtual ~OutOfBoundException() throw();
+  Threads& operator = (const Threads& other);
   /** @}
     */
 
+public:
   /** \name Accessors
     @{
     */
-  /// Access the exception string
-  virtual const char* what() const throw();
+  /// Access the number of thread objects
+  size_t getNumThreads() const;
+  /// Access the thread object associated with the calling thread
+  Thread& getSelf() const;
+  /// Access the thread object associated with the specified identifier
+  Thread& get(const Thread::Identifier& identifier) const;
+  /** @}
+    */
+
+  /** \name Methods
+    @{
+    */
+  /// Interrupt all registered thread objects
+  void interrupt();
   /** @}
     */
 
 protected:
+  /** \name Protected constructors/destructor
+    @{
+    */
+  /// Default constructor
+  Threads();
+  /// Destructor
+  virtual ~Threads();
+  /** @}
+    */
+
+  /** \name Protected methods
+    @{
+    */
+  /// Register a thread
+  void registerThread(Thread& thread);
+  /// Unregister a thread
+  void unregisterThread(Thread& thread);
+  /** @}
+    */
+
   /** \name Protected members
     @{
     */
-  /// Message in the exception
-  std::string mMsg;
-  /// Argument that causes the exception
-  X mArg;
-  /// Filename where the exception occurs
-  std::string mFilename;
-  /// Line number where the exception occurs
-  size_t mLine;
+  /// Map between thread identifier and thread pointers
+  std::map<Thread::Identifier, Thread*> mInstances;
+  /// Mutex protecting the object
+  mutable pthread_mutex_t mMutex;
   /** @}
     */
 
 };
 
-#include "exceptions/OutOfBoundException.tpp"
-
-#endif // OUTOFBOUNDEXCEPTION_H
+#endif // THREADS_H

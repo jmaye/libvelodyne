@@ -2,10 +2,12 @@ cmake_minimum_required(VERSION 2.6)
 
 include(ReMake)
 
+remake_set(CMAKE_CXX_FLAGS -std=c++0x CACHE FORCE INIT)
+
 remake_project(
   libvelodyne
-  VERSION 0.1
-  RELEASE alpha
+  VERSION 1.0
+  RELEASE beta
   SUMMARY "A C++ based Velodyne HDL-64E S2 and HDL-32E interfacing library"
   AUTHOR "Jerome Maye"
   CONTACT "jerome.maye@mavt.ethz.ch"

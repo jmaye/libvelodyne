@@ -16,15 +16,38 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.       *
  ******************************************************************************/
 
-#include "exceptions/ThreadException.h"
+#include "base/Serializable.h"
 
-ThreadException::ThreadException(const std::string& msg) :
-    std::runtime_error(msg) {
+/******************************************************************************/
+/* Constructors and Destructor                                                */
+/******************************************************************************/
+
+Serializable::Serializable() {
 }
 
-ThreadException::ThreadException(const ThreadException& other) throw () :
-    std::runtime_error(other) {
+Serializable::~Serializable() {
 }
 
-ThreadException::~ThreadException() throw () {
+/******************************************************************************/
+/* Methods                                                                    */
+/******************************************************************************/
+
+std::ostream& operator << (std::ostream& stream, const Serializable& obj) {
+  obj.write(stream);
+  return stream;
+}
+
+std::istream& operator >> (std::istream& stream, Serializable& obj) {
+  obj.read(stream);
+  return stream;
+}
+
+std::ofstream& operator << (std::ofstream& stream, const Serializable& obj) {
+  obj.write(stream);
+  return stream;
+}
+
+std::ifstream& operator >> (std::ifstream& stream, Serializable& obj) {
+  obj.read(stream);
+  return stream;
 }

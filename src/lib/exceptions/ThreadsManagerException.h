@@ -16,37 +16,65 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.       *
  ******************************************************************************/
 
-/** \file ThreadException.h
-    \brief This file defines the ThreadException class, which represents a
-           posix thread exception
+/** \file ThreadsManagerException.h
+    \brief This file defines the ThreadsManagerException class, which
+           is thrown whenever an exception occured in threads manager
   */
 
-#ifndef THREADEXCEPTION_H
-#define THREADEXCEPTION_H
+#ifndef THREADSMANAGEREXCEPTION_H
+#define THREADSMANAGEREXCEPTION_H
 
-#include <stdexcept>
+#include <exception>
 #include <string>
 
-/** The class ThreadException represents a posix thread exception.
-    \brief Thread exception
+/** The class ThreadsManagerException represents any exceptions occuring with
+    threads management
+    \brief Threads manager exception
   */
-class ThreadException :
-  public std::runtime_error {
+template <typename X> class ThreadsManagerException :
+  public std::exception {
 public:
-  /** \name Constructors/Destructor
+  /** \name Constructors/destructor
     @{
     */
-  /// Constructs exception from message
-  ThreadException(const std::string& msg = "");
+  /// Constructs exception from argument and string
+  ThreadsManagerException(const X& argument, const std::string& msg, const
+    std::string& filename = " ", size_t line = 0);
   /// Copy constructor
-  ThreadException(const ThreadException& other) throw ();
+  ThreadsManagerException(const ThreadsManagerException& other) throw ();
+  /// Assignment operator
+  ThreadsManagerException& operator = (const ThreadsManagerException& other)
+    throw ();
   /// Destructor
-  virtual ~ThreadException() throw ();
+  virtual ~ThreadsManagerException() throw ();
+  /** @}
+    */
+
+  /** \name Accessors
+    @{
+    */
+  /// Access the exception string
+  virtual const char* what() const throw ();
   /** @}
     */
 
 protected:
+  /** \name Protected members
+    @{
+    */
+  /// Message in the exception
+  std::string mMsg;
+  /// Argument that causes the exception
+  X mArg;
+  /// Filename where the exception occurs
+  std::string mFilename;
+  /// Line number where the exception occurs
+  size_t mLine;
+  /** @}
+    */
 
 };
 
-#endif // THREADEXCEPTION_H
+#include "exceptions/ThreadsManagerException.tpp"
+
+#endif // THREADSMANAGEREXCEPTION_H

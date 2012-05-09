@@ -16,15 +16,38 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.       *
  ******************************************************************************/
 
-#include "exceptions/ThreadException.h"
+/** \file InvalidOperationException.h
+    \brief This file defines the InvalidOperationException class, which
+           represents invalid operations exceptions
+  */
 
-ThreadException::ThreadException(const std::string& msg) :
-    std::runtime_error(msg) {
-}
+#ifndef INVALIDOPERATIONEXCEPTION_H
+#define INVALIDOPERATIONEXCEPTION_H
 
-ThreadException::ThreadException(const ThreadException& other) throw () :
-    std::runtime_error(other) {
-}
+#include <stdexcept>
+#include <string>
 
-ThreadException::~ThreadException() throw () {
-}
+/** The class InvalidOperationException represents invalid operations
+    exceptions.
+    \brief Invalid operation exception
+  */
+class InvalidOperationException :
+  public std::runtime_error {
+public:
+  /** \name Constructors/Destructor
+    @{
+    */
+  /// Constructs exception from message
+  InvalidOperationException(const std::string& msg = "");
+  /// Copy constructor
+  InvalidOperationException(const InvalidOperationException& other) throw ();
+  /// Destructor
+  virtual ~InvalidOperationException() throw ();
+  /** @}
+    */
+
+protected:
+
+};
+
+#endif // INVALIDOPERATIONEXCEPTION_H

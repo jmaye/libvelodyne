@@ -24,66 +24,59 @@
 #ifndef SERIALCONNECTION_H
 #define SERIALCONNECTION_H
 
-#include "exceptions/IOException.h"
-
 #include <string>
 
-#include <stdint.h>
-
-/** The enum SerialParity represents the different kinds of serial parity.
-    \brief Serial parity
-  */
-enum SerialParity {
-  /// No parity
-  none = 0,
-  /// Odd parity
-  odd = 1,
-  /// Even parity
-  even = 2
-};
+#include "base/Serializable.h"
 
 /** The class SerialConnection is an interface for serial communication.
     \brief Serial communication interface
   */
-class SerialConnection {
+class SerialConnection :
+  public virtual Serializable {
   /** \name Private constructors
     @{
     */
   /// Copy constructor
-  SerialConnection(const SerialConnection &other);
+  SerialConnection(const SerialConnection& other);
   /// Assignment operator
-  SerialConnection& operator = (const SerialConnection &other);
-  /** @}
-    */
-
-  /** \name Private members
-    @{
-    */
-  /// Path to the serial device
-  std::string mDevicePathStr;
-  // Baudrate of the device
-  size_t mBaudrate;
-  /// Data bits size
-  size_t mDatabits;
-  /// Stop bits number
-  size_t mStopbits;
-  /// Parity of the device
-  SerialParity mSerialParity;
-  /// Timeout of the device
-  double mTimeout;
-  /// Handle on the device
-  ssize_t mHandle;
+  SerialConnection& operator = (const SerialConnection& other);
   /** @}
     */
 
 public:
+  /** \name Types definitions
+    @{
+    */
+  /// The enum SerialParity represents the different kinds of serial parity.
+  enum SerialParity {
+    /// No parity
+    none = 0,
+    /// Odd parity
+    odd = 1,
+    /// Even parity
+    even = 2
+  };
+
+  /// The enum FlowControl represents the different kinds of flow controls.
+  enum FlowControl {
+    /// No flow control
+    no = 0,
+    /// Hardware flow control
+    hardware = 1,
+    /// Software flow control
+    software = 2
+  };
+  /** @}
+    */
+
   /** \name Constructors/destructor
     @{
     */
   /// Constructs the serial connection from parameters
   SerialConnection(const std::string& devicePathStr = "/dev/ttyUSB0",
     size_t baudrate = 9600, size_t databits = 8, size_t stopbits = 1,
-    SerialParity parity = none, double timeout = 2.5);
+    SerialParity parity = none, FlowControl flowControl = no, double
+    timeout = 2.5);
    /// Destructor
   ~SerialConnection();
   /** @}
@@ -102,6 +95,8 @@ public:
   size_t getStopbits() const;
   /// Returns the parity
   SerialParity getParity() const;
+  /// Returns the flow control
+  FlowControl getFlowControl() const;
   /// Returns the timeout
   double getTimeout() const;
   /// Sets the timeout
@@ -114,6 +109,8 @@ public:
   void setStopbits(size_t stopbits);
   /// Set the parity
   void setParity(SerialParity parity);
+  /// Set the flow control
+  void setFlowControl(FlowControl flowControl);
   /** @}
     */
 
@@ -121,20 +118,54 @@ public:
     @{
     */
   /// Opens the serial port
-  void open() throw (IOException);
+  void open();
   /// Closes the serial port
-  void close() throw (IOException);
+  void close();
   /// Check if the port is open
   bool isOpen() const;
   /// Reads a buffer of bytes from the serial port
-  void readBuffer(uint8_t* au8Buffer, size_t nbBytes) throw (IOException);
+  void readBuffer(char* buffer, ssize_t numBytes);
   /// Writes a buffer of bytes to the serial port
-  void writeBuffer(const uint8_t* au8Buffer, size_t nbBytes)
-    throw (IOException);
+  void writeBuffer(const char* buffer, ssize_t numBytes);
   /** @}
     */
 
 protected:
+  /** \name Stream methods
+    @{
+    */
+  /// Reads from standard input
+  virtual void read(std::istream& stream);
+  /// Writes to standard output
+  virtual void write(std::ostream& stream) const;
+  /// Reads from a file
+  virtual void read(std::ifstream& stream);
+  /// Writes to a file
+  virtual void write(std::ofstream& stream) const;
+  /** @}
+    */
+
+  /** \name Private members
+    @{
+    */
+  /// Path to the serial device
+  std::string mDevicePathStr;
+  /// Baudrate of the device
+  size_t mBaudrate;
+  /// Data bits size
+  size_t mDatabits;
+  /// Stop bits number
+  size_t mStopbits;
+  /// Parity of the device
+  SerialParity mSerialParity;
+  /// Flow control of the device
+  FlowControl mFlowControl;
+  /// Timeout of the device
+  double mTimeout;
+  /// Handle on the device
+  ssize_t mHandle;
+  /** @}
+    */
 
 };
 

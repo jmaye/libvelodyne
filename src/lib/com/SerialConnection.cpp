@@ -28,31 +28,52 @@
 #include <termios.h>
 #include <errno.h>
 
+#include "exceptions/BadArgumentException.h"
+#include "exceptions/SystemException.h"
+#include "exceptions/IOException.h"
+
 /******************************************************************************/
 /* Constructors and Destructor                                                */
 /******************************************************************************/
 
-SerialConnection::SerialConnection(const std::string& devicePathStr,
-  size_t baudrate, size_t databits, size_t stopbits, SerialParity parity,
-  double timeout) :
-  mDevicePathStr(devicePathStr),
-  mBaudrate(baudrate),
-  mDatabits(databits),
-  mStopbits(stopbits),
-  mSerialParity(parity),
-  mTimeout(timeout),
-  mHandle(0) {
+SerialConnection::SerialConnection(const std::string& devicePathStr, size_t
+    baudrate, size_t databits, size_t stopbits, SerialParity parity, FlowControl
+    flowControl, double timeout) :
+    mDevicePathStr(devicePathStr),
+    mBaudrate(baudrate),
+    mDatabits(databits),
+    mStopbits(stopbits),
+    mSerialParity(parity),
+    mFlowControl(flowControl),
+    mTimeout(timeout),
+    mHandle(0) {
 }
 
 SerialConnection::~SerialConnection() {
   close();
 }
 
-SerialConnection::SerialConnection(const SerialConnection& other) {
+/******************************************************************************/
+/* Stream operations                                                          */
+/******************************************************************************/
+
+void SerialConnection::read(std::istream& stream) {
 }
 
-SerialConnection& SerialConnection::operator = (const SerialConnection& other) {
-  return *this;
+void SerialConnection::write(std::ostream& stream) const {
+  stream << "device path: " << mDevicePathStr << std::endl
+    << "baudrate: " << mBaudrate << std::endl
+    << "data bits: " << mDatabits << std::endl
+    << "stop bit: " << mStopbits << std::endl
+    << "parity: " << mSerialParity << std::endl
+    << "flow control: " << mFlowControl << std::endl
+    << "timeout: " << mTimeout;
+}
+
+void SerialConnection::read(std::ifstream& stream) {
+}
+
+void SerialConnection::write(std::ofstream& stream) const {
 }
 
 /******************************************************************************/
@@ -83,8 +104,12 @@ size_t SerialConnection::getStopbits() const {
   return mStopbits;
 }
 
-SerialParity SerialConnection::getParity() const {
+SerialConnection::SerialParity SerialConnection::getParity() const {
   return mSerialParity;
+}
+
+SerialConnection::FlowControl SerialConnection::getFlowControl() const {
+  return mFlowControl;
 }
 
 void SerialConnection::setBaudrate(size_t baudrate) {
@@ -111,56 +136,67 @@ void SerialConnection::setParity(SerialParity parity) {
   open();
 }
 
+void SerialConnection::setFlowControl(FlowControl flowControl) {
+  mFlowControl = flowControl;
+}
+
 /******************************************************************************/
 /* Methods                                                                    */
 /******************************************************************************/
 
-void SerialConnection::open() throw (IOException) {
-  mHandle = ::open(mDevicePathStr.c_str(), O_RDWR | O_NDELAY);
+void SerialConnection::open() {
+  mHandle = ::open(mDevicePathStr.c_str(), O_RDWR | O_NDELAY | O_NOCTTY);
   if (mHandle == -1)
-    throw IOException("SerialConnection::open(): Port opening failed");
+    throw SystemException(errno, "SerialConnection::open()::open()");
   struct termios tios;
   memset(&tios, 0, sizeof(struct termios));
+  speed_t speed;
   switch (mBaudrate) {
-    case 50L    : tios.c_cflag |= B50;
+    case 0L     : speed = B0;
                   break;
-    case 75L    : tios.c_cflag |= B75;
+    case 50L    : speed = B50;
                   break;
-    case 110L   : tios.c_cflag |= B110;
+    case 75L    : speed = B75;
                   break;
-    case 134L   : tios.c_cflag |= B134;
+    case 110L   : speed = B110;
                   break;
-    case 150L   : tios.c_cflag |= B150;
+    case 134L   : speed = B134;
                   break;
-    case 200L   : tios.c_cflag |= B200;
+    case 150L   : speed = B150;
                   break;
-    case 300L   : tios.c_cflag |= B300;
+    case 200L   : speed = B200;
                   break;
-    case 600L   : tios.c_cflag |= B600;
+    case 300L   : speed = B300;
                   break;
-    case 1200L  : tios.c_cflag |= B1200;
+    case 600L   : speed = B600;
                   break;
-    case 1800L  : tios.c_cflag |= B1800;
+    case 1200L  : speed = B1200;
                   break;
-    case 2400L  : tios.c_cflag |= B2400;
+    case 1800L  : speed = B1800;
                   break;
-    case 4800L  : tios.c_cflag |= B4800;
+    case 2400L  : speed = B2400;
                   break;
-    case 9600L  : tios.c_cflag |= B9600;
+    case 4800L  : speed = B4800;
                   break;
-    case 19200L : tios.c_cflag |= B19200;
+    case 9600L  : speed = B9600;
                   break;
-    case 38400L : tios.c_cflag |= B38400;
+    case 19200L : speed = B19200;
                   break;
-    case 57600L : tios.c_cflag |= B57600;
+    case 38400L : speed = B38400;
                   break;
-    case 115200L: tios.c_cflag |= B115200;
+    case 57600L : speed = B57600;
                   break;
-    case 230400L: tios.c_cflag |= B230400;
+    case 115200L: speed = B115200;
+                  break;
+    case 230400L: speed = B230400;
                   break;
     default     :
-      throw IOException("SerialConnection::open(): Invalid baudrate");
+      throw BadArgumentException<size_t>(mBaudrate,
+        "SerialConnection::open(): invalid baudrate");
   }
+  if (cfsetspeed(&tios, speed))
+    throw SystemException(errno, "SerialConnection::open()");
+  tios.c_cflag &= ~CSIZE;
   switch (mDatabits) {
     case 5 : tios.c_cflag |= CS5;
              break;
@@ -171,15 +207,20 @@ void SerialConnection::open() throw (IOException) {
     case 8 : tios.c_cflag |= CS8;
              break;
     default:
-      throw IOException("SerialConnection::open(): Invalid databits");
+      throw BadArgumentException<size_t>(mDatabits,
+        "SerialConnection::open(): invalid databits");
   }
+  tios.c_cflag &= ~CSTOPB;
   switch (mStopbits) {
     case 1 : break;
     case 2 : tios.c_cflag |= CSTOPB;
              break;
     default:
-      throw IOException("SerialConnection::open(): Invalid stopbits");
+      throw BadArgumentException<size_t>(mStopbits,
+        "SerialConnection::open(): invalid stopbits");
   }
+  tios.c_cflag &= ~PARENB;
+  tios.c_cflag &= ~PARODD;
   switch (mSerialParity) {
     case none: break;
     case even: tios.c_cflag |= PARENB;
@@ -187,24 +228,35 @@ void SerialConnection::open() throw (IOException) {
     case odd : tios.c_cflag |= PARENB | PARODD;
                break;
     default  :
-      throw IOException("SerialConnection::open(): Invalid parity");
+      throw BadArgumentException<size_t>(mSerialParity,
+        "SerialConnection::open(): invalid parity");
   }
-  tios.c_cflag |= CLOCAL;
-  tios.c_iflag = IGNPAR;
+  tios.c_cflag &= ~CRTSCTS;
+  if (mFlowControl == hardware)
+    tios.c_cflag |= CRTSCTS;
+  tios.c_cflag |= (CLOCAL | CREAD);
+  tios.c_iflag |= (INPCK | ISTRIP);
+  tios.c_iflag &= ~(IXON | IXOFF | IXANY);
+  if (mFlowControl == software)
+    tios.c_iflag |= (IXON | IXOFF | IXANY);
+  tios.c_lflag &= ~(ICANON | ECHO | ECHOE | ISIG);
+  tios.c_oflag &= ~OPOST;
   if (tcflush(mHandle, TCIOFLUSH))
-    throw IOException("SerialConnection::open(): flush failed");
+    throw SystemException(errno,
+      "SerialConnection::open()::tcflush()");
   if (tcsetattr(mHandle, TCSANOW, &tios))
-    throw IOException("SerialConnection::open(): setting attributes failed");
+    throw SystemException(errno,
+      "SerialConnection::open()::tcsetattr()");
 }
 
-void SerialConnection::close() throw (IOException) {
+void SerialConnection::close() {
   if (mHandle != 0) {
     if (tcdrain(mHandle))
-      throw IOException("SerialConnection::close(): Port draining failed");
+      throw SystemException(errno, "SerialConnection::close()::tcdrain()");
     if (tcflush(mHandle, TCIOFLUSH))
-      throw IOException("SerialConnection::close(): Port flusing failed");
+      throw SystemException(errno, "SerialConnection::close()::tcflush()");
     if (::close(mHandle))
-      throw IOException("SerialConnection::close(): Port closing failed");
+      throw SystemException(errno, "SerialConnection::close()::close()");
     mHandle = 0;
   }
 }
@@ -213,66 +265,61 @@ bool SerialConnection::isOpen() const {
   return (mHandle != 0);
 }
 
-void SerialConnection::readBuffer(uint8_t* au8Buffer, size_t nbBytes)
-  throw (IOException) {
+void SerialConnection::readBuffer(char* buffer, ssize_t numBytes) {
   if (isOpen() == false)
     open();
   double intPart;
   double fractPart = modf(mTimeout , &intPart);
-  size_t numRead = 0;
-  while (numRead < nbBytes) {
+  ssize_t bytesRead = 0;
+  while (bytesRead < numBytes) {
     struct timeval waitd;
     waitd.tv_sec = intPart;
-    waitd.tv_usec = fractPart * 1000000;
+    waitd.tv_usec = fractPart * 1e6;
     fd_set readFlags;
     FD_ZERO(&readFlags);
     FD_SET(mHandle, &readFlags);
     ssize_t res = select(mHandle + 1, &readFlags, (fd_set*)0, (fd_set*)0,
       &waitd);
     if(res < 0)
-      throw IOException("SerialConnection::readBuffer(): Read select failed");
+      throw SystemException(errno, "SerialConnection::readBuffer()::select()");
     if (FD_ISSET(mHandle, &readFlags)) {
       FD_CLR(mHandle, &readFlags);
-      res = read(mHandle, &au8Buffer[numRead], nbBytes - numRead);
-      if ((res < 0) && (errno != EWOULDBLOCK))
-        throw IOException("SerialConnection::readBuffer(): Read failed");
-      if (res > 0) {
-        numRead += res;
-      }
+      res = ::read(mHandle, &buffer[bytesRead], numBytes - bytesRead);
+      if (res < 0)
+        throw SystemException(errno, "SerialConnection::readBuffer()::read()");
+      bytesRead += res;
     }
     else
-      throw IOException("SerialConnection::readBuffer(): Read timeout");
+      throw IOException("SerialConnection::readBuffer(): timeout occured");
   }
 }
 
-void SerialConnection::writeBuffer(const uint8_t* au8Buffer, size_t nbBytes)
-  throw (IOException) {
+void SerialConnection::writeBuffer(const char* buffer, ssize_t numBytes) {
   if (isOpen() == false)
     open();
   double intPart;
   double fractPart = modf(mTimeout , &intPart);
-  size_t numWrite = 0;
-  while (numWrite < nbBytes) {
+  ssize_t bytesWritten = 0;
+  while (bytesWritten < numBytes) {
     struct timeval waitd;
     waitd.tv_sec = intPart;
-    waitd.tv_usec = fractPart * 1000000;
+    waitd.tv_usec = fractPart * 1e6;
     fd_set writeFlags;
     FD_ZERO(&writeFlags);
     FD_SET(mHandle, &writeFlags);
-    ssize_t res = select(mHandle + 1, (fd_set*)0, &writeFlags,
-      (fd_set*)0, &waitd);
+    ssize_t res = select(mHandle + 1, (fd_set*)0, &writeFlags, (fd_set*)0,
+      &waitd);
     if(res < 0)
-      throw IOException("SerialConnection::writeBuffer(): Write select failed");
+      throw SystemException(errno, "SerialConnection::writeBuffer()::select()");
     if (FD_ISSET(mHandle, &writeFlags)) {
       FD_CLR(mHandle, &writeFlags);
-      res = write(mHandle, &au8Buffer[numWrite], nbBytes - numWrite);
-      if ((res < 0) && (errno != EWOULDBLOCK))
-        throw IOException("SerialConnection::writeBuffer(): Write failed");
-      if (res > 0) {
-        numWrite += res;
-      }
+      res = ::write(mHandle, &buffer[bytesWritten], numBytes - bytesWritten);
+      if (res < 0)
+        throw SystemException(errno,
+          "SerialConnection::writeBuffer()::write()");
+      bytesWritten += res;
     }
     else
-      throw IOException("SerialConnection::writeBuffer(): Write timeout");
+      throw IOException("SerialConnection::writeBuffer(): timeout occured");
   }
 }

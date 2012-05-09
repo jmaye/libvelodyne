@@ -9,22 +9,73 @@
  *                                                                            *
  * This program is distributed in the hope that it will be useful,            *
  * but WITHOUT ANY WARRANTY; without even the implied warranty of             *
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the              *
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the               *
  * Lesser GNU General Public License for more details.                        *
  *                                                                            *
  * You should have received a copy of the Lesser GNU General Public License   *
  * along with this program. If not, see <http://www.gnu.org/licenses/>.       *
  ******************************************************************************/
 
-#include "exceptions/ThreadException.h"
+/** \file Singleton.h
+    \brief This file defines the Singleton class, which implements the singleton
+           design pattern
+  */
 
-ThreadException::ThreadException(const std::string& msg) :
-    std::runtime_error(msg) {
-}
+#ifndef SINGLETON_H
+#define SINGLETON_H
 
-ThreadException::ThreadException(const ThreadException& other) throw () :
-    std::runtime_error(other) {
-}
+/** The class Singleton implements the singleton design pattern.
+    \brief Singleton design pattern
+  */
+template <class C> class Singleton {
+  /** \name Private constructors
+    @{
+    */
+  /// Copy constructor
+  Singleton(const Singleton& other);
+  /// Assignment operator
+  Singleton& operator = (const Singleton& other);
+  /** @}
+    */
 
-ThreadException::~ThreadException() throw () {
-}
+public:
+  /** \name Accessors
+    @{
+    */
+  /// Access the static instance
+  static C& getInstance();
+  /** @}
+    */
+
+  /** \name Methods
+    @{
+    */
+  /// Check if the object exists
+  static bool exists();
+  /** @}
+    */
+
+protected:
+  /** \name Protected constructors/destructor
+    @{
+    */
+  /// Default constructor
+  Singleton();
+  /// Destructor
+  virtual ~Singleton();
+  /** @}
+    */
+
+  /** \name Protected members
+    @{
+    */
+  /// Instance of the object
+  static C* instance;
+  /** @}
+    */
+
+};
+
+#include "base/Singleton.tpp"
+
+#endif

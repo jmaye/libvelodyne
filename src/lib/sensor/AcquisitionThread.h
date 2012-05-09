@@ -16,64 +16,86 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.       *
  ******************************************************************************/
 
-/** \file OutOfBoundException.h
-    \brief This file defines the OutOfBoundException class, which represents any
-           exceptions occuring when trying to access unallocated memory
+/** \file AcquisitionThread.h
+    \brief This file defines the AcquisitionThread class which is an interface
+           for acquiring Velodyne packets using a thread.
   */
 
-#ifndef OUTOFBOUNDEXCEPTION_H
-#define OUTOFBOUNDEXCEPTION_H
+#ifndef ACQUISITIONTHREAD_H
+#define ACQUISITIONTHREAD_H
 
-#include <stdexcept>
-#include <string>
+#include <boost/shared_ptr.hpp>
 
-/** The class OutOfBoundException represents any exceptions occuring when trying
-    to access unallocated memory.
-    \brief Out of bounds exception
+#include "base/Thread.h"
+#include "com/UDPConnectionServer.h"
+#include "data-structures/SafeQueue.h"
+
+/** The class AcquisitionThread represents an interface for acquiring Velodyne
+    packets using a thread.
+    \brief Velodyne acquisition thread
   */
-template <typename X> class OutOfBoundException :
-  public std::exception {
-public:
-  /** \name Constructors/destructor
+template <typename P> class AcquisitionThread :
+  public Thread {
+  /** \name Private constructors
     @{
     */
-  /// Constructs exception from argument and string
-  OutOfBoundException(const X& argument, const std::string& msg, const
-    std::string& filename = " ", size_t line = 0);
   /// Copy constructor
-  OutOfBoundException(const OutOfBoundException& other) throw();
+  AcquisitionThread(const AcquisitionThread& other);
   /// Assignment operator
-  OutOfBoundException& operator = (const OutOfBoundException& other) throw();
-  /// Destructor
-  virtual ~OutOfBoundException() throw();
+  AcquisitionThread& operator = (const AcquisitionThread& other);
+  /** @}
+    */
+
+public:
+  /** \name Types definitions
+    @{
+    */
+  typedef SafeQueue<boost::shared_ptr<P> > Buffer;
+  /** @}
+    */
+
+  /** \name Constructors/Destructor
+    @{
+    */
+  /// Constructs thread with UDP connection and buffer size
+  AcquisitionThread(UDPConnectionServer& connection, size_t bufferSize =
+    std::numeric_limits<size_t>::infinity());
+   /// Destructor
+  ~AcquisitionThread();
   /** @}
     */
 
   /** \name Accessors
     @{
     */
-  /// Access the exception string
-  virtual const char* what() const throw();
+  /// Access the thread's acquisition queue
+  const Buffer& getBuffer() const;
+  /// Access the thread's acquisition queue
+  Buffer& getBuffer();
   /** @}
     */
 
 protected:
+  /** \name Protected methods
+    @{
+    */
+  /// Do computational processing
+  virtual void process();
+  /** @}
+    */
+
   /** \name Protected members
     @{
     */
-  /// Message in the exception
-  std::string mMsg;
-  /// Argument that causes the exception
-  X mArg;
-  /// Filename where the exception occurs
-  std::string mFilename;
-  /// Line number where the exception occurs
-  size_t mLine;
+  /// UDP connection to Velodyne
+  UDPConnectionServer& mConnection;
+  /// Buffer for acquisition
+  Buffer mBuffer;
   /** @}
     */
 
 };
 
-#include "exceptions/OutOfBoundException.tpp"
+#include "sensor/AcquisitionThread.tpp"
 
-#endif // OUTOFBOUNDEXCEPTION_H
+#endif // ACQUISITIONTHREAD_H

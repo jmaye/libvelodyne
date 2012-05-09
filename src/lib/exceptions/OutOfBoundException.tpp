@@ -16,19 +16,55 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.       *
  ******************************************************************************/
 
-#include "exceptions/IOException.h"
+#include <sstream>
 
 /******************************************************************************/
 /* Constructors and Destructor                                                */
 /******************************************************************************/
 
-IOException::IOException(const std::string& msg) :
-    std::runtime_error(msg) {
+template <typename X>
+OutOfBoundException<X>::OutOfBoundException(const X& argument, const
+    std::string& msg, const std::string& filename, size_t line) :
+    mMsg(msg),
+    mArg(argument),
+    mFilename(filename),
+    mLine(line) {
 }
 
-IOException::IOException(const IOException& other) throw () :
-    std::runtime_error(other) {
+template <typename X>
+OutOfBoundException<X>::OutOfBoundException(const OutOfBoundException& other)
+    throw() :
+    mMsg(other.mMsg),
+    mArg(other.mArg),
+    mFilename(other.mFilename),
+    mLine(other.mLine) {
 }
 
-IOException::~IOException() throw () {
+template <typename X>
+OutOfBoundException<X>& OutOfBoundException<X>::operator =
+    (const OutOfBoundException& other) throw() {
+  if (this != &other) {
+    mMsg = other.mMsg;
+    mArg = other.mArg;
+    mFilename = other.mFilename;
+    mLine = other.mLine;
+  }
+  return *this;
+}
+
+template <typename X>
+OutOfBoundException<X>::~OutOfBoundException() throw() {
+}
+
+/******************************************************************************/
+/* Accessors                                                                  */
+/******************************************************************************/
+
+template <typename X>
+const char* OutOfBoundException<X>::what() const throw() {
+  std::stringstream stream;
+  stream << mMsg << " [argument = " << mArg << "]";
+  if (mFilename != " ")
+    stream << " [file = " << mFilename << "]" << "[line = " << mLine << "]";
+  return stream.str().c_str();
 }

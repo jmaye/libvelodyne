@@ -16,15 +16,19 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.       *
  ******************************************************************************/
 
-#include "exceptions/ThreadException.h"
+#include "exceptions/TypeCastException.h"
 
-ThreadException::ThreadException(const std::string& msg) :
+/******************************************************************************/
+/* Constructors and Destructor                                                */
+/******************************************************************************/
+
+TypeCastException::TypeCastException(const std::string& msg) :
     std::runtime_error(msg) {
 }
 
-ThreadException::ThreadException(const ThreadException& other) throw () :
+TypeCastException::TypeCastException(const TypeCastException& other) throw () :
     std::runtime_error(other) {
 }
 
-ThreadException::~ThreadException() throw () {
+TypeCastException::~TypeCastException() throw () {
 }

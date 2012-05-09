@@ -16,19 +16,43 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.       *
  ******************************************************************************/
 
-#include "exceptions/IOException.h"
-
 /******************************************************************************/
 /* Constructors and Destructor                                                */
 /******************************************************************************/
 
-IOException::IOException(const std::string& msg) :
-    std::runtime_error(msg) {
+template <typename P>
+AcquisitionThread<P>::AcquisitionThread(UDPConnectionServer& connection, size_t
+    bufferSize) :
+    mConnection(connection),
+    mBuffer(bufferSize) {
 }
 
-IOException::IOException(const IOException& other) throw () :
-    std::runtime_error(other) {
+template <typename P>
+AcquisitionThread<P>::~AcquisitionThread() {
 }
 
-IOException::~IOException() throw () {
+/******************************************************************************/
+/* Accessors                                                                  */
+/******************************************************************************/
+
+template <typename P>
+const typename AcquisitionThread<P>::Buffer& AcquisitionThread<P>::getBuffer()
+    const {
+  return mBuffer;
+}
+
+template <typename P>
+typename AcquisitionThread<P>::Buffer& AcquisitionThread<P>::getBuffer() {
+  return mBuffer;
+}
+
+/******************************************************************************/
+/* Methods                                                                    */
+/******************************************************************************/
+
+template <typename P>
+void AcquisitionThread<P>::process() {
+  boost::shared_ptr<P> p(new P());
+  p->readBinary(mConnection);
+  mBuffer.enqueue(p);
 }

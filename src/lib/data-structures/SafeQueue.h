@@ -16,44 +16,69 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.       *
  ******************************************************************************/
 
-/** \file OutOfBoundException.h
-    \brief This file defines the OutOfBoundException class, which represents any
-           exceptions occuring when trying to access unallocated memory
+/** \file SafeQueue.h
+    \brief This file defines the SafeQueue class, which represents a
+           thread-safe queue.
   */
 
-#ifndef OUTOFBOUNDEXCEPTION_H
-#define OUTOFBOUNDEXCEPTION_H
+#ifndef SAFEQUEUE_H
+#define SAFEQUEUE_H
 
-#include <stdexcept>
-#include <string>
+#include <deque>
+#include <limits>
 
-/** The class OutOfBoundException represents any exceptions occuring when trying
-    to access unallocated memory.
-    \brief Out of bounds exception
+#include "base/Mutex.h"
+
+/** The class SafeQueue represents a thread-safe queue.
+    \brief Thread-safe queue
   */
-template <typename X> class OutOfBoundException :
-  public std::exception {
+template <typename T> class SafeQueue {
 public:
+  /** \name Types definitions
+    @{
+    */
+  /// Container type
+  typedef std::deque<T> Container;
+  /** @}
+    */
+
   /** \name Constructors/destructor
     @{
     */
-  /// Constructs exception from argument and string
-  OutOfBoundException(const X& argument, const std::string& msg, const
-    std::string& filename = " ", size_t line = 0);
+  /// Constructs queue with capacity
+  SafeQueue(size_t capacity = std::numeric_limits<size_t>::infinity);
   /// Copy constructor
-  OutOfBoundException(const OutOfBoundException& other) throw();
+  SafeQueue(const SafeQueue& other);
   /// Assignment operator
-  OutOfBoundException& operator = (const OutOfBoundException& other) throw();
+  SafeQueue& operator = (const SafeQueue& other);
   /// Destructor
-  virtual ~OutOfBoundException() throw();
+  ~SafeQueue();
   /** @}
     */
 
   /** \name Accessors
-    @{
+      @{
     */
-  /// Access the exception string
-  virtual const char* what() const throw();
+  /// Returns the capacity of the queue
+  size_t getCapacity() const;
+  /// Sets the capacity of the queue
+  void setCapacity(size_t capacity);
+  /// Returns the statistics about dropped elements
+  size_t getNumDroppedElements() const;
+  /// Check whether the queue is empty
+  bool isEmpty() const;
+  /// Get size of the queue
+  size_t getSize() const;
+  /** @}
+    */
+
+  /** \name Methods
+      @{
+    */
+  /// Enqueue an element
+  void enqueue(const T& value);
+  /// Dequeue an element
+  T dequeue();
   /** @}
     */
 
@@ -61,19 +86,19 @@ protected:
   /** \name Protected members
     @{
     */
-  /// Message in the exception
-  std::string mMsg;
-  /// Argument that causes the exception
-  X mArg;
-  /// Filename where the exception occurs
-  std::string mFilename;
-  /// Line number where the exception occurs
-  size_t mLine;
+  /// Queue
+  Container mQueue;
+  /// Capacity
+  size_t mCapacity;
+  /// Statistics about the dropped elements
+  size_t mNumDroppedElements;
+  /// Mutex protecting the queue
+  mutable Mutex mMutex;
   /** @}
     */
 
 };
 
-#include "exceptions/OutOfBoundException.tpp"
+#include "data-structures/SafeQueue.tpp"
 
-#endif // OUTOFBOUNDEXCEPTION_H
+#endif // SAFEQUEUE_H

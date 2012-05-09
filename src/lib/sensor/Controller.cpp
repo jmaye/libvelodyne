@@ -16,15 +16,37 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.       *
  ******************************************************************************/
 
-#include "exceptions/ThreadException.h"
+#include "sensor/Controller.h"
 
-ThreadException::ThreadException(const std::string& msg) :
-    std::runtime_error(msg) {
+#include <sstream>
+
+#include "exceptions/OutOfBoundException.h"
+
+/******************************************************************************/
+/* Constructors and Destructor                                                */
+/******************************************************************************/
+
+Controller::Controller(SerialConnection& serialConnection) :
+    mCommandString("#HDLRPMnnn$"),
+    mSerialConnection(serialConnection) {
 }
 
-ThreadException::ThreadException(const ThreadException& other) throw () :
-    std::runtime_error(other) {
+Controller::~Controller() {
 }
 
-ThreadException::~ThreadException() throw () {
+/******************************************************************************/
+/* Methods                                                                    */
+/******************************************************************************/
+
+void Controller::setRPM(size_t RPM) {
+  if (RPM > mMaxRPM || RPM < mMinRPM)
+    throw OutOfBoundException<size_t>(RPM,
+      "Controller::setRPM(): RPM should be in [300, 900]",
+      __FILE__, __LINE__);
+  std::stringstream ss(std::stringstream::in | std::stringstream::out);
+  ss << RPM;
+  mCommandString.replace(7, 3, ss.str());
+  mSerialConnection.writeBuffer(
+    reinterpret_cast<const char*>(mCommandString.c_str()),
+    mCommandString.size());
 }

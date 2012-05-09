@@ -16,15 +16,71 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.       *
  ******************************************************************************/
 
-#include "exceptions/ThreadException.h"
+/** \file Controller.h
+    \brief This file defines the Controller class, which is the interface
+           for controlling the Velodyne
+  */
 
-ThreadException::ThreadException(const std::string& msg) :
-    std::runtime_error(msg) {
-}
+#ifndef CONTROLLER_H
+#define CONTROLLER_H
 
-ThreadException::ThreadException(const ThreadException& other) throw () :
-    std::runtime_error(other) {
-}
+#include "com/SerialConnection.h"
 
-ThreadException::~ThreadException() throw () {
-}
+/** The class Controller represents the interface for controlling the
+    Velodyne.
+    \brief Velodyne controller
+  */
+class Controller {
+  /** \name Private constructors
+    @{
+    */
+  /// Copy constructor
+  Controller(const Controller& other);
+  /// Assignment operator
+  Controller& operator = (const Controller& other);
+  /** @}
+    */
+
+public:
+  /** \name Constants
+    @{
+    */
+  /// Maximum spinning rate
+  static const size_t mMaxRPM = 900;
+  /// Minimum spinning rate
+  static const size_t mMinRPM = 300;
+  /** @}
+    */
+
+  /** \name Constructors/Destructor
+    @{
+    */
+  /// Constructs object from serial port
+  Controller(SerialConnection& serialConnection);
+   /// Destructor
+  ~Controller();
+  /** @}
+    */
+
+  /** \name Methods
+    @{
+    */
+  /// Set the RPM
+  void setRPM(size_t RPM);
+  /** @}
+    */
+
+protected:
+  /** \name Protected members
+    @{
+    */
+  /// Command string
+  std::string mCommandString;
+  /// Serial connection to the Velodyne
+  SerialConnection& mSerialConnection;
+  /** @}
+    */
+
+};
+
+#endif // CONTROLLER_H

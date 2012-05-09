@@ -16,64 +16,89 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.       *
  ******************************************************************************/
 
-/** \file OutOfBoundException.h
-    \brief This file defines the OutOfBoundException class, which represents any
-           exceptions occuring when trying to access unallocated memory
+/** \file Condition.h
+    \brief This file defines the Condition class, which provides condition
+           facilities
   */
 
-#ifndef OUTOFBOUNDEXCEPTION_H
-#define OUTOFBOUNDEXCEPTION_H
+#ifndef CONDITION_H
+#define CONDITION_H
 
-#include <stdexcept>
-#include <string>
+#include <pthread.h>
 
-/** The class OutOfBoundException represents any exceptions occuring when trying
-    to access unallocated memory.
-    \brief Out of bounds exception
+#include "base/Timer.h"
+
+class Mutex;
+
+/** The class Condition implements condition facilities.
+    \brief Condition facilities
   */
-template <typename X> class OutOfBoundException :
-  public std::exception {
-public:
-  /** \name Constructors/destructor
+class Condition {
+  /** \name Private constructors
     @{
     */
-  /// Constructs exception from argument and string
-  OutOfBoundException(const X& argument, const std::string& msg, const
-    std::string& filename = " ", size_t line = 0);
   /// Copy constructor
-  OutOfBoundException(const OutOfBoundException& other) throw();
+  Condition(const Condition& other);
   /// Assignment operator
-  OutOfBoundException& operator = (const OutOfBoundException& other) throw();
-  /// Destructor
-  virtual ~OutOfBoundException() throw();
+  Condition& operator = (const Condition& other);
   /** @}
     */
 
-  /** \name Accessors
+public:
+  /** \name Types definitions
     @{
     */
-  /// Access the exception string
-  virtual const char* what() const throw();
+  /// Signal type
+  enum SignalType {
+    /// Unicast signal
+    unicast,
+    /// Broadcast signal
+    broadcast
+  };
+  /** @}
+    */
+
+  /** \name Constructors/Destructor
+    @{
+    */
+  /// Default constructor
+  Condition();
+  /// Destructor
+  virtual ~Condition();
+  /** @}
+    */
+
+  /** \name Methods
+    @{
+    */
+  /// Signal the condition
+  void signal(SignalType signalType = unicast);
+  /// Wait for the condition to be signaled
+  bool wait(Mutex& mutex, double seconds = Timer::eternal()) const;
   /** @}
     */
 
 protected:
+  /** \name Protected methods
+    @{
+    */
+  /// Safely wait for the condition to be signaled
+  bool safeWait(const Mutex& mutex, double seconds) const;
+  /// Safely wait eternally for the condition to be signaled
+  bool safeEternalWait(const Mutex& mutex) const;
+  /// Safely wait until the specified time for the condition to be signaled
+  bool safeWaitUntil(const Mutex& mutex, const Timestamp& time) const;
+  /** @}
+    */
+
   /** \name Protected members
     @{
     */
-  /// Message in the exception
-  std::string mMsg;
-  /// Argument that causes the exception
-  X mArg;
-  /// Filename where the exception occurs
-  std::string mFilename;
-  /// Line number where the exception occurs
-  size_t mLine;
+  /// Condition identifier
+  mutable pthread_cond_t mIdentifier;
   /** @}
     */
 
 };
 
-#include "exceptions/OutOfBoundException.tpp"
-
-#endif // OUTOFBOUNDEXCEPTION_H
+#endif // CONDITION_H

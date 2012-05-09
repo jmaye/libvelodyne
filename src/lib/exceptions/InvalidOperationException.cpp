@@ -16,15 +16,20 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.       *
  ******************************************************************************/
 
-#include "exceptions/ThreadException.h"
+#include "exceptions/InvalidOperationException.h"
 
-ThreadException::ThreadException(const std::string& msg) :
+/******************************************************************************/
+/* Constructors and Destructor                                                */
+/******************************************************************************/
+
+InvalidOperationException::InvalidOperationException(const std::string& msg) :
     std::runtime_error(msg) {
 }
 
-ThreadException::ThreadException(const ThreadException& other) throw () :
+InvalidOperationException::InvalidOperationException(const
+    InvalidOperationException& other) throw () :
     std::runtime_error(other) {
 }
 
-ThreadException::~ThreadException() throw () {
+InvalidOperationException::~InvalidOperationException() throw () {
 }

@@ -16,15 +16,37 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.       *
  ******************************************************************************/
 
-#include "exceptions/ThreadException.h"
+/** \file TypeCastException.h
+    \brief This file defines the TypeCastException class, which represents wrong
+           type casts
+  */
 
-ThreadException::ThreadException(const std::string& msg) :
-    std::runtime_error(msg) {
-}
+#ifndef TYPECASTEXCEPTION_H
+#define TYPECASTEXCEPTION_H
 
-ThreadException::ThreadException(const ThreadException& other) throw () :
-    std::runtime_error(other) {
-}
+#include <stdexcept>
+#include <string>
 
-ThreadException::~ThreadException() throw () {
-}
+/** The class TypeCastException represents a wrong type cast.
+    \brief Type cast exception
+  */
+class TypeCastException :
+  public std::runtime_error {
+public:
+  /** \name Constructors/Destructor
+    @{
+    */
+  /// Constructs exception from message
+  TypeCastException(const std::string& msg = "");
+  /// Copy constructor
+  TypeCastException(const TypeCastException& other) throw ();
+  /// Destructor
+  virtual ~TypeCastException() throw ();
+  /** @}
+    */
+
+protected:
+
+};
+
+#endif // TYPECASTEXCEPTION_H
