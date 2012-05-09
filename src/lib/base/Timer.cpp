@@ -18,6 +18,8 @@
 
 #include "base/Timer.h"
 
+#include <errno.h>
+
 #include <limits>
 
 #include "base/Threads.h"
