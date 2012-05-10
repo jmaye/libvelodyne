@@ -1,1 +1,1 @@
-remake_add_executables(LINK sensor data-structures)
+remake_add_executables(LINK sensor)
