@@ -17,6 +17,7 @@
  ******************************************************************************/
 
 #include "exceptions/IOException.h"
+#include "com/UDPConnectionServer.h"
 
 /******************************************************************************/
 /* Constructors and Destructor                                                */

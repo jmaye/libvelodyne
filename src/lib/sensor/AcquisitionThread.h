@@ -27,8 +27,9 @@
 #include <boost/shared_ptr.hpp>
 
 #include "base/Thread.h"
-#include "com/UDPConnectionServer.h"
 #include "data-structures/SafeQueue.h"
+
+class UDPConnectionServer;
 
 /** The class AcquisitionThread represents an interface for acquiring Velodyne
     packets using a thread.
