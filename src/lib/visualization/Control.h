@@ -51,7 +51,7 @@ public:
   /// Default constructor
   Control();
   /// Destructor
-  ~Control();
+  virtual ~Control();
   /** @}
     */
 

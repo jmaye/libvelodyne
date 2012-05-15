@@ -62,7 +62,7 @@ public:
   View3dControl(bool showFog = true, bool showGround = true,
     bool showAxes = true);
   /// Destructor
-  ~View3dControl();
+  virtual ~View3dControl();
   /** @}
     */
 

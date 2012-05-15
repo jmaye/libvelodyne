@@ -63,7 +63,7 @@ public:
   /// Constructs the view
   View3d(QWidget* parent = 0);
   /// Destructor
-  ~View3d();
+  virtual ~View3d();
   /** @}
     */
 

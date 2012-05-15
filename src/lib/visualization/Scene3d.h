@@ -54,7 +54,7 @@ public:
   /// Default constructor
   Scene3d();
   /// Destructor
-  ~Scene3d();
+  virtual ~Scene3d();
   /** @}
     */
 

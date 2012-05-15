@@ -55,7 +55,7 @@ public:
   Camera(double x = -20.0, double y = 0.0, double z = 0.0, double near = 0.1,
     double far = 1000.0);
   /// Destructor
-  ~Camera();
+  virtual ~Camera();
   /** @}
     */
 

@@ -62,7 +62,7 @@ public:
   /// Default constructor
   Palette();
   /// Destructor
-  ~Palette();
+  virtual ~Palette();
   /** @}
     */
 
