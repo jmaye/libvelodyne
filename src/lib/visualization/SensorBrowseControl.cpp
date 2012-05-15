@@ -317,6 +317,8 @@ bool SensorBrowseControl::readPointCloud() {
     }
     mUi->numPointsSpinBox->setValue(mPointCloud.getSize());
     View3d::getInstance().update();
+    if (finished)
+      logStartClicked();
     return !finished;
   }
   return false;

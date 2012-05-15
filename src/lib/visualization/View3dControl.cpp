@@ -233,22 +233,22 @@ void View3dControl::renderAxes(double length) {
   glVertex3f(0.0, 0.0, 0.0);
   glVertex3f(length, 0.0, 0.0);
   glEnd();
-  View3d::getInstance().render(length, 0.0, 0.0, "X", 0.2 * length, true, true,
-    true);
+  View3d::getInstance().render(length, 0.0, 0.0, "X", 0.0, 0.2 * length, true,
+    true, true);
   glBegin(GL_LINES);
   glColor3f(0.0, 1.0, 0.0);
   glVertex3f(0.0, 0.0, 0.0);
   glVertex3f(0.0, length, 0.0);
   glEnd();
-  View3d::getInstance().render(0.0, length, 0.0, "Y", 0.2 * length, true, true,
-    true);
+  View3d::getInstance().render(0.0, length, 0.0, "Y", 0.0, 0.2 * length, true,
+    true, true);
   glBegin(GL_LINES);
   glColor3f(0.0, 0.0, 1.0);
   glVertex3f(0.0, 0.0, 0.0);
   glVertex3f(0.0, 0.0, length);
   glEnd();
-  View3d::getInstance().render(0, 0, length, "Z", 0.2 * length, true, true,
-    true);
+  View3d::getInstance().render(0.0, 0.0, length, "Z", 0.0, 0.2 * length, true,
+    true, true);
   glPopAttrib();
 }
 

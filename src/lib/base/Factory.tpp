@@ -41,8 +41,7 @@ void Factory<T, C>::read(std::istream& stream) {
 
 template <typename T, typename C>
 void Factory<T, C>::write(std::ostream& stream) const {
-  typename std::map<T, const C*>::const_iterator it;
-  for (it = mTypesMap.begin(); it != mTypesMap.end(); ++it)
+  for (auto it = mTypesMap.begin(); it != mTypesMap.end(); ++it)
     stream << it->first << std::endl;
 }
 
@@ -69,14 +68,13 @@ size_t Factory<T, C>::getNumTypes() const {
 
 template <typename T, typename C>
 void Factory<T, C>::clear() {
-  typename std::map<T, const C*>::iterator it;
-  for (it = mTypesMap.begin(); it != mTypesMap.end(); ++it)
+  for (auto it = mTypesMap.begin(); it != mTypesMap.end(); ++it)
     unregisterType(it->first);
 }
 
 template <typename T, typename C>
 C* Factory<T, C>::create(const T& typeID) const {
-  typename std::map<T, const C*>::const_iterator it = mTypesMap.find(typeID);
+  auto it = mTypesMap.find(typeID);
   if (it != mTypesMap.end())
     return it->second->clone();
   else
@@ -104,6 +102,5 @@ void Factory<T, C>::unregisterType(const T& typeID) {
 
 template <typename T, typename C>
 bool Factory<T, C>::isRegistered(const T& typeID) const {
-  typename std::map<T, const C*>::const_iterator it = mTypesMap.find(typeID);
-  return (it != mTypesMap.end());
+  return (mTypesMap.find(typeID) != mTypesMap.end());
 }
