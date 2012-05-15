@@ -176,10 +176,14 @@ void SensorBrowseControl::logPlayToggled() {
   mLogStartAction->setEnabled(!mUi->logPlayButton->isChecked());
   mLogSkipAction->setEnabled(!mUi->logPlayButton->isChecked());
   mLogPlayAction->setChecked(mUi->logPlayButton->isChecked());
-  if (mUi->logPlayButton->isChecked())
+  if (mUi->logPlayButton->isChecked()) {
     mTimer.start(0);
-  else
+    emit start();
+  }
+  else {
     mTimer.stop();
+    emit stop();
+  }
 }
 
 void SensorBrowseControl::logPlayTriggered() {

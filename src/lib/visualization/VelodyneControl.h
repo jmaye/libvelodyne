@@ -107,6 +107,10 @@ protected slots:
   void createDisplayLists();
   /// Timeout of the timer
   void timerTimeout();
+  /// Start spinning
+  void start();
+  /// Stop spinning
+  void stop();
   /** @}
     */
 

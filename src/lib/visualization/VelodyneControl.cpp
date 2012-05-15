@@ -39,7 +39,6 @@ VelodyneControl::VelodyneControl(bool showVelodyne) :
   connect(&mRotateTimer, SIGNAL(timeout()), this, SLOT(timerTimeout()));
   setShowVelodyne(showVelodyne);
   mRotateTimer.setInterval(50);
-  mRotateTimer.start();
 }
 
 VelodyneControl::~VelodyneControl() {
@@ -98,4 +97,12 @@ void VelodyneControl::timerTimeout() {
   mAngle += 66;
   mAngle = (int)mAngle % 360;
   View3d::getInstance().update();
+}
+
+void VelodyneControl::start() {
+  mRotateTimer.start();
+}
+
+void VelodyneControl::stop() {
+  mRotateTimer.stop();
 }

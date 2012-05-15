@@ -182,6 +182,17 @@ protected slots:
   /** @}
     */
 
+signals:
+  /** \name Qt signals
+    @{
+    */
+  /// Start Velodyne spinning
+  void start();
+  /// Stop Velodyne spinning
+  void stop();
+  /** @}
+    */
+
 };
 
 #endif // SENSORBROWSECONTROL_H

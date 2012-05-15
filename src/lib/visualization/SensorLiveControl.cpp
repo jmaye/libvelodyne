@@ -138,9 +138,12 @@ void SensorLiveControl::timerTimeout() {
     mPointCloud = mAcqPointCloud;
     View3d::getInstance().update();
     mTimer.start(0);
+    emit start();
   }
-  else
+  else {
     mTimer.start(1);
+    emit stop();
+  }
 }
 
 void SensorLiveControl::colorChanged(const QString& role, const QColor&
@@ -190,8 +193,8 @@ bool SensorLiveControl::readPointCloud() {
   double startAngle;
   while (1) {
     if (readPacket(packet)) {
-      Converter::toPointCloud(*packet, mCalibration, mPointCloud, mMinDistance,
-        mMaxDistance);
+      Converter::toPointCloud(*packet, mCalibration, mAcqPointCloud,
+        mMinDistance, mMaxDistance);
       if (numPackets && (startAngle > mAcqPointCloud.getEndRotationAngle()))
         break;
       else

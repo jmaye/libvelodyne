@@ -41,6 +41,23 @@ int main(int argc, char** argv) {
   mainWindow.addControl(QString("Sensor"), sensorLiveControl);
   mainWindow.addControl(QString("Velodyne"), VelodyneControl::getInstance());
   acqThread.start();
+  QObject::connect(&sensorLiveControl,
+    SIGNAL(start()),
+    &VelodyneControl::getInstance(),
+    SLOT(start()));
+  QObject::connect(&sensorLiveControl,
+    SIGNAL(stop()),
+    &VelodyneControl::getInstance(),
+    SLOT(stop()));
   mainWindow.show();
-  return app.exec();
+  const int ret = app.exec();
+  QObject::disconnect(&sensorLiveControl,
+    SIGNAL(start()),
+    &VelodyneControl::getInstance(),
+    SLOT(start()));
+  QObject::disconnect(&sensorLiveControl,
+    SIGNAL(stop()),
+    &VelodyneControl::getInstance(),
+    SLOT(stop()));
+  return ret;
 }

@@ -37,6 +37,23 @@ int main(int argc, char** argv) {
   mainWindow.addControl(QString("View3d"), View3dControl::getInstance());
   mainWindow.addControl(QString("Sensor"), SensorBrowseControl::getInstance());
   mainWindow.addControl(QString("Velodyne"), VelodyneControl::getInstance());
+  QObject::connect(&SensorBrowseControl::getInstance(),
+    SIGNAL(start()),
+    &VelodyneControl::getInstance(),
+    SLOT(start()));
+  QObject::connect(&SensorBrowseControl::getInstance(),
+    SIGNAL(stop()),
+    &VelodyneControl::getInstance(),
+    SLOT(stop()));
   mainWindow.show();
-  return app.exec();
+  const int ret =  app.exec();
+   QObject::disconnect(&SensorBrowseControl::getInstance(),
+    SIGNAL(start()),
+    &VelodyneControl::getInstance(),
+    SLOT(start()));
+  QObject::disconnect(&SensorBrowseControl::getInstance(),
+    SIGNAL(stop()),
+    &VelodyneControl::getInstance(),
+    SLOT(stop()));
+  return ret;
 }
