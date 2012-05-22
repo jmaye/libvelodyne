@@ -89,12 +89,12 @@ public:
     /// Writes to a file
     virtual void write(std::ofstream& stream) const {
     }
-    /// Writes into a output stream
+    /// Writes binary into a output stream
     void writeBinary(std::ostream& stream) const {
       BinaryStreamWriter binaryStream(stream);
       binaryStream << mX << mY << mZ << mIntensity;
     }
-    /// Reads from an input stream
+    /// Reads binary from an input stream
     void readBinary(std::istream& stream) {
       BinaryStreamReader binaryStream(stream);
       binaryStream >> mX >> mY >> mZ >> mIntensity;

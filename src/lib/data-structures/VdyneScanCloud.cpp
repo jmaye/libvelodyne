@@ -69,10 +69,6 @@ void VdyneScanCloud::read(std::ifstream& stream) {
 void VdyneScanCloud::write(std::ofstream& stream) const {
 }
 
-/******************************************************************************/
-/* Methods                                                                    */
-/******************************************************************************/
-
 void VdyneScanCloud::writeBinary(std::ostream& stream) const {
   BinaryStreamWriter binaryStream(stream);
   const size_t numScans = mScans.size();

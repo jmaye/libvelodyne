@@ -69,10 +69,6 @@ void VdynePointCloud::read(std::ifstream& stream) {
 void VdynePointCloud::write(std::ofstream& stream) const {
 }
 
-/******************************************************************************/
-/* Methods                                                                    */
-/******************************************************************************/
-
 void VdynePointCloud::writeBinary(std::ostream& stream) const {
   BinaryStreamWriter binaryStream(stream);
   const size_t numPoints = mPoints.size();
