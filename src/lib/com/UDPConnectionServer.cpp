@@ -103,8 +103,8 @@ bool UDPConnectionServer::isOpen() const {
   return (mSocket != 0);
 }
 
-ssize_t UDPConnectionServer::readBuffer(char* buffer, ssize_t numBytes) {
-  if (isOpen() == false)
+size_t UDPConnectionServer::read(char* buffer, size_t numBytes) {
+  if (!isOpen())
     open();
   double intPart;
   double fracPart = modf(mTimeout, &intPart);
@@ -116,7 +116,7 @@ ssize_t UDPConnectionServer::readBuffer(char* buffer, ssize_t numBytes) {
   FD_SET(mSocket, &readFlags);
   ssize_t res = select(mSocket + 1, &readFlags, (fd_set*)0, (fd_set*)0, &waitd);
   if(res < 0)
-    throw SystemException(errno, "UDPConnectionServer::readBuffer()::select()");
+    throw SystemException(errno, "UDPConnectionServer::read()::select()");
   if (FD_ISSET(mSocket, &readFlags)) {
     FD_CLR(mSocket, &readFlags);
     struct sockaddr_in client;
@@ -125,18 +125,18 @@ ssize_t UDPConnectionServer::readBuffer(char* buffer, ssize_t numBytes) {
       &size);
     if (res < 0)
         throw SystemException(errno,
-          "UDPConnectionServer::readBuffer()::read()");
+          "UDPConnectionServer::read()::read()");
     return res;
   }
   else
-    throw IOException("UDPConnectionServer::readBuffer(): timeout occured");
+    throw IOException("UDPConnectionServer::read(): timeout occured");
   return 0;
 }
 
-void UDPConnectionServer::writeBuffer(const char* buffer, ssize_t numBytes) {
-  if (isOpen() == false)
+void UDPConnectionServer::write(const char* buffer, size_t numBytes) {
+  if (!isOpen())
     open();
-  ssize_t bytesWritten = 0;
+  size_t bytesWritten = 0;
   while (bytesWritten != numBytes) {
     double intPart;
     double fracPart = modf(mTimeout, &intPart);
@@ -150,7 +150,7 @@ void UDPConnectionServer::writeBuffer(const char* buffer, ssize_t numBytes) {
       &waitd);
     if(res < 0)
       throw SystemException(errno,
-        "UDPConnectionServer::writeBuffer()::select()");
+        "UDPConnectionServer::write()::select()");
     if (FD_ISSET(mSocket, &writeFlags)) {
       FD_CLR(mSocket, &writeFlags);
       //TODO: MODIFY THIS PART
@@ -159,10 +159,10 @@ void UDPConnectionServer::writeBuffer(const char* buffer, ssize_t numBytes) {
         (const struct sockaddr*)&client, sizeof(struct sockaddr_in));
       if (res < 0)
         throw SystemException(errno,
-          "UDPConnectionServer::writeBuffer()::write()");
+          "UDPConnectionServer::write()::write()");
       bytesWritten += res;
     }
     else
-      throw IOException("UDPConnectionServer::writeBuffer(): timeout occured");
+      throw IOException("UDPConnectionServer::write(): timeout occured");
   }
 }

@@ -74,25 +74,19 @@ void VdyneScanCloud::write(std::ofstream& stream) const {
 /******************************************************************************/
 
 void VdyneScanCloud::writeBinary(std::ostream& stream) const {
-  stream.write(reinterpret_cast<const char*>(&mTimestamp), sizeof(mTimestamp));
-  stream.write(reinterpret_cast<const char*>(&mStartRotationAngle),
-    sizeof(mStartRotationAngle));
-  stream.write(reinterpret_cast<const char*>(&mEndRotationAngle),
-    sizeof(mEndRotationAngle));
+  BinaryStreamWriter binaryStream(stream);
   const size_t numScans = mScans.size();
-  stream.write(reinterpret_cast<const char*>(&numScans), sizeof(numScans));
+  binaryStream << mTimestamp << mStartRotationAngle << mEndRotationAngle
+    << numScans;
   for (auto it = getScanBegin(); it != getScanEnd(); ++it)
     it->writeBinary(stream);
 }
 
 void VdyneScanCloud::readBinary(std::istream& stream) {
-  stream.read(reinterpret_cast<char*>(&mTimestamp), sizeof(mTimestamp));
-  stream.read(reinterpret_cast<char*>(&mStartRotationAngle),
-    sizeof(mStartRotationAngle));
-  stream.read(reinterpret_cast<char*>(&mEndRotationAngle),
-    sizeof(mEndRotationAngle));
+  BinaryStreamReader binaryStream(stream);
   size_t numScans;
-  stream.read(reinterpret_cast<char*>(&numScans), sizeof(numScans));
+  binaryStream >> mTimestamp >> mStartRotationAngle >> mEndRotationAngle
+    >> numScans;
   for (size_t i = 0; i < numScans; ++i) {
     Scan scan;
     scan.readBinary(stream);

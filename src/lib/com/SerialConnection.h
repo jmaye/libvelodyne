@@ -124,9 +124,9 @@ public:
   /// Check if the port is open
   bool isOpen() const;
   /// Reads a buffer of bytes from the serial port
-  void readBuffer(char* buffer, ssize_t numBytes);
+  void read(char* buffer, size_t numBytes);
   /// Writes a buffer of bytes to the serial port
-  void writeBuffer(const char* buffer, ssize_t numBytes);
+  void write(const char* buffer, size_t numBytes);
   /** @}
     */
 

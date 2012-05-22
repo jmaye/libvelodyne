@@ -16,31 +16,31 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.       *
  ******************************************************************************/
 
-/** \file BinaryWriter.h
-    \brief This file defines the BinaryWriter class which is an interface
-           for writing basic types to a binary stream
+/** \file BinaryStreamWriter.h
+    \brief This file defines the BinaryStreamWriter class which allows writing
+           binary data to a standard stream.
   */
 
-#ifndef BINARYWRITER_H
-#define BINARYWRITER_H
+#ifndef BINARYSTREAMWRITER_H
+#define BINARYSTREAMWRITER_H
 
-#include <stdint.h>
-#include <stdlib.h>
+#include <iosfwd>
 
-#include <string>
+#include "base/BinaryWriter.h"
 
-/** The BinaryWriter class is an interface for writing basic types to a binary
+/** The BinaryStreamWriter class allows for writing binary data to a standard
     stream.
-    \brief Binary writer
+    \brief Stream buffer writer
   */
-class BinaryWriter {
+class BinaryStreamWriter :
+  public BinaryWriter {
   /** \name Private constructors
     @{
     */
   /// Copy constructor
-  BinaryWriter(const BinaryWriter& other);
+  BinaryStreamWriter(const BinaryStreamWriter& other);
   /// Assignment operator
-  BinaryWriter& operator = (const BinaryWriter& other);
+  BinaryStreamWriter& operator = (const BinaryStreamWriter& other);
   /** @}
     */
 
@@ -48,38 +48,10 @@ public:
   /** \name Constructors/destructor
     @{
     */
-  /// Default constructor
-  BinaryWriter();
+  /// Constructs object
+  BinaryStreamWriter(std::ostream& stream);
   /// Destructor
-  virtual ~BinaryWriter();
-  /** @}
-    */
-
-  /** \name Operators
-    @{
-    */
-  /// Writes 8-bit signed integer
-  BinaryWriter& operator << (int8_t value);
-  /// Writes 8-bit unsigned integer
-  BinaryWriter& operator << (uint8_t value);
-  /// Writes 16-bit signed integer
-  BinaryWriter& operator << (int16_t value);
-  /// Writes 16-bit unsigned integer
-  BinaryWriter& operator << (uint16_t value);
-  /// Writes 32-bit signed integer
-  BinaryWriter& operator << (int32_t value);
-  /// Writes 32-bit unsigned integer
-  BinaryWriter& operator << (uint32_t value);
-  /// Writes 64-bit signed integer
-  BinaryWriter& operator << (int64_t value);
-  /// Writes 64-bit unsigned integer
-  BinaryWriter& operator << (uint64_t value);
-  /// Writes 32-bit floating point
-  BinaryWriter& operator << (float value);
-  /// Writes 64-bit floating point
-  BinaryWriter& operator << (double value);
-  /// Writes a string
-  BinaryWriter& operator << (const std::string& value);
+  virtual ~BinaryStreamWriter();
   /** @}
     */
 
@@ -87,10 +59,18 @@ public:
     @{
     */
   /// Performs write on the stream
-  virtual void write(const char* buffer, size_t numBytes) = 0;
+  virtual void write(const char* buffer, size_t numBytes);
+  /** @}
+    */
+
+protected:
+  /** \name Protected members
+    @{
+    */
+  std::ostream& mStream;
   /** @}
     */
 
 };
 
-#endif // BINARYWRITER_H
+#endif // BINARYSTREAMWRITER_H

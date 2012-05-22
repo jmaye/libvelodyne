@@ -29,6 +29,8 @@
 #include <vector>
 
 #include "base/Serializable.h"
+#include "base/BinaryStreamReader.h"
+#include "base/BinaryStreamWriter.h"
 
 /** The class VdynePointCloud represents a Velodyne point cloud.
     \brief Velodyne point cloud
@@ -89,18 +91,13 @@ public:
     }
     /// Writes into a output stream
     void writeBinary(std::ostream& stream) const {
-      stream.write(reinterpret_cast<const char*>(&mX), sizeof(mX));
-      stream.write(reinterpret_cast<const char*>(&mY), sizeof(mY));
-      stream.write(reinterpret_cast<const char*>(&mZ), sizeof(mZ));
-      stream.write(reinterpret_cast<const char*>(&mIntensity),
-        sizeof(mIntensity));
+      BinaryStreamWriter binaryStream(stream);
+      binaryStream << mX << mY << mZ << mIntensity;
     }
     /// Reads from an input stream
     void readBinary(std::istream& stream) {
-      stream.read(reinterpret_cast<char*>(&mX), sizeof(mX));
-      stream.read(reinterpret_cast<char*>(&mY), sizeof(mY));
-      stream.read(reinterpret_cast<char*>(&mZ), sizeof(mZ));
-      stream.read(reinterpret_cast<char*>(&mIntensity), sizeof(mIntensity));
+      BinaryStreamReader binaryStream(stream);
+      binaryStream >> mX >> mY >> mZ >> mIntensity;
     }
   };
   /// Container type

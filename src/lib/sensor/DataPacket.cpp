@@ -20,6 +20,9 @@
 
 #include "com/UDPConnectionServer.h"
 #include "base/Timestamp.h"
+#include "base/BinaryBufferReader.h"
+#include "base/BinaryStreamReader.h"
+#include "base/BinaryStreamWriter.h"
 #include "exceptions/OutOfBoundException.h"
 
 /******************************************************************************/
@@ -148,56 +151,42 @@ void DataPacket::setDataChunk(const DataChunk& data, size_t dataChunkIdx) {
 /* Methods                                                                    */
 /******************************************************************************/
 
-void DataPacket::readRawPacket(std::istream& stream) {
+void DataPacket::readRawPacket(BinaryReader& stream) {
   for (size_t i = 0; i < mDataChunkNbr; ++i) {
-    stream.read(reinterpret_cast<char*>(&mData[i].mHeaderInfo),
-      sizeof(mData[i].mHeaderInfo));
-    stream.read(reinterpret_cast<char*>(&mData[i].mRotationalInfo),
-      sizeof(mData[i].mRotationalInfo));
-    for (size_t j = 0; j < DataChunk::mLasersPerPacket; ++j) {
-      stream.read(reinterpret_cast<char*>(&mData[i].mLaserData[j].mDistance),
-        sizeof(mData[i].mLaserData[j].mDistance));
-      stream.read(reinterpret_cast<char*>(&mData[i].mLaserData[j].mIntensity),
-        sizeof(mData[i].mLaserData[j].mIntensity));
-    }
+    stream >> mData[i].mHeaderInfo >> mData[i].mRotationalInfo;
+    for (size_t j = 0; j < DataChunk::mLasersPerPacket; ++j)
+      stream >> mData[i].mLaserData[j].mDistance
+        >> mData[i].mLaserData[j].mIntensity;
   }
-  stream.read(reinterpret_cast<char*>(&mSpinCount), sizeof(mSpinCount));
-  stream.read(reinterpret_cast<char*>(&mReserved), sizeof(mReserved));
+  stream >> mSpinCount >> mReserved;
 }
 
-void DataPacket::writeRawPacket(std::ostream& stream) const {
+void DataPacket::writeRawPacket(BinaryWriter& stream) const {
   for (size_t i = 0; i < mDataChunkNbr; i++) {
-    stream.write(reinterpret_cast<const char*>(&mData[i].mHeaderInfo),
-      sizeof(mData[i].mHeaderInfo));
-    stream.write(reinterpret_cast<const char*>(&mData[i].mRotationalInfo),
-      sizeof(mData[i].mRotationalInfo));
-    for (size_t j = 0; j < DataChunk::mLasersPerPacket; ++j) {
-      stream.write(reinterpret_cast<const char*>(
-        &mData[i].mLaserData[j].mDistance),
-        sizeof(mData[i].mLaserData[j].mDistance));
-      stream.write(reinterpret_cast<const char*>(
-        &mData[i].mLaserData[j].mIntensity),
-        sizeof(mData[i].mLaserData[j].mIntensity));
-    }
+    stream << mData[i].mHeaderInfo << mData[i].mRotationalInfo;
+    for (size_t j = 0; j < DataChunk::mLasersPerPacket; ++j)
+      stream << mData[i].mLaserData[j].mDistance
+        << mData[i].mLaserData[j].mIntensity;
   }
-  stream.write(reinterpret_cast<const char*>(&mSpinCount), sizeof(mSpinCount));
-  stream.write(reinterpret_cast<const char*>(&mReserved), sizeof(mReserved));
+  stream << mSpinCount << mReserved;
 }
 
 void DataPacket::readBinary(UDPConnectionServer& connection) {
-  connection.readBuffer(reinterpret_cast<char*>(mRawPacket), mPacketSize);
+  connection.read(reinterpret_cast<char*>(mRawPacket), mPacketSize);
   mTimestamp = Timestamp::now();
-  std::istringstream is(std::string(reinterpret_cast<const char*>(mRawPacket),
-    mPacketSize));
-  readRawPacket(is);
+  BinaryBufferReader binaryStream(reinterpret_cast<char*>(mRawPacket),
+    mPacketSize);
+  readRawPacket(binaryStream);
 }
 
 void DataPacket::writeBinary(std::ostream& stream) const {
-  stream.write(reinterpret_cast<const char*>(&mTimestamp), sizeof(mTimestamp));
-  writeRawPacket(stream);
+  BinaryStreamWriter binaryStream(stream);
+  binaryStream << mTimestamp;
+  writeRawPacket(binaryStream);
 }
 
 void DataPacket::readBinary(std::istream& stream) {
-  stream.read(reinterpret_cast<char*>(&mTimestamp), sizeof(mTimestamp));
-  readRawPacket(stream);
+  BinaryStreamReader binaryStream(stream);
+  binaryStream >> mTimestamp;
+  readRawPacket(binaryStream);
 }

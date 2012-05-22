@@ -29,6 +29,8 @@
 #include <vector>
 
 #include "base/Serializable.h"
+#include "base/BinaryStreamReader.h"
+#include "base/BinaryStreamWriter.h"
 
 /** The class VdyneScanCloud represents a Velodyne scan cloud.
     \brief Velodyne scan cloud
@@ -90,18 +92,13 @@ public:
     }
     /// Writes into a output stream
     void writeBinary(std::ostream& stream) const {
-      stream.write(reinterpret_cast<const char*>(&mRange), sizeof(mRange));
-      stream.write(reinterpret_cast<const char*>(&mHeading), sizeof(mHeading));
-      stream.write(reinterpret_cast<const char*>(&mPitch), sizeof(mPitch));
-      stream.write(reinterpret_cast<const char*>(&mIntensity),
-        sizeof(mIntensity));
+      BinaryStreamWriter binaryStream(stream);
+      binaryStream << mRange << mHeading << mPitch << mIntensity;
     }
     /// Reads from an input stream
     void readBinary(std::istream& stream) {
-      stream.read(reinterpret_cast<char*>(&mRange), sizeof(mRange));
-      stream.read(reinterpret_cast<char*>(&mHeading), sizeof(mHeading));
-      stream.read(reinterpret_cast<char*>(&mPitch), sizeof(mPitch));
-      stream.read(reinterpret_cast<char*>(&mIntensity), sizeof(mIntensity));
+      BinaryStreamReader binaryStream(stream);
+      binaryStream >> mRange >> mHeading >> mPitch >> mIntensity;
     }
   };
   /// Container type

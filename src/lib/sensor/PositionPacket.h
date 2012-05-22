@@ -29,6 +29,8 @@
 #include "base/Serializable.h"
 
 class UDPConnectionServer;
+class BinaryReader;
+class BinaryWriter;
 
 /** The class PositionPacket represents a Velodyne position packet.
     \brief Velodyne position packet
@@ -107,9 +109,9 @@ protected:
     @{
     */
   /// Read raw packet
-  void readRawPacket(std::istream& stream);
+  void readRawPacket(BinaryReader& stream);
   /// Write raw packet
-  void writeRawPacket(std::ostream& stream) const;
+  void writeRawPacket(BinaryWriter& stream) const;
   /** @}
     */
 

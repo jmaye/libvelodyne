@@ -20,6 +20,9 @@
 
 #include "com/UDPConnectionServer.h"
 #include "base/Timestamp.h"
+#include "base/BinaryBufferReader.h"
+#include "base/BinaryStreamReader.h"
+#include "base/BinaryStreamWriter.h"
 #include "exceptions/OutOfBoundException.h"
 
 /******************************************************************************/
@@ -89,48 +92,27 @@ void PositionPacket::setTimestamp(double timestamp) {
 /* Methods                                                                    */
 /******************************************************************************/
 
-void PositionPacket::readRawPacket(std::istream& stream) {
+void PositionPacket::readRawPacket(BinaryReader& stream) {
   stream.read(reinterpret_cast<char*>(&mEthernetHeader),
     sizeof(mEthernetHeader));
   stream.read(reinterpret_cast<char*>(&mNotUsed1), sizeof(mNotUsed1));
-  stream.read(reinterpret_cast<char*>(&mGyro1), sizeof(mGyro1));
-  stream.read(reinterpret_cast<char*>(&mTemp1), sizeof(mTemp1));
-  stream.read(reinterpret_cast<char*>(&mAccel1X), sizeof(mAccel1X));
-  stream.read(reinterpret_cast<char*>(&mAccel1Y), sizeof(mAccel1Y));
-  stream.read(reinterpret_cast<char*>(&mGyro2), sizeof(mGyro2));
-  stream.read(reinterpret_cast<char*>(&mTemp2), sizeof(mTemp2));
-  stream.read(reinterpret_cast<char*>(&mAccel2X), sizeof(mAccel2X));
-  stream.read(reinterpret_cast<char*>(&mAccel2Y), sizeof(mAccel2Y));
-  stream.read(reinterpret_cast<char*>(&mGyro3), sizeof(mGyro2));
-  stream.read(reinterpret_cast<char*>(&mTemp3), sizeof(mTemp2));
-  stream.read(reinterpret_cast<char*>(&mAccel3X), sizeof(mAccel2X));
-  stream.read(reinterpret_cast<char*>(&mAccel3Y), sizeof(mAccel2Y));
+  stream >> mGyro1 >> mTemp1 >> mAccel1X >> mAccel1Y >> mGyro2 >> mTemp2 >>
+    mAccel2X >> mAccel2Y >> mGyro3 >> mTemp3 >> mAccel3X >> mAccel3Y;
   stream.read(reinterpret_cast<char*>(&mNotUsed2), sizeof(mNotUsed2));
-  stream.read(reinterpret_cast<char*>(&mGPSTimestamp), sizeof(mGPSTimestamp));
+  stream >> mTimestamp;
   stream.read(reinterpret_cast<char*>(&mNotUsed3), sizeof(mNotUsed3));
   stream.read(reinterpret_cast<char*>(&mNMEASentence), sizeof(mNMEASentence));
   stream.read(reinterpret_cast<char*>(&mNotUsed4), sizeof(mNotUsed4));
 }
 
-void PositionPacket::writeRawPacket(std::ostream& stream) const {
+void PositionPacket::writeRawPacket(BinaryWriter& stream) const {
   stream.write(reinterpret_cast<const char*>(&mEthernetHeader),
     sizeof(mEthernetHeader));
   stream.write(reinterpret_cast<const char*>(&mNotUsed1), sizeof(mNotUsed1));
-  stream.write(reinterpret_cast<const char*>(&mGyro1), sizeof(mGyro1));
-  stream.write(reinterpret_cast<const char*>(&mTemp1), sizeof(mTemp1));
-  stream.write(reinterpret_cast<const char*>(&mAccel1X), sizeof(mAccel1X));
-  stream.write(reinterpret_cast<const char*>(&mAccel1Y), sizeof(mAccel1Y));
-  stream.write(reinterpret_cast<const char*>(&mGyro2), sizeof(mGyro2));
-  stream.write(reinterpret_cast<const char*>(&mTemp2), sizeof(mTemp2));
-  stream.write(reinterpret_cast<const char*>(&mAccel2X), sizeof(mAccel2X));
-  stream.write(reinterpret_cast<const char*>(&mAccel2Y), sizeof(mAccel2Y));
-  stream.write(reinterpret_cast<const char*>(&mGyro3), sizeof(mGyro2));
-  stream.write(reinterpret_cast<const char*>(&mTemp3), sizeof(mTemp2));
-  stream.write(reinterpret_cast<const char*>(&mAccel3X), sizeof(mAccel2X));
-  stream.write(reinterpret_cast<const char*>(&mAccel3Y), sizeof(mAccel2Y));
+  stream << mGyro1 << mTemp1 << mAccel1X << mAccel1Y << mGyro2 << mTemp2 <<
+    mAccel2X << mAccel2Y << mGyro3 << mTemp3 << mAccel3X << mAccel3Y;
   stream.write(reinterpret_cast<const char*>(&mNotUsed2), sizeof(mNotUsed2));
-  stream.write(reinterpret_cast<const char*>(&mGPSTimestamp),
-    sizeof(mGPSTimestamp));
+  stream << mTimestamp;
   stream.write(reinterpret_cast<const char*>(&mNotUsed3), sizeof(mNotUsed3));
   stream.write(reinterpret_cast<const char*>(&mNMEASentence),
     sizeof(mNMEASentence));
@@ -138,19 +120,21 @@ void PositionPacket::writeRawPacket(std::ostream& stream) const {
 }
 
 void PositionPacket::readBinary(UDPConnectionServer& stream) {
-  stream.readBuffer(reinterpret_cast<char*>(mRawPacket), mPacketSize);
+  stream.read(reinterpret_cast<char*>(mRawPacket), mPacketSize);
   mTimestamp = Timestamp::now();
-  std::istringstream is(std::string(reinterpret_cast<const char*>(mRawPacket),
-    mPacketSize));
-  readRawPacket(is);
+  BinaryBufferReader binaryStream(reinterpret_cast<char*>(mRawPacket),
+    mPacketSize);
+  readRawPacket(binaryStream);
 }
 
 void PositionPacket::writeBinary(std::ostream& stream) const {
-  stream.write(reinterpret_cast<const char*>(&mTimestamp), sizeof(mTimestamp));
-  writeRawPacket(stream);
+  BinaryStreamWriter binaryStream(stream);
+  stream << mTimestamp;
+  writeRawPacket(binaryStream);
 }
 
 void PositionPacket::readBinary(std::istream& stream) {
-  stream.read(reinterpret_cast<char*>(&mTimestamp), sizeof(mTimestamp));
-  readRawPacket(stream);
+  BinaryStreamReader binaryStream(stream);
+  stream >> mTimestamp;
+  readRawPacket(binaryStream);
 }

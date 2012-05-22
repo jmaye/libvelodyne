@@ -112,10 +112,10 @@ bool TCPConnectionClient::isOpen() const {
   return (mSocket != 0);
 }
 
-void TCPConnectionClient::readBuffer(char* buffer, ssize_t numBytes) {
-  if (isOpen() == false)
+void TCPConnectionClient::read(char* buffer, size_t numBytes) {
+  if (!isOpen())
     open();
-  ssize_t bytesRead = 0;
+  size_t bytesRead = 0;
   while (bytesRead != numBytes) {
     double intPart;
     double fracPart = modf(mTimeout, &intPart);
@@ -129,24 +129,24 @@ void TCPConnectionClient::readBuffer(char* buffer, ssize_t numBytes) {
       &waitd);
     if(res < 0)
       throw SystemException(errno,
-        "TCPConnectionClient::readBuffer()::select()");
+        "TCPConnectionClient::read()::select()");
     if (FD_ISSET(mSocket, &readFlags)) {
       FD_CLR(mSocket, &readFlags);
       res = ::read(mSocket, &buffer[bytesRead], numBytes - bytesRead);
       if (res < 0)
         throw SystemException(errno,
-          "TCPConnectionClient::readBuffer()::read()");
+          "TCPConnectionClient::read()::read()");
       bytesRead += res;
     }
     else
-      throw IOException("TCPConnectionClient::readBuffer(): timeout occured");
+      throw IOException("TCPConnectionClient::read(): timeout occured");
   }
 }
 
-void TCPConnectionClient::writeBuffer(const char* buffer, ssize_t numBytes) {
-  if (isOpen() == false)
+void TCPConnectionClient::write(const char* buffer, size_t numBytes) {
+  if (!isOpen())
     open();
-  ssize_t bytesWritten = 0;
+  size_t bytesWritten = 0;
   while (bytesWritten != numBytes) {
     double intPart;
     double fracPart = modf(mTimeout, &intPart);
@@ -160,16 +160,16 @@ void TCPConnectionClient::writeBuffer(const char* buffer, ssize_t numBytes) {
       &waitd);
     if(res < 0)
       throw SystemException(errno,
-        "TCPConnectionClient::writeBuffer()::select()");
+        "TCPConnectionClient::write()::select()");
     if (FD_ISSET(mSocket, &writeFlags)) {
       FD_CLR(mSocket, &writeFlags);
       res = ::write(mSocket, &buffer[bytesWritten], numBytes - bytesWritten);
       if (res < 0)
         throw SystemException(errno,
-          "TCPConnectionClient::writeBuffer()::write()");
+          "TCPConnectionClient::write()::write()");
       bytesWritten += res;
     }
     else
-      throw IOException("TCPConnectionClient::writeBuffer(): timeout occured");
+      throw IOException("TCPConnectionClient::write(): timeout occured");
   }
 }

@@ -77,9 +77,9 @@ public:
   /// Test if the connection is open
   bool isOpen() const;
   /// Read buffer from TCP
-  void readBuffer(char* buffer, ssize_t numBytes);
+  void read(char* buffer, size_t numBytes);
   /// Write buffer to TCP
-  void writeBuffer(const char* buffer, ssize_t numBytes);
+  void write(const char* buffer, size_t numBytes);
  /** @}
     */
 

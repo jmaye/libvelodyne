@@ -74,25 +74,19 @@ void VdynePointCloud::write(std::ofstream& stream) const {
 /******************************************************************************/
 
 void VdynePointCloud::writeBinary(std::ostream& stream) const {
-  stream.write(reinterpret_cast<const char*>(&mTimestamp), sizeof(mTimestamp));
-  stream.write(reinterpret_cast<const char*>(&mStartRotationAngle),
-    sizeof(mStartRotationAngle));
-  stream.write(reinterpret_cast<const char*>(&mEndRotationAngle),
-    sizeof(mEndRotationAngle));
+  BinaryStreamWriter binaryStream(stream);
   const size_t numPoints = mPoints.size();
-  stream.write(reinterpret_cast<const char*>(&numPoints), sizeof(numPoints));
+  binaryStream << mTimestamp << mStartRotationAngle << mEndRotationAngle
+    << numPoints;
   for (auto it = getPointBegin(); it != getPointEnd(); ++it)
     it->writeBinary(stream);
 }
 
 void VdynePointCloud::readBinary(std::istream& stream) {
-  stream.read(reinterpret_cast<char*>(&mTimestamp), sizeof(mTimestamp));
-  stream.read(reinterpret_cast<char*>(&mStartRotationAngle),
-    sizeof(mStartRotationAngle));
-  stream.read(reinterpret_cast<char*>(&mEndRotationAngle),
-    sizeof(mEndRotationAngle));
+  BinaryStreamReader binaryStream(stream);
   size_t numPoints;
-  stream.read(reinterpret_cast<char*>(&numPoints), sizeof(numPoints));
+  binaryStream >> mTimestamp >> mStartRotationAngle >> mEndRotationAngle
+    >> numPoints;
   for (size_t i = 0; i < numPoints; ++i) {
     Point3D point;
     point.readBinary(stream);

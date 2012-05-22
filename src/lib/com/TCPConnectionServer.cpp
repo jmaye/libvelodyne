@@ -109,7 +109,7 @@ bool TCPConnectionServer::isOpen() const {
   return (mSocket != 0);
 }
 
-void TCPConnectionServer::readBuffer(char* buffer, ssize_t numBytes) {
+void TCPConnectionServer::read(char* buffer, size_t numBytes) {
 //newsockfd = accept(sockfd,
 //                 (struct sockaddr *) &cli_addr,
 //                 &clilen);
@@ -125,20 +125,20 @@ void TCPConnectionServer::readBuffer(char* buffer, ssize_t numBytes) {
 //  FD_SET(mSocket, &readFlags);
 //  ssize_t res = select(mSocket + 1, &readFlags, (fd_set*)0, (fd_set*)0, &waitd);
 //  if(res < 0)
-//    throw IOException("TCPConnectionServer::readBuffer(): read select failed");
+//    throw IOException("TCPConnectionServer::read(): read select failed");
 //  if (FD_ISSET(mSocket, &readFlags)) {
 //    FD_CLR(mSocket, &readFlags);
 //    struct sockaddr_in client;
 //    socklen_t size;
 //    if (recvfrom(mSocket, buffer, numBytes, 0, (struct sockaddr*)&client,
 //      &size) != numBytes)
-//      throw IOException("TCPConnectionServer::readBuffer(): read failed");
+//      throw IOException("TCPConnectionServer::read(): read failed");
 //  }
 //  else
-//    throw IOException("TCPConnectionServer::readBuffer(): read timeout");
+//    throw IOException("TCPConnectionServer::read(): read timeout");
 }
 
-void TCPConnectionServer::writeBuffer(const char* buffer, ssize_t numBytes) {
+void TCPConnectionServer::write(const char* buffer, size_t numBytes) {
 //  if (isOpen() == false)
 //    open();
 //  double intPart;
@@ -152,15 +152,15 @@ void TCPConnectionServer::writeBuffer(const char* buffer, ssize_t numBytes) {
 //  ssize_t res = select(mSocket + 1, (fd_set*)0, &writeFlags, (fd_set*)0,
 //    &waitd);
 //  if(res < 0)
-//    throw IOException("TCPConnectionServer::writeBuffer(): write select failed");
+//    throw IOException("TCPConnectionServer::write(): write select failed");
 //  if (FD_ISSET(mSocket, &writeFlags)) {
 //    FD_CLR(mSocket, &writeFlags);
 //    //TODO: MODIFY THIS PART
 //    struct sockaddr_in client;
 //    if (sendto(mSocket, buffer, numBytes, 0, (const struct sockaddr*)&client,
 //      sizeof(struct sockaddr_in)) != numBytes)
-//      throw IOException("TCPConnectionServer::writeBuffer(): write failed");
+//      throw IOException("TCPConnectionServer::write(): write failed");
 //  }
 //  else
-//    throw IOException("TCPConnectionServer::writeBuffer(): write timeout");
+//    throw IOException("TCPConnectionServer::write(): write timeout");
 }

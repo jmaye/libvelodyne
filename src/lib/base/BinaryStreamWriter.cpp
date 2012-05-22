@@ -16,68 +16,25 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.       *
  ******************************************************************************/
 
-#include "base/BinaryReader.h"
+#include "base/BinaryStreamWriter.h"
+
+#include <iostream>
 
 /******************************************************************************/
 /* Constructors and Destructor                                                */
 /******************************************************************************/
 
-BinaryReader::BinaryReader() {
+BinaryStreamWriter::BinaryStreamWriter(std::ostream& stream) :
+    mStream(stream) {
 }
 
-BinaryReader::~BinaryReader() {
+BinaryStreamWriter::~BinaryStreamWriter() {
 }
 
 /******************************************************************************/
 /* Methods                                                                    */
 /******************************************************************************/
 
-BinaryReader& BinaryReader::operator >> (int8_t& value) {
-  read(reinterpret_cast<char*>(&value), sizeof(value));
-  return *this;
-}
-
-BinaryReader& BinaryReader::operator >> (uint8_t& value) {
-  read(reinterpret_cast<char*>(&value), sizeof(value));
-  return *this;
-}
-
-BinaryReader& BinaryReader::operator >> (int16_t& value) {
-  read(reinterpret_cast<char*>(&value), sizeof(value));
-  return *this;
-}
-
-BinaryReader& BinaryReader::operator >> (uint16_t& value) {
-  read(reinterpret_cast<char*>(&value), sizeof(value));
-  return *this;
-}
-
-BinaryReader& BinaryReader::operator >> (int32_t& value) {
-  read(reinterpret_cast<char*>(&value), sizeof(value));
-  return *this;
-}
-
-BinaryReader& BinaryReader::operator >> (uint32_t& value) {
-  read(reinterpret_cast<char*>(&value), sizeof(value));
-  return *this;
-}
-
-BinaryReader& BinaryReader::operator >> (int64_t& value) {
-  read(reinterpret_cast<char*>(&value), sizeof(value));
-  return *this;
-}
-
-BinaryReader& BinaryReader::operator >> (uint64_t& value) {
-  read(reinterpret_cast<char*>(&value), sizeof(value));
-  return *this;
-}
-
-BinaryReader& BinaryReader::operator >> (float& value) {
-  read(reinterpret_cast<char*>(&value), sizeof(value));
-  return *this;
-}
-
-BinaryReader& BinaryReader::operator >> (double& value) {
-  read(reinterpret_cast<char*>(&value), sizeof(value));
-  return *this;
+void BinaryStreamWriter::write(const char* buffer, size_t numBytes) {
+  mStream.write(buffer, numBytes);
 }

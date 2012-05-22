@@ -265,12 +265,12 @@ bool SerialConnection::isOpen() const {
   return (mHandle != 0);
 }
 
-void SerialConnection::readBuffer(char* buffer, ssize_t numBytes) {
-  if (isOpen() == false)
+void SerialConnection::read(char* buffer, size_t numBytes) {
+  if (!isOpen())
     open();
   double intPart;
   double fractPart = modf(mTimeout , &intPart);
-  ssize_t bytesRead = 0;
+  size_t bytesRead = 0;
   while (bytesRead < numBytes) {
     struct timeval waitd;
     waitd.tv_sec = intPart;
@@ -281,25 +281,25 @@ void SerialConnection::readBuffer(char* buffer, ssize_t numBytes) {
     ssize_t res = select(mHandle + 1, &readFlags, (fd_set*)0, (fd_set*)0,
       &waitd);
     if(res < 0)
-      throw SystemException(errno, "SerialConnection::readBuffer()::select()");
+      throw SystemException(errno, "SerialConnection::read()::select()");
     if (FD_ISSET(mHandle, &readFlags)) {
       FD_CLR(mHandle, &readFlags);
       res = ::read(mHandle, &buffer[bytesRead], numBytes - bytesRead);
       if (res < 0)
-        throw SystemException(errno, "SerialConnection::readBuffer()::read()");
+        throw SystemException(errno, "SerialConnection::read()::read()");
       bytesRead += res;
     }
     else
-      throw IOException("SerialConnection::readBuffer(): timeout occured");
+      throw IOException("SerialConnection::read(): timeout occured");
   }
 }
 
-void SerialConnection::writeBuffer(const char* buffer, ssize_t numBytes) {
-  if (isOpen() == false)
+void SerialConnection::write(const char* buffer, size_t numBytes) {
+  if (!isOpen())
     open();
   double intPart;
   double fractPart = modf(mTimeout , &intPart);
-  ssize_t bytesWritten = 0;
+  size_t bytesWritten = 0;
   while (bytesWritten < numBytes) {
     struct timeval waitd;
     waitd.tv_sec = intPart;
@@ -310,16 +310,16 @@ void SerialConnection::writeBuffer(const char* buffer, ssize_t numBytes) {
     ssize_t res = select(mHandle + 1, (fd_set*)0, &writeFlags, (fd_set*)0,
       &waitd);
     if(res < 0)
-      throw SystemException(errno, "SerialConnection::writeBuffer()::select()");
+      throw SystemException(errno, "SerialConnection::write()::select()");
     if (FD_ISSET(mHandle, &writeFlags)) {
       FD_CLR(mHandle, &writeFlags);
       res = ::write(mHandle, &buffer[bytesWritten], numBytes - bytesWritten);
       if (res < 0)
         throw SystemException(errno,
-          "SerialConnection::writeBuffer()::write()");
+          "SerialConnection::write()::write()");
       bytesWritten += res;
     }
     else
-      throw IOException("SerialConnection::writeBuffer(): timeout occured");
+      throw IOException("SerialConnection::write(): timeout occured");
   }
 }

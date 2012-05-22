@@ -77,9 +77,9 @@ public:
   /// Test if the connection is open
   bool isOpen() const;
   /// Read buffer from UDP
-  ssize_t readBuffer(char* buffer, ssize_t numBytes);
+  size_t read(char* buffer, size_t numBytes);
   /// Write buffer to UDP
-  void writeBuffer(const char* buffer, ssize_t numBytes);
+  void write(const char* buffer, size_t numBytes);
  /** @}
     */
 

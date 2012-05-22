@@ -46,7 +46,7 @@ void Controller::setRPM(size_t RPM) {
   std::stringstream ss(std::stringstream::in | std::stringstream::out);
   ss << RPM;
   mCommandString.replace(7, 3, ss.str());
-  mSerialConnection.writeBuffer(
+  mSerialConnection.write(
     reinterpret_cast<const char*>(mCommandString.c_str()),
     mCommandString.size());
 }
