@@ -145,6 +145,8 @@ void SerialConnection::setFlowControl(FlowControl flowControl) {
 /******************************************************************************/
 
 void SerialConnection::open() {
+  if (isOpen())
+    return;
   mHandle = ::open(mDevicePathStr.c_str(), O_RDWR | O_NDELAY | O_NOCTTY);
   if (mHandle == -1)
     throw SystemException(errno, "SerialConnection::open()::open()");

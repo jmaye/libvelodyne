@@ -85,6 +85,8 @@ double TCPConnectionClient::getTimeout() const {
 /******************************************************************************/
 
 void TCPConnectionClient::open() {
+  if (isOpen())
+    return;
   mSocket = socket(AF_INET, SOCK_STREAM, 0);
   if (mSocket < 0)
     throw SystemException(errno,

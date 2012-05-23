@@ -78,6 +78,8 @@ double UDPConnectionServer::getTimeout() const {
 /******************************************************************************/
 
 void UDPConnectionServer::open() {
+  if (isOpen())
+    return;
   mSocket = socket(AF_INET, SOCK_DGRAM, 0);
   if (mSocket < 0)
     throw SystemException(errno, "UDPConnectionServer::open()::socket()");
