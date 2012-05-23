@@ -88,17 +88,21 @@ void TCPConnectionClient::open() {
   if (isOpen())
     return;
   mSocket = socket(AF_INET, SOCK_STREAM, 0);
-  if (mSocket < 0)
+  if (mSocket < 0) {
+    mSocket = 0;
     throw SystemException(errno,
       "TCPConnectionClient::open()::socket()");
+  }
   struct sockaddr_in server;
   memset(&server, 0, sizeof(struct sockaddr_in));
   server.sin_family = AF_INET;
   server.sin_addr.s_addr = inet_addr(mServerIP.c_str());
   server.sin_port = htons(mPort);
-  if (connect(mSocket, (const struct sockaddr*)&server, sizeof(server)) == -1)
+  if (connect(mSocket, (const struct sockaddr*)&server, sizeof(server)) == -1) {
+    close();
     throw SystemException(errno,
       "TCPConnectionClient::open()::connect()");
+  }
 }
 
 void TCPConnectionClient::close() {

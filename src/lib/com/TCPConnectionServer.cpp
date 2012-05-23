@@ -79,20 +79,26 @@ double TCPConnectionServer::getTimeout() const {
 
 void TCPConnectionServer::open() {
   mSocket = socket(AF_INET, SOCK_DGRAM, 0);
-  if (mSocket == -1)
+  if (mSocket == -1) {
+    mSocket = 0;
     throw SystemException(errno,
       "TCPConnectionServer::open()::socket()");
+  }
   struct sockaddr_in server;
   server.sin_family = AF_INET;
   server.sin_addr.s_addr = INADDR_ANY;
   server.sin_port = htons(mPort);
   if (bind(mSocket, (struct sockaddr*)&server, sizeof(struct sockaddr_in)) ==
-    -1)
+      -1) {
+    close();
     throw SystemException(errno,
       "TCPConnectionServer::open()::bind()");
-  if (listen(mSocket, 5) == -1)
+  }
+  if (listen(mSocket, 5) == -1) {
+    close();
     throw SystemException(errno,
       "TCPConnectionServer::open()::listen()");
+  }
 }
 
 void TCPConnectionServer::close() {

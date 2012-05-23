@@ -81,15 +81,19 @@ void UDPConnectionServer::open() {
   if (isOpen())
     return;
   mSocket = socket(AF_INET, SOCK_DGRAM, 0);
-  if (mSocket < 0)
+  if (mSocket < 0) {
+    mSocket = 0;
     throw SystemException(errno, "UDPConnectionServer::open()::socket()");
+  }
   struct sockaddr_in server;
   server.sin_family = AF_INET;
   server.sin_addr.s_addr = INADDR_ANY;
   server.sin_port = htons(mPort);
   if (bind(mSocket, (struct sockaddr*)&server, sizeof(struct sockaddr_in)) ==
-    -1)
+      -1) {
+    close();
     throw SystemException(errno, "UDPConnectionServer::open()::bind()");
+  }
 }
 
 void UDPConnectionServer::close() {

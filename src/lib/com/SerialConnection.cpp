@@ -147,9 +147,6 @@ void SerialConnection::setFlowControl(FlowControl flowControl) {
 void SerialConnection::open() {
   if (isOpen())
     return;
-  mHandle = ::open(mDevicePathStr.c_str(), O_RDWR | O_NDELAY | O_NOCTTY);
-  if (mHandle == -1)
-    throw SystemException(errno, "SerialConnection::open()::open()");
   struct termios tios;
   memset(&tios, 0, sizeof(struct termios));
   speed_t speed;
@@ -243,12 +240,21 @@ void SerialConnection::open() {
     tios.c_iflag |= (IXON | IXOFF | IXANY);
   tios.c_lflag &= ~(ICANON | ECHO | ECHOE | ISIG);
   tios.c_oflag &= ~OPOST;
-  if (tcflush(mHandle, TCIOFLUSH))
+  mHandle = ::open(mDevicePathStr.c_str(), O_RDWR | O_NDELAY | O_NOCTTY);
+  if (mHandle == -1) {
+    mHandle = 0;
+    throw SystemException(errno, "SerialConnection::open()::open()");
+  }
+  if (tcflush(mHandle, TCIOFLUSH)) {
+    close();
     throw SystemException(errno,
       "SerialConnection::open()::tcflush()");
-  if (tcsetattr(mHandle, TCSANOW, &tios))
+  }
+  if (tcsetattr(mHandle, TCSANOW, &tios)) {
+    close();
     throw SystemException(errno,
       "SerialConnection::open()::tcsetattr()");
+  }
 }
 
 void SerialConnection::close() {
