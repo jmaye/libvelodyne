@@ -35,7 +35,7 @@ int main(int argc, char **argv) {
       << " <logFile> <calibrationFile> <wrmlFile>" << std::endl;
     return -1;
   }
-  std::ifstream logFile(argv[1], std::ios::in | std::ios::binary);
+  std::ifstream logFile(argv[1]);
   Calibration calibration;
   std::ifstream calibFile(argv[2]);
   calibFile >> calibration;

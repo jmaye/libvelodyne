@@ -33,7 +33,7 @@ int main(int argc, char **argv) {
     std::cerr << "Usage: " << argv[0] << " <LogFile> <PktNbr>" << std::endl;
     return -1;
   }
-  std::ofstream logFile(argv[1], std::ios::out | std::ios::binary);
+  std::ofstream logFile(argv[1]);
   UDPConnectionServer com(2368);
   for (size_t i = 0; i < (size_t)atoi(argv[2]); ++i) {
     DataPacket dataPacket;

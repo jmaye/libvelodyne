@@ -31,7 +31,7 @@ int main(int argc, char **argv) {
     std::cerr << "Usage: " << argv[0] << " <LogFile>" << std::endl;
     return -1;
   }
-  std::ifstream logFile(argv[1], std::ios::in | std::ios::binary);
+  std::ifstream logFile(argv[1]);
   while (logFile.eof() != true) {
     PositionPacket posPacket;
     posPacket.readBinary(logFile);

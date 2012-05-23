@@ -34,7 +34,7 @@ int main(int argc, char **argv) {
     std::cerr << "Usage: " << argv[0] << " <LogFile> <PktNbr>" << std::endl;
     return -1;
   }
-  std::ofstream logFile (argv[1], std::ios::out | std::ios::binary);
+  std::ofstream logFile (argv[1]);
   UDPConnectionServer connection(2368);
   AcquisitionThread<DataPacket> acqThread(connection);
   acqThread.start();

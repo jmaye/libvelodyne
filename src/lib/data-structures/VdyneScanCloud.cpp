@@ -70,7 +70,7 @@ void VdyneScanCloud::write(std::ofstream& stream) const {
 }
 
 void VdyneScanCloud::writeBinary(std::ostream& stream) const {
-  BinaryStreamWriter binaryStream(stream);
+  BinaryStreamWriter<std::ostream> binaryStream(stream);
   const size_t numScans = mScans.size();
   binaryStream << mTimestamp << mStartRotationAngle << mEndRotationAngle
     << numScans;
@@ -79,7 +79,7 @@ void VdyneScanCloud::writeBinary(std::ostream& stream) const {
 }
 
 void VdyneScanCloud::readBinary(std::istream& stream) {
-  BinaryStreamReader binaryStream(stream);
+  BinaryStreamReader<std::istream> binaryStream(stream);
   size_t numScans;
   binaryStream >> mTimestamp >> mStartRotationAngle >> mEndRotationAngle
     >> numScans;

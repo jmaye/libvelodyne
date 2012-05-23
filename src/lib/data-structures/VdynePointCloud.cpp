@@ -70,7 +70,7 @@ void VdynePointCloud::write(std::ofstream& stream) const {
 }
 
 void VdynePointCloud::writeBinary(std::ostream& stream) const {
-  BinaryStreamWriter binaryStream(stream);
+  BinaryStreamWriter<std::ostream> binaryStream(stream);
   const size_t numPoints = mPoints.size();
   binaryStream << mTimestamp << mStartRotationAngle << mEndRotationAngle
     << numPoints;
@@ -79,7 +79,7 @@ void VdynePointCloud::writeBinary(std::ostream& stream) const {
 }
 
 void VdynePointCloud::readBinary(std::istream& stream) {
-  BinaryStreamReader binaryStream(stream);
+  BinaryStreamReader<std::istream> binaryStream(stream);
   size_t numPoints;
   binaryStream >> mTimestamp >> mStartRotationAngle >> mEndRotationAngle
     >> numPoints;

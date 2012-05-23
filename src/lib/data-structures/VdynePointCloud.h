@@ -91,12 +91,12 @@ public:
     }
     /// Writes binary into a output stream
     void writeBinary(std::ostream& stream) const {
-      BinaryStreamWriter binaryStream(stream);
+      BinaryStreamWriter<std::ostream> binaryStream(stream);
       binaryStream << mX << mY << mZ << mIntensity;
     }
     /// Reads binary from an input stream
     void readBinary(std::istream& stream) {
-      BinaryStreamReader binaryStream(stream);
+      BinaryStreamReader<std::istream> binaryStream(stream);
       binaryStream >> mX >> mY >> mZ >> mIntensity;
     }
   };

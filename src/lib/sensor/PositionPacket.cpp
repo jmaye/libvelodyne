@@ -128,13 +128,13 @@ void PositionPacket::readBinary(UDPConnectionServer& stream) {
 }
 
 void PositionPacket::writeBinary(std::ostream& stream) const {
-  BinaryStreamWriter binaryStream(stream);
+  BinaryStreamWriter<std::ostream> binaryStream(stream);
   stream << mTimestamp;
   writeRawPacket(binaryStream);
 }
 
 void PositionPacket::readBinary(std::istream& stream) {
-  BinaryStreamReader binaryStream(stream);
+  BinaryStreamReader<std::istream> binaryStream(stream);
   stream >> mTimestamp;
   readRawPacket(binaryStream);
 }

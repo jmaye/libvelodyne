@@ -180,13 +180,13 @@ void DataPacket::readBinary(UDPConnectionServer& connection) {
 }
 
 void DataPacket::writeBinary(std::ostream& stream) const {
-  BinaryStreamWriter binaryStream(stream);
+  BinaryStreamWriter<std::ostream> binaryStream(stream);
   binaryStream << mTimestamp;
   writeRawPacket(binaryStream);
 }
 
 void DataPacket::readBinary(std::istream& stream) {
-  BinaryStreamReader binaryStream(stream);
+  BinaryStreamReader<std::istream> binaryStream(stream);
   binaryStream >> mTimestamp;
   readRawPacket(binaryStream);
 }
