@@ -86,6 +86,7 @@ void UDPConnectionServer::open() {
     throw SystemException(errno, "UDPConnectionServer::open()::socket()");
   }
   struct sockaddr_in server;
+  memset(&server, 0, sizeof(struct sockaddr_in));
   server.sin_family = AF_INET;
   server.sin_addr.s_addr = INADDR_ANY;
   server.sin_port = htons(mPort);
