@@ -55,7 +55,7 @@ typename AcquisitionThread<P>::Buffer& AcquisitionThread<P>::getBuffer() {
 
 template <typename P>
 void AcquisitionThread<P>::process() {
-  boost::shared_ptr<P> p(new P());
+  std::shared_ptr<P> p(new P());
   try {
     p->readBinary(mConnection);
     mBuffer.enqueue(p);

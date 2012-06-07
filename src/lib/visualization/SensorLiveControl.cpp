@@ -177,7 +177,7 @@ void SensorLiveControl::render(View3d& view, Scene3d& Scene3d) {
       mUi->smoothPointsCheckBox->isChecked());
 }
 
-bool SensorLiveControl::readPacket(boost::shared_ptr<DataPacket>& packet) {
+bool SensorLiveControl::readPacket(std::shared_ptr<DataPacket>& packet) {
   if (mAcqBuffer.isEmpty())
     return false;
   else {
@@ -188,7 +188,7 @@ bool SensorLiveControl::readPacket(boost::shared_ptr<DataPacket>& packet) {
 
 bool SensorLiveControl::readPointCloud() {
   mAcqPointCloud.clear();
-  boost::shared_ptr<DataPacket> packet;
+  std::shared_ptr<DataPacket> packet;
   size_t numPackets = 0;
   double startAngle;
   while (1) {

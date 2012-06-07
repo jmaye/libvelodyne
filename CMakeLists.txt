@@ -31,7 +31,6 @@ remake_pack_deb(
   COMPONENT dev
   DESCRIPTION "Development headers"
   libvelodyne
-  libboost-dev
 )
 
 remake_pack_deb(

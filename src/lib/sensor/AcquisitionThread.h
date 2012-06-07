@@ -24,7 +24,7 @@
 #ifndef ACQUISITIONTHREAD_H
 #define ACQUISITIONTHREAD_H
 
-#include <boost/shared_ptr.hpp>
+#include <memory>
 
 #include "base/Thread.h"
 #include "data-structures/SafeQueue.h"
@@ -51,7 +51,7 @@ public:
   /** \name Types definitions
     @{
     */
-  typedef SafeQueue<boost::shared_ptr<P> > Buffer;
+  typedef SafeQueue<std::shared_ptr<P> > Buffer;
   /** @}
     */
 

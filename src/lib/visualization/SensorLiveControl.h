@@ -23,7 +23,7 @@
 #ifndef SENSORLIVECONTROL_H
 #define SENSORLIVECONTROL_H
 
-#include <boost/shared_ptr.hpp>
+#include <memory>
 
 #include <QtGui/QColor>
 #include <QtCore/QTimer>
@@ -99,7 +99,7 @@ protected:
   /// Render the points
   void renderPoints(double size, bool smooth);
   /// Read packet from the queue
-  bool readPacket(boost::shared_ptr<DataPacket>& packet);
+  bool readPacket(std::shared_ptr<DataPacket>& packet);
   /// Read point cloud
   bool readPointCloud();
   /** @}
