@@ -17,6 +17,7 @@
  ******************************************************************************/
 
 #include "exceptions/IOException.h"
+#include "exceptions/SystemException.h"
 #include "com/UDPConnectionServer.h"
 
 /******************************************************************************/
@@ -61,6 +62,9 @@ void AcquisitionThread<P>::process() {
     mBuffer.enqueue(p);
   }
   catch (IOException& e) {
+    std::cerr << e.what() << std::endl;
+  }
+  catch (SystemException& e) {
     std::cerr << e.what() << std::endl;
   }
 }

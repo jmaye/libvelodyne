@@ -34,11 +34,16 @@ int main(int argc, char **argv) {
     std::cerr << "Usage: " << argv[0] << " <LogFile> <PktNbr>" << std::endl;
     return -1;
   }
-  std::ofstream logFile (argv[1]);
   UDPConnectionServer connection(2368);
   AcquisitionThread<DataPacket> acqThread(connection);
   acqThread.start();
-  for (size_t i = 0; i < (size_t)atoi(argv[2]); i++)
-     acqThread.getBuffer().dequeue()->writeBinary(logFile);
+  const size_t numPackets = atoi(argv[2]);
+  size_t packetCount = 0;
+  while (packetCount < numPackets)
+    if (!acqThread.getBuffer().isEmpty()) {
+      std::ofstream logFile (argv[1], std::ios::app);
+      acqThread.getBuffer().dequeue()->writeBinary(logFile);
+      packetCount++;
+    }
   return 0;
 }

@@ -27,18 +27,33 @@
 
 #include "com/UDPConnectionServer.h"
 #include "sensor/DataPacket.h"
+#include "exceptions/IOException.h"
+#include "exceptions/SystemException.h"
 
 int main(int argc, char **argv) {
   if (argc != 3) {
     std::cerr << "Usage: " << argv[0] << " <LogFile> <PktNbr>" << std::endl;
     return -1;
   }
-  std::ofstream logFile(argv[1]);
   UDPConnectionServer com(2368);
-  for (size_t i = 0; i < (size_t)atoi(argv[2]); ++i) {
+  const size_t numPackets = atoi(argv[2]);
+  size_t packetCount = 0;
+  while (packetCount < numPackets) {
     DataPacket dataPacket;
-    dataPacket.readBinary(com);
+    try {
+      dataPacket.readBinary(com);
+    }
+    catch (IOException& e) {
+      std::cerr << e.what() << std::endl;
+      continue;
+    }
+    catch (SystemException& e) {
+      std::cerr << e.what() << std::endl;
+      continue;
+    }
+    std::ofstream logFile(argv[1], std::ios::app);
     dataPacket.writeBinary(logFile);
+    packetCount++;
   }
   return 0;
 }

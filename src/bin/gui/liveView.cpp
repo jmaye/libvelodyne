@@ -34,10 +34,10 @@ int main(int argc, char** argv) {
   MainWindow mainWindow;
   UDPConnectionServer connection(2368);
   AcquisitionThread<DataPacket> acqThread(connection);
-  SensorLiveControl sensorLiveControl(acqThread.getBuffer());
   mainWindow.setWindowTitle("Velodyne Live View");
   mainWindow.addView(QString("Velodyne Data"), View3d::getInstance());
   mainWindow.addControl(QString("View3d"), View3dControl::getInstance());
+  SensorLiveControl sensorLiveControl(acqThread.getBuffer());
   mainWindow.addControl(QString("Sensor"), sensorLiveControl);
   mainWindow.addControl(QString("Velodyne"), VelodyneControl::getInstance());
   acqThread.start();

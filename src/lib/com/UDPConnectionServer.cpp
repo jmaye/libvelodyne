@@ -126,13 +126,9 @@ size_t UDPConnectionServer::read(char* buffer, size_t numBytes) {
     throw SystemException(errno, "UDPConnectionServer::read()::select()");
   if (FD_ISSET(mSocket, &readFlags)) {
     FD_CLR(mSocket, &readFlags);
-    struct sockaddr_in client;
-    socklen_t size;
-    res = recvfrom(mSocket, buffer, numBytes, 0, (struct sockaddr*)&client,
-      &size);
+    res = recvfrom(mSocket, buffer, numBytes, 0, NULL, 0);
     if (res < 0)
-        throw SystemException(errno,
-          "UDPConnectionServer::read()::read()");
+        throw SystemException(errno, "UDPConnectionServer::read()::read()");
     return res;
   }
   else

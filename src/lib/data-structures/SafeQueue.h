@@ -46,7 +46,7 @@ public:
     @{
     */
   /// Constructs queue with capacity
-  SafeQueue(size_t capacity = std::numeric_limits<size_t>::infinity);
+  SafeQueue(size_t capacity = std::numeric_limits<size_t>::max());
   /// Copy constructor
   SafeQueue(const SafeQueue& other);
   /// Assignment operator

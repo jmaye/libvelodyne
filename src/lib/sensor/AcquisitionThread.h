@@ -60,7 +60,7 @@ public:
     */
   /// Constructs thread with UDP connection and buffer size
   AcquisitionThread(UDPConnectionServer& connection, size_t bufferSize =
-    std::numeric_limits<size_t>::infinity());
+    std::numeric_limits<size_t>::max());
    /// Destructor
   ~AcquisitionThread();
   /** @}
