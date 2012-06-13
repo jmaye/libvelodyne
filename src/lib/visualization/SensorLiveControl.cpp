@@ -202,16 +202,16 @@ bool SensorLiveControl::readPointCloud() {
       ++numPackets;
     }
     else
-      return false;
-    }
-    if (mAcqPointCloud.getSize()) {
-      const double timestamp = mAcqPointCloud.getTimestamp();
-      const QDateTime time = QDateTime::fromTime_t(timestamp);
-      QString msecs;
-      msecs.sprintf("%03d", (uint)((timestamp - (size_t)timestamp) * 1e3));
-      mUi->timestampLabel->setText(
-          time.toString("yyyy-MM-dd hh:mm:ss:" + msecs));
-    }
-    mUi->numPointsSpinBox->setValue(mAcqPointCloud.getSize());
-    return true;
+      QApplication::processEvents();
+  }
+  if (mAcqPointCloud.getSize()) {
+    const double timestamp = mAcqPointCloud.getTimestamp();
+    const QDateTime time = QDateTime::fromTime_t(timestamp);
+    QString msecs;
+    msecs.sprintf("%03d", (uint)((timestamp - (size_t)timestamp) * 1e3));
+    mUi->timestampLabel->setText(
+        time.toString("yyyy-MM-dd hh:mm:ss:" + msecs));
+  }
+  mUi->numPointsSpinBox->setValue(mAcqPointCloud.getSize());
+  return true;
 }

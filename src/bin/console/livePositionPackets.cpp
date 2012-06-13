@@ -16,29 +16,35 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.       *
  ******************************************************************************/
 
-/** \file readPositionPacketsFromFile.cpp
-    \brief This file is a testing binary for reading Velodyne position packets
-           from file.
+/** \file liveDataPackets.cpp
+    \brief This file is a testing binary for live Velodyne position packets.
   */
 
-#include <iostream>
-#include <fstream>
+#include <cstdlib>
 
+#include <iostream>
+
+#include "com/UDPConnectionServer.h"
 #include "sensor/PositionPacket.h"
+#include "exceptions/IOException.h"
+#include "exceptions/SystemException.h"
 
 int main(int argc, char **argv) {
-  if (argc != 2) {
-    std::cerr << "Usage: " << argv[0] << " <LogFile>" << std::endl;
-    return -1;
-  }
-  std::ifstream logFile(argv[1]);
-  logFile.seekg (0, std::ios::end);
-  const int length = logFile.tellg();
-  logFile.seekg (0, std::ios::beg);
-  while (logFile.tellg() != length) {
+  UDPConnectionServer com(8308);
+  while (1) {
     PositionPacket posPacket;
-    posPacket.readBinary(logFile);
-    std::cout << posPacket;
+    try {
+      posPacket.readBinary(com);
+    }
+    catch (IOException& e) {
+      std::cerr << e.what() << std::endl;
+      continue;
+    }
+    catch (SystemException& e) {
+      std::cerr << e.what() << std::endl;
+      continue;
+    }
+    std::cout << posPacket << std::endl;
   }
   return 0;
 }

@@ -32,7 +32,10 @@ int main(int argc, char **argv) {
     return -1;
   }
   std::ifstream logFile(argv[1]);
-  while (logFile.eof() != true) {
+  logFile.seekg (0, std::ios::end);
+  const int length = logFile.tellg();
+  logFile.seekg (0, std::ios::beg);
+  while (logFile.tellg() != length) {
     DataPacket dataPacket;
     dataPacket.readBinary(logFile);
     std::cout << dataPacket;

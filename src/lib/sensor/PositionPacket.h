@@ -42,7 +42,7 @@ public:
     @{
     */
   /// Packet size
-  static const size_t mPacketSize = 540;
+  static const size_t mPacketSize = 512;
   /// Gyro scale factor
   static const double mGyroScaleFactor = 0.09766;
   /// Temp scale factor
@@ -75,6 +75,34 @@ public:
   double getTimestamp() const;
   /// Sets the timestamp
   void setTimestamp(double timestamp);
+  /// Returns the gyro1
+  double getGyro1() const;
+  /// Returns the gyro2
+  double getGyro2() const;
+  /// Returns the gyro3
+  double getGyro3() const;
+  /// Returns the temp1
+  double getTemp1() const;
+  /// Returns the temp2
+  double getTemp2() const;
+  /// Returns the temp3
+  double getTemp3() const;
+  /// Returns the accel1 x
+  double getAccel1X() const;
+  /// Returns the accel2 x
+  double getAccel2X() const;
+  /// Returns the accel3 x
+  double getAccel3X() const;
+  /// Returns the accel1 y
+  double getAccel1Y() const;
+  /// Returns the accel2 y
+  double getAccel2Y() const;
+  /// Returns the accel3 y
+  double getAccel3Y() const;
+  /// Returns the GPS timestamp in seconds
+  double getGPSTimestamp() const;
+  /// Returns the NMEA sentence
+  const uint8_t* getNMEASentence() const;
   /** @}
     */
 
@@ -120,8 +148,6 @@ protected:
     */
   /// Timestamp of the packet
   double mTimestamp;
-  /// Ethernet header
-  uint8_t mEthernetHeader[42];
   /// Unused bytes
   uint8_t mNotUsed1[14];
   /// Gyro 1
