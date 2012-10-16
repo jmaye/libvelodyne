@@ -26,6 +26,15 @@
 #include "exceptions/OutOfBoundException.h"
 
 /******************************************************************************/
+/* Statics initialization                                                     */
+/******************************************************************************/
+
+const double PositionPacket::mGyroScaleFactor = 0.09766;
+const double PositionPacket::mTempScaleFactor = 0.1453;
+const double PositionPacket::mTempOffset = 25;
+const double PositionPacket::mAccelScaleFactor = 0.001221;
+
+/******************************************************************************/
 /* Constructors and Destructor                                                */
 /******************************************************************************/
 

@@ -44,13 +44,13 @@ public:
   /// Packet size
   static const size_t mPacketSize = 512;
   /// Gyro scale factor
-  static const double mGyroScaleFactor = 0.09766;
+  static const double mGyroScaleFactor;
   /// Temp scale factor
-  static const double mTempScaleFactor = 0.1453;
+  static const double mTempScaleFactor;
   /// Temp offset
-  static const double mTempOffset = 25;
+  static const double mTempOffset;
   /// Accel scale factor
-  static const double mAccelScaleFactor = 0.001221;
+  static const double mAccelScaleFactor;
   /** @}
     */
 
