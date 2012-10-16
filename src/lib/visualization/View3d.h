@@ -25,6 +25,7 @@
 
 #include <vector>
 
+#include <GL/glu.h>
 #include <QtOpenGL/QGLWidget>
 #include <QtGui/QColor>
 #include <QtCore/QString>
