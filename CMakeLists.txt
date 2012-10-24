@@ -43,7 +43,7 @@ remake_pack_deb(
   COMPONENT gui-tools
   DESCRIPTION "GUI tools"
   libvelodyne
-  libqt4-gui
+  libqtgui4
   libqt4-opengl
   libfreetype6
   libftgl2
