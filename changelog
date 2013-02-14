@@ -1,8 +1,14 @@
-libvelodyne (1.0-83ubuntu1) lucid; urgency=low
+libvelodyne (1.0-85) lucid; urgency=low
+
+  * fixing bug
+
+ -- Jerome Maye <jerome.maye@mavt.ethz.ch>  Thu, 14 Feb 2013 13:06:23 +0100
+
+libvelodyne (1.0-84) lucid; urgency=low
 
   * ppa changed
 
- -- Jerome Maye <jmaye@jmaye-laptop>  Thu, 14 Feb 2013 13:02:54 +0100
+ -- Jerome Maye <jerome.maye@mavt.ethz.ch>  Thu, 14 Feb 2013 13:02:54 +0100
 
 libvelodyne (1.0-83) lucid; urgency=low
 
