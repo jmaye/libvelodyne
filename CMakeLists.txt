@@ -60,5 +60,5 @@ remake_distribute_deb(
   DISTRIBUTION lucid
   DEPENDS remake libqt4-dev libfreetype6-dev libftgl-dev
   PASS CMAKE_BUILD_TYPE LIBVELODYNE_SUBVERSION_REVISION
-  UPLOAD ppa:jmaye/asl
+  UPLOAD ppa:jmaye/ethz
 )
