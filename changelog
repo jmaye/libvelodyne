@@ -1,3 +1,9 @@
+libvelodyne (1.0-83) lucid; urgency=low
+
+  * remake dependency added
+
+ -- Jerome Maye <jerome.maye@mavt.ethz.ch>  Thu, 14 Feb 2013 11:19:33 +0100
+
 libvelodyne (1.0-82) lucid; urgency=low
 
   * fix changelog
