@@ -43,10 +43,15 @@ remake_pack_deb(
   COMPONENT gui-tools
   DESCRIPTION "GUI tools"
   libvelodyne
-  libqtgui4
   libqt4-opengl
-  libfreetype6
   libftgl2
+)
+
+remake_pack_deb(
+  COMPONENT gui-tools-dev
+  DESCRIPTION "GUI tools development headers"
+  libvelodyne-dev
+  libqt4-opengl-dev
 )
 
 remake_pack_deb(
@@ -58,7 +63,7 @@ remake_pack_deb(
 remake_distribute_deb(
   SECTION libs
   DISTRIBUTION lucid
-  DEPENDS remake doxygen libqt4-dev libfreetype6-dev libftgl-dev
+  DEPENDS remake doxygen libqt4-opengl-dev libftgl-dev
   PASS CMAKE_BUILD_TYPE LIBVELODYNE_SUBVERSION_REVISION
   UPLOAD ppa:jmaye/ethz
 )
