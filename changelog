@@ -1,3 +1,9 @@
+libvelodyne (1.0-89) lucid; urgency=low
+
+  * bug fix
+
+ -- Jerome Maye <jerome.maye@mavt.ethz.ch>  Thu, 14 Feb 2013 15:33:32 +0100
+
 libvelodyne (1.0-88) lucid; urgency=low
 
   * change of deb dependencies
