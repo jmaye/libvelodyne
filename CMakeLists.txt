@@ -30,34 +30,31 @@ remake_pack_deb(
 remake_pack_deb(
   COMPONENT dev
   DESCRIPTION "Development headers"
-  libvelodyne
+  DEPENDS libvelodyne
 )
 
 remake_pack_deb(
   COMPONENT console-tools
   DESCRIPTION "Console tools"
-  libvelodyne
+  DEPENDS libvelodyne
 )
 
 remake_pack_deb(
   COMPONENT gui-tools
   DESCRIPTION "GUI tools"
-  libvelodyne
-  libqt4-opengl
-  libftgl2
+  DEPENDS libvelodyne libqt4-opengl libftgl2
 )
 
 remake_pack_deb(
   COMPONENT gui-tools-dev
   DESCRIPTION "GUI tools development headers"
-  libvelodyne-dev
-  libqt4-opengl-dev
+  DEPENDS libvelodyne-dev libqt4-opengl-dev
 )
 
 remake_pack_deb(
   COMPONENT doc
   DESCRIPTION "Documentation"
-  libvelodyne
+  DEPENDS libvelodyne
 )
 
 remake_distribute_deb(
