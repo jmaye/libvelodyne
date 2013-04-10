@@ -2,8 +2,6 @@ cmake_minimum_required(VERSION 2.6)
 
 include(ReMake)
 
-remake_set(CMAKE_CXX_FLAGS -std=c++0x CACHE FORCE INIT)
-
 remake_project(
   libvelodyne
   VERSION 1.0
@@ -15,6 +13,7 @@ remake_project(
   LICENSE "GNU Lesser General Public License (LGPL)"
   PREFIX velodyne-
   INSTALL /usr/
+  EXTRA_CXX_FLAGS -std=c++0x
 )
 
 remake_doc(
