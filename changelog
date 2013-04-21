@@ -1,3 +1,9 @@
+libvelodyne (1.0-94) lucid; urgency=low
+
+  * changed some linkage
+
+ -- Jerome Maye <jerome.maye@mavt.ethz.ch>  Sun, 21 Apr 2013 17:45:09 +0200
+
 libvelodyne (1.0-93) lucid; urgency=low
 
   * remake change
