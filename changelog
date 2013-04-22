@@ -1,3 +1,9 @@
+libvelodyne (1.0-95) lucid; urgency=low
+
+  * porting to GIT
+
+ -- Jerome Maye <jerome.maye@mavt.ethz.ch>  Mon, 22 Apr 2013 10:15:53 +0200
+
 libvelodyne (1.0-94) lucid; urgency=low
 
   * changed some linkage
