@@ -1,3 +1,9 @@
+libvelodyne (1.0-96) lucid; urgency=low
+
+  * git ignore added 
+
+ -- Jerome Maye <jerome.maye@mavt.ethz.ch>  Tue, 23 Apr 2013 10:14:50 +0200
+
 libvelodyne (1.0-95) lucid; urgency=low
 
   * porting to GIT
