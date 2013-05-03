@@ -47,7 +47,7 @@ remake_pack_deb(
 remake_pack_deb(
   COMPONENT gui-tools-dev
   DESCRIPTION "GUI tools development headers"
-  DEPENDS libvelodyne-dev libqt4-opengl-dev
+  DEPENDS libvelodyne-dev libvelodyne-gui-tools libqt4-opengl-dev
 )
 
 remake_pack_deb(

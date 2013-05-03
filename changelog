@@ -1,3 +1,9 @@
+libvelodyne (1.0-98) lucid; urgency=low
+
+  * dependency 
+
+ -- Jerome Maye <jerome.maye@mavt.ethz.ch>  Fri, 03 May 2013 10:54:26 +0200
+
 libvelodyne (1.0-97) lucid; urgency=low
 
   * adding README.md 
