@@ -1,3 +1,9 @@
+libvelodyne (1.0-99) lucid; urgency=low
+
+  * using pkg-config 
+
+ -- Jerome Maye <jerome.maye@mavt.ethz.ch>  Mon, 13 May 2013 14:31:51 +0200
+
 libvelodyne (1.0-98) lucid; urgency=low
 
   * dependency 
