@@ -59,5 +59,6 @@ int main(int argc, char** argv) {
     SIGNAL(stop()),
     &VelodyneControl::getInstance(),
     SLOT(stop()));
+  acqThread.interrupt();
   return ret;
 }

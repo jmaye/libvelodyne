@@ -45,5 +45,6 @@ int main(int argc, char **argv) {
       acqThread.getBuffer().dequeue()->writeBinary(logFile);
       packetCount++;
     }
+  acqThread.interrupt();
   return 0;
 }
