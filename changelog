@@ -1,3 +1,9 @@
+libvelodyne (1.0-102) lucid; urgency=low
+
+  * signing changelog with jmaye credentials
+
+ -- Jerome Maye <jerome.maye@mavt.ethz.ch>  Fri, 26 Jul 2013 13:44:34 +0200
+
 libvelodyne (1.0-101) lucid; urgency=low
 
   * Added c++0x to pkg-config file extra compiler flags
