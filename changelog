@@ -1,3 +1,9 @@
+libvelodyne (1.0-101) lucid; urgency=low
+
+  * Added c++0x to pkg-config file extra compiler flags
+
+ -- Ralf Kaestner <ralf.kaestner@gmail.com>  Fri, 26 Jul 2013 11:26:00 +0100
+
 libvelodyne (1.0-100) lucid; urgency=low
 
   * clean interrupt of the thread 
