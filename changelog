@@ -1,3 +1,9 @@
+libvelodyne (1.0-103) precise; urgency=low
+
+  * trusty build 
+
+ -- Jerome Maye <jerome.maye@mavt.ethz.ch>  Tue, 29 Jul 2014 09:59:33 +0200
+
 libvelodyne (1.0-102) lucid; urgency=low
 
   * signing changelog with jmaye credentials

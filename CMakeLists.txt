@@ -71,3 +71,11 @@ remake_distribute_deb(
   DEPENDS remake doxygen libqt4-opengl-dev libftgl-dev pkg-config
   PASS CMAKE_BUILD_TYPE LIBVELODYNE_GIT_REVISION
 )
+
+remake_distribute_deb(
+  DISTRIBUTION trusty
+  SECTION libs
+  UPLOAD ppa:jmaye/ethz
+  DEPENDS remake doxygen libqt4-opengl-dev libftgl-dev pkg-config
+  PASS CMAKE_BUILD_TYPE LIBVELODYNE_GIT_REVISION
+)
