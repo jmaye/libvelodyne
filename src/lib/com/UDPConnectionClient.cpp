@@ -20,6 +20,7 @@
 
 #include <cstring>
 #include <cmath>
+#include <unistd.h>
 
 #include "exceptions/IOException.h"
 #include "exceptions/SystemException.h"

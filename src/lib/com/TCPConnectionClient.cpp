@@ -21,6 +21,7 @@
 #include <cstring>
 #include <cmath>
 #include <arpa/inet.h>
+#include <unistd.h>
 
 #include "exceptions/SystemException.h"
 #include "exceptions/IOException.h"

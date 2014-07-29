@@ -18,6 +18,8 @@
 
 #include "base/Thread.h"
 
+#include <sys/types.h>
+#include <unistd.h>
 #include <cmath>
 
 #include "base/Threads.h"
