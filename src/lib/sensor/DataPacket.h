@@ -155,6 +155,8 @@ public:
   const DataChunk& getDataChunk(size_t dataChunkIdx) const;
   /// Sets the data chunk
   void setDataChunk(const DataChunk& data, size_t dataChunkIdx);
+  /// Returns hardware timestamp (tested on Velodyne HDL-32E)
+  uint32_t getHardwareTimestamp() const;
   /** @}
     */
 

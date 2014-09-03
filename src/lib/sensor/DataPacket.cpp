@@ -18,6 +18,8 @@
 
 #include "sensor/DataPacket.h"
 
+#include <cstring>
+
 #include "com/UDPConnectionServer.h"
 #include "base/Timestamp.h"
 #include "base/BinaryBufferReader.h"
@@ -145,6 +147,16 @@ void DataPacket::setDataChunk(const DataChunk& data, size_t dataChunkIdx) {
       "DataPacket::getDataChunk(): Out of bound",
       __FILE__, __LINE__);
   mData[dataChunkIdx] = data;
+}
+
+uint32_t DataPacket::getHardwareTimestamp() const {
+  uint32_t hwTimestamp;
+  memcpy(reinterpret_cast<uint8_t*>(&hwTimestamp),
+    reinterpret_cast<const uint8_t*>(&mSpinCount), 2);
+  memcpy(reinterpret_cast<uint8_t*>(
+    &(reinterpret_cast<uint8_t*>(&hwTimestamp)[2])),
+    reinterpret_cast<const uint8_t*>(&mReserved), 2);
+  return hwTimestamp;
 }
 
 /******************************************************************************/

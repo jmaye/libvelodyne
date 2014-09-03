@@ -1,3 +1,9 @@
+libvelodyne (1.0-105) precise; urgency=low
+
+  * adding hardware timestamping 
+
+ -- Jerome Maye <jerome.maye@mavt.ethz.ch>  Wed, 03 Sep 2014 14:10:43 +0200
+
 libvelodyne (1.0-104) precise; urgency=low
 
   * correcting trusty changes 
