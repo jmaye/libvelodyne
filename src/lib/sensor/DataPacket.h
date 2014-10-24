@@ -24,7 +24,7 @@
 #ifndef DATAPACKET_H
 #define DATAPACKET_H
 
-#include <stdint.h>
+#include <cstdint>
 
 #include "base/Serializable.h"
 
@@ -139,10 +139,10 @@ public:
   /** \name Accessors
     @{
     */
-  /// Returns the timestamp of the acquisition
-  double getTimestamp() const;
+  /// Returns the timestamp of the acquisition [ns]
+  int64_t getTimestamp() const;
   /// Sets the timestamp
-  void setTimestamp(double timestamp);
+  void setTimestamp(int64_t timestamp);
   /// Returns the spin count
   uint16_t getSpinCount() const;
   /// Sets the spin count
@@ -155,8 +155,8 @@ public:
   const DataChunk& getDataChunk(size_t dataChunkIdx) const;
   /// Sets the data chunk
   void setDataChunk(const DataChunk& data, size_t dataChunkIdx);
-  /// Returns hardware timestamp (tested on Velodyne HDL-32E)
-  uint32_t getHardwareTimestamp() const;
+  /// Returns GPS timestamp [us]
+  uint32_t getGPSTimestamp() const;
   /** @}
     */
 
@@ -200,8 +200,8 @@ protected:
   /** \name Protected members
     @{
     */
-  /// Timestamp of the packet
-  double mTimestamp;
+  /// Timestamp of the packet in nanoseconds since the epoch
+  int64_t mTimestamp;
   /// Data in the packet
   DataChunk mData[mDataChunkNbr];
   /// Spin count

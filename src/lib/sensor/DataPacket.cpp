@@ -19,9 +19,9 @@
 #include "sensor/DataPacket.h"
 
 #include <cstring>
+#include <chrono>
 
 #include "com/UDPConnectionServer.h"
-#include "base/Timestamp.h"
 #include "base/BinaryBufferReader.h"
 #include "base/BinaryStreamReader.h"
 #include "base/BinaryStreamWriter.h"
@@ -108,7 +108,7 @@ void DataPacket::write(std::ostream& stream) const {
 /* Accessors                                                                  */
 /******************************************************************************/
 
-double DataPacket::getTimestamp() const {
+int64_t DataPacket::getTimestamp() const {
   return mTimestamp;
 }
 
@@ -129,7 +129,7 @@ const DataPacket::DataChunk& DataPacket::getDataChunk(size_t dataChunkIdx)
   return mData[dataChunkIdx];
 }
 
-void DataPacket::setTimestamp(double timestamp) {
+void DataPacket::setTimestamp(int64_t timestamp) {
   mTimestamp = timestamp;
 }
 
@@ -149,14 +149,14 @@ void DataPacket::setDataChunk(const DataChunk& data, size_t dataChunkIdx) {
   mData[dataChunkIdx] = data;
 }
 
-uint32_t DataPacket::getHardwareTimestamp() const {
-  uint32_t hwTimestamp;
-  memcpy(reinterpret_cast<uint8_t*>(&hwTimestamp),
+uint32_t DataPacket::getGPSTimestamp() const {
+  uint32_t gpsTimestamp;
+  memcpy(reinterpret_cast<uint8_t*>(&gpsTimestamp),
     reinterpret_cast<const uint8_t*>(&mSpinCount), 2);
   memcpy(reinterpret_cast<uint8_t*>(
-    &(reinterpret_cast<uint8_t*>(&hwTimestamp)[2])),
+    &(reinterpret_cast<uint8_t*>(&gpsTimestamp)[2])),
     reinterpret_cast<const uint8_t*>(&mReserved), 2);
-  return hwTimestamp;
+  return gpsTimestamp;
 }
 
 /******************************************************************************/
@@ -185,7 +185,9 @@ void DataPacket::writeRawPacket(BinaryWriter& stream) const {
 
 void DataPacket::readBinary(UDPConnectionServer& connection) {
   connection.read(reinterpret_cast<char*>(mRawPacket), mPacketSize);
-  mTimestamp = Timestamp::now();
+  auto time = std::chrono::high_resolution_clock::now();
+  mTimestamp = std::chrono::duration_cast<std::chrono::nanoseconds>(
+    time.time_since_epoch()).count();
   BinaryBufferReader binaryStream(reinterpret_cast<char*>(mRawPacket),
     mPacketSize);
   readRawPacket(binaryStream);

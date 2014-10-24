@@ -1,3 +1,9 @@
+libvelodyne (1.0-106) precise; urgency=low
+
+  * change timestamps from double to integer 
+
+ -- Jerome Maye <jerome.maye@mavt.ethz.ch>  Fri, 24 Oct 2014 10:45:49 +0200
+
 libvelodyne (1.0-105) precise; urgency=low
 
   * adding hardware timestamping 

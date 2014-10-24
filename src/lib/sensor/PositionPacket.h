@@ -24,7 +24,7 @@
 #ifndef POSITIONPACKET_H
 #define POSITIONPACKET_H
 
-#include <stdint.h>
+#include <cstdint>
 
 #include "base/Serializable.h"
 
@@ -71,10 +71,10 @@ public:
   /** \name Accessors
     @{
     */
-  /// Returns the timestamp of the acquisition
-  double getTimestamp() const;
+  /// Returns the timestamp of the acquisition [ns]
+  int64_t getTimestamp() const;
   /// Sets the timestamp
-  void setTimestamp(double timestamp);
+  void setTimestamp(int64_t timestamp);
   /// Returns the gyro1
   double getGyro1() const;
   /// Returns the gyro2
@@ -99,8 +99,8 @@ public:
   double getAccel2Y() const;
   /// Returns the accel3 y
   double getAccel3Y() const;
-  /// Returns the GPS timestamp in seconds
-  double getGPSTimestamp() const;
+  /// Returns the GPS timestamp [us]
+  uint32_t getGPSTimestamp() const;
   /// Returns the NMEA sentence
   const uint8_t* getNMEASentence() const;
   /** @}
@@ -146,8 +146,8 @@ protected:
   /** \name Protected members
     @{
     */
-  /// Timestamp of the packet
-  double mTimestamp;
+  /// Timestamp of the packet in nanoseconds since the epoch
+  int64_t mTimestamp;
   /// Unused bytes
   uint8_t mNotUsed1[14];
   /// Gyro 1

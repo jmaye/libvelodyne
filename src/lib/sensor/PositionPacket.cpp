@@ -18,8 +18,9 @@
 
 #include "sensor/PositionPacket.h"
 
+#include <chrono>
+
 #include "com/UDPConnectionServer.h"
-#include "base/Timestamp.h"
 #include "base/BinaryBufferReader.h"
 #include "base/BinaryStreamReader.h"
 #include "base/BinaryStreamWriter.h"
@@ -90,11 +91,11 @@ void PositionPacket::write(std::ostream& stream) const {
 /* Accessors                                                                  */
 /******************************************************************************/
 
-double PositionPacket::getTimestamp() const {
+int64_t PositionPacket::getTimestamp() const {
   return mTimestamp;
 }
 
-void PositionPacket::setTimestamp(double timestamp) {
+void PositionPacket::setTimestamp(int64_t timestamp) {
   mTimestamp = timestamp;
 }
 
@@ -185,8 +186,8 @@ double PositionPacket::getAccel3Y() const {
     return (mAccel3Y & 0x0fff) * mAccelScaleFactor;
 }
 
-double PositionPacket::getGPSTimestamp() const {
-  return mGPSTimestamp / 1000000.0;
+uint32_t PositionPacket::getGPSTimestamp() const {
+  return mGPSTimestamp;
 }
 
 const uint8_t* PositionPacket::getNMEASentence() const {
@@ -222,7 +223,9 @@ void PositionPacket::writeRawPacket(BinaryWriter& stream) const {
 
 void PositionPacket::readBinary(UDPConnectionServer& stream) {
   stream.read(reinterpret_cast<char*>(mRawPacket), mPacketSize);
-  mTimestamp = Timestamp::now();
+  auto time = std::chrono::high_resolution_clock::now();
+  mTimestamp = std::chrono::duration_cast<std::chrono::nanoseconds>(
+    time.time_since_epoch()).count();
   BinaryBufferReader binaryStream(reinterpret_cast<char*>(mRawPacket),
     mPacketSize);
   readRawPacket(binaryStream);
