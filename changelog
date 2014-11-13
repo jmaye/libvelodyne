@@ -1,3 +1,9 @@
+libvelodyne (1.0-108) precise; urgency=low
+
+  * versioning
+
+ -- Jerome Maye <jerome.maye@mavt.ethz.ch>  Thu, 13 Nov 2014 12:45:46 +0100
+
 libvelodyne (1.0-106) precise; urgency=low
 
   * change timestamps from double to integer 
