@@ -29,6 +29,7 @@ VdynePointCloud::VdynePointCloud() :
 }
 
 VdynePointCloud::VdynePointCloud(const VdynePointCloud& other) :
+    Serializable(),
     mTimestamp(other.mTimestamp),
     mPoints(other.mPoints),
     mStartRotationAngle(other.mStartRotationAngle),
@@ -52,7 +53,7 @@ VdynePointCloud::~VdynePointCloud() {
 /* Streaming operations                                                       */
 /******************************************************************************/
 
-void VdynePointCloud::read(std::istream& stream) {
+void VdynePointCloud::read(std::istream& /*stream*/) {
 }
 
 void VdynePointCloud::write(std::ostream& stream) const {
@@ -63,10 +64,10 @@ void VdynePointCloud::write(std::ostream& stream) const {
     stream << *it << std::endl;
 }
 
-void VdynePointCloud::read(std::ifstream& stream) {
+void VdynePointCloud::read(std::ifstream& /*stream*/) {
 }
 
-void VdynePointCloud::write(std::ofstream& stream) const {
+void VdynePointCloud::write(std::ofstream& /*stream*/) const {
 }
 
 void VdynePointCloud::writeBinary(std::ostream& stream) const {

@@ -61,6 +61,7 @@ public:
     }
     /// Copy constructor
     Scan(const Scan& other) :
+        Serializable(),
         mRange(other.mRange),
         mHeading(other.mHeading),
         mPitch(other.mPitch),
@@ -77,7 +78,7 @@ public:
       return *this;
     }
     /// Reads from standard input
-    virtual void read(std::istream& stream) {
+    virtual void read(std::istream& /*stream*/) {
     }
     /// Writes to standard output
     virtual void write(std::ostream& stream) const {
@@ -85,10 +86,10 @@ public:
          << mIntensity;
     }
     /// Reads from a file
-    virtual void read(std::ifstream& stream) {
+    virtual void read(std::ifstream& /*stream*/) {
     }
     /// Writes to a file
-    virtual void write(std::ofstream& stream) const {
+    virtual void write(std::ofstream& /*stream*/) const {
     }
     /// Writes binary into a output stream
     void writeBinary(std::ostream& stream) const {
