@@ -29,6 +29,7 @@ VdyneScanCloud::VdyneScanCloud() :
 }
 
 VdyneScanCloud::VdyneScanCloud(const VdyneScanCloud& other) :
+    Serializable(),
     mTimestamp(other.mTimestamp),
     mScans(other.mScans),
     mStartRotationAngle(other.mStartRotationAngle),
@@ -52,7 +53,7 @@ VdyneScanCloud::~VdyneScanCloud() {
 /* Streaming operations                                                       */
 /******************************************************************************/
 
-void VdyneScanCloud::read(std::istream& stream) {
+void VdyneScanCloud::read(std::istream& /*stream*/) {
 }
 
 void VdyneScanCloud::write(std::ostream& stream) const {
@@ -63,10 +64,10 @@ void VdyneScanCloud::write(std::ostream& stream) const {
     stream << *it << std::endl;
 }
 
-void VdyneScanCloud::read(std::ifstream& stream) {
+void VdyneScanCloud::read(std::ifstream& /*stream*/) {
 }
 
-void VdyneScanCloud::write(std::ofstream& stream) const {
+void VdyneScanCloud::write(std::ofstream& /*stream*/) const {
 }
 
 void VdyneScanCloud::writeBinary(std::ostream& stream) const {
