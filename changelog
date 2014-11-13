@@ -1,3 +1,9 @@
+libvelodyne (1.0-109) precise; urgency=low
+
+  * correcting pkg-config for ftgl 
+
+ -- Jerome Maye <jerome.maye@mavt.ethz.ch>  Thu, 13 Nov 2014 14:05:51 +0100
+
 libvelodyne (1.0-108) precise; urgency=low
 
   * versioning
