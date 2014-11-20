@@ -95,27 +95,27 @@ void VdyneScanCloud::readBinary(std::istream& stream) {
 /* Accessors                                                                  */
 /******************************************************************************/
 
-double VdyneScanCloud::getTimestamp() const {
+int64_t VdyneScanCloud::getTimestamp() const {
   return mTimestamp;
 }
 
-void VdyneScanCloud::setTimestamp(double timestamp) {
+void VdyneScanCloud::setTimestamp(int64_t timestamp) {
   mTimestamp = timestamp;
 }
 
-double VdyneScanCloud::getStartRotationAngle() const {
+float VdyneScanCloud::getStartRotationAngle() const {
   return mStartRotationAngle;
 }
 
-void VdyneScanCloud::setStartRotationAngle(double angle) {
+void VdyneScanCloud::setStartRotationAngle(float angle) {
   mStartRotationAngle = angle;
 }
 
-double VdyneScanCloud::getEndRotationAngle() const {
+float VdyneScanCloud::getEndRotationAngle() const {
   return mEndRotationAngle;
 }
 
-void VdyneScanCloud::setEndRotationAngle(double angle) {
+void VdyneScanCloud::setEndRotationAngle(float angle) {
   mEndRotationAngle = angle;
 }
 

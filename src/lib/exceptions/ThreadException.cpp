@@ -26,5 +26,5 @@ ThreadException::ThreadException(const ThreadException& other) :
     std::runtime_error(other) {
 }
 
-ThreadException::~ThreadException() {
+ThreadException::~ThreadException() throw() {
 }

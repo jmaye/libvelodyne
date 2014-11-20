@@ -30,10 +30,10 @@
 /* Statics initialization                                                     */
 /******************************************************************************/
 
-const double PositionPacket::mGyroScaleFactor = 0.09766;
-const double PositionPacket::mTempScaleFactor = 0.1453;
-const double PositionPacket::mTempOffset = 25;
-const double PositionPacket::mAccelScaleFactor = 0.001221;
+const float PositionPacket::mGyroScaleFactor = 0.09766;
+const float PositionPacket::mTempScaleFactor = 0.1453;
+const float PositionPacket::mTempOffset = 25;
+const float PositionPacket::mAccelScaleFactor = 0.001221;
 
 /******************************************************************************/
 /* Constructors and Destructor                                                */
@@ -100,28 +100,28 @@ void PositionPacket::setTimestamp(int64_t timestamp) {
   mTimestamp = timestamp;
 }
 
-double PositionPacket::getGyro1() const {
+float PositionPacket::getGyro1() const {
   if ((mGyro1 & 0x0fff) & 0x0800)
     return (int16_t)((mGyro1 & 0x0fff) | 0xf000) * mGyroScaleFactor;
   else
     return (mGyro1 & 0x0fff) * mGyroScaleFactor;
 }
 
-double PositionPacket::getGyro2() const {
+float PositionPacket::getGyro2() const {
   if ((mGyro2 & 0x0fff) & 0x0800)
     return (int16_t)((mGyro2 & 0x0fff) | 0xf000) * mGyroScaleFactor;
   else
     return (mGyro2 & 0x0fff) * mGyroScaleFactor;
 }
 
-double PositionPacket::getGyro3() const {
+float PositionPacket::getGyro3() const {
   if ((mGyro3 & 0x0fff) & 0x0800)
     return (int16_t)((mGyro3 & 0x0fff) | 0xf000) * mGyroScaleFactor;
   else
     return (mGyro3 & 0x0fff) * mGyroScaleFactor;
 }
 
-double PositionPacket::getTemp1() const {
+float PositionPacket::getTemp1() const {
   if ((mTemp1 & 0x0fff) & 0x0800)
     return (int16_t)((mTemp1 & 0x0fff) | 0xf000) * mTempScaleFactor +
       mTempOffset;
@@ -129,7 +129,7 @@ double PositionPacket::getTemp1() const {
     return (mTemp1 & 0x0fff) * mTempScaleFactor + mTempOffset;
 }
 
-double PositionPacket::getTemp2() const {
+float PositionPacket::getTemp2() const {
   if ((mTemp2 & 0x0fff) & 0x0800)
     return (int16_t)((mTemp2 & 0x0fff) | 0xf000) * mTempScaleFactor +
       mTempOffset;
@@ -137,7 +137,7 @@ double PositionPacket::getTemp2() const {
     return (mTemp2 & 0x0fff) * mTempScaleFactor + mTempOffset;
 }
 
-double PositionPacket::getTemp3() const {
+float PositionPacket::getTemp3() const {
   if ((mTemp3 & 0x0fff) & 0x0800)
     return (int16_t)((mTemp3 & 0x0fff) | 0xf000) * mTempScaleFactor +
       mTempOffset;
@@ -145,42 +145,42 @@ double PositionPacket::getTemp3() const {
     return (mTemp3 & 0x0fff) * mTempScaleFactor + mTempOffset;
 }
 
-double PositionPacket::getAccel1X() const {
+float PositionPacket::getAccel1X() const {
   if ((mAccel1X & 0x0fff) & 0x0800)
     return (int16_t)((mAccel1X & 0x0fff) | 0xf000) * mAccelScaleFactor;
   else
     return (mAccel1X & 0x0fff) * mAccelScaleFactor;
 }
 
-double PositionPacket::getAccel2X() const {
+float PositionPacket::getAccel2X() const {
   if ((mAccel2X & 0x0fff) & 0x0800)
     return (int16_t)((mAccel2X & 0x0fff) | 0xf000) * mAccelScaleFactor;
   else
     return (mAccel2X & 0x0fff) * mAccelScaleFactor;
 }
 
-double PositionPacket::getAccel3X() const {
+float PositionPacket::getAccel3X() const {
   if ((mAccel3X & 0x0fff) & 0x0800)
     return (int16_t)((mAccel3X & 0x0fff) | 0xf000) * mAccelScaleFactor;
   else
     return (mAccel3X & 0x0fff) * mAccelScaleFactor;
 }
 
-double PositionPacket::getAccel1Y() const {
+float PositionPacket::getAccel1Y() const {
   if ((mAccel1Y & 0x0fff) & 0x0800)
     return (int16_t)((mAccel1Y & 0x0fff) | 0xf000) * mAccelScaleFactor;
   else
     return (mAccel1Y & 0x0fff) * mAccelScaleFactor;
 }
 
-double PositionPacket::getAccel2Y() const {
+float PositionPacket::getAccel2Y() const {
   if ((mAccel2Y & 0x0fff) & 0x0800)
     return (int16_t)((mAccel2Y & 0x0fff) | 0xf000) * mAccelScaleFactor;
   else
     return (mAccel2Y & 0x0fff) * mAccelScaleFactor;
 }
 
-double PositionPacket::getAccel3Y() const {
+float PositionPacket::getAccel3Y() const {
   if ((mAccel3Y & 0x0fff) & 0x0800)
     return (int16_t)((mAccel3Y & 0x0fff) | 0xf000) * mAccelScaleFactor;
   else

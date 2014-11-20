@@ -81,7 +81,7 @@ void Calibration::read(std::ifstream& stream) {
     throw IOException("Calibration::read(): could not open file");
   for (size_t i = 0; i < mNumLasers; ++i) {
     std::string strKey;
-    double value;
+    float value;
     stream >> strKey;
     if (strKey.compare("id") != 0)
       throw IOException("Calibration::read(): Unexcepted key");
@@ -142,7 +142,7 @@ size_t Calibration::getNumLasers() const {
   return mNumLasers;
 }
 
-double Calibration::getRotCorr(size_t laserNbr) const {
+float Calibration::getRotCorr(size_t laserNbr) const {
   if (laserNbr > mNumLasers)
     throw OutOfBoundException<size_t>(laserNbr,
       "Calibration::getRotCorr(): Out of bound",
@@ -150,7 +150,7 @@ double Calibration::getRotCorr(size_t laserNbr) const {
   return mCorr[laserNbr].mRotCorr;
 }
 
-double Calibration::getSinRotCorr(size_t laserNbr) const {
+float Calibration::getSinRotCorr(size_t laserNbr) const {
   if (laserNbr > mNumLasers)
     throw OutOfBoundException<size_t>(laserNbr,
       "Calibration::getSinRotCorr(): Out of bound",
@@ -158,7 +158,7 @@ double Calibration::getSinRotCorr(size_t laserNbr) const {
   return mCorr[laserNbr].mSinRotCorr;
 }
 
-double Calibration::getCosRotCorr(size_t laserNbr) const {
+float Calibration::getCosRotCorr(size_t laserNbr) const {
   if (laserNbr > mNumLasers)
     throw OutOfBoundException<size_t>(laserNbr,
       "Calibration::getCosRotCorr(): Out of bound",
@@ -166,7 +166,7 @@ double Calibration::getCosRotCorr(size_t laserNbr) const {
   return mCorr[laserNbr].mCosRotCorr;
 }
 
-double Calibration::getVertCorr(size_t laserNbr) const {
+float Calibration::getVertCorr(size_t laserNbr) const {
   if (laserNbr > mNumLasers)
     throw OutOfBoundException<size_t>(laserNbr,
       "Calibration::getVertCorr(): Out of bound",
@@ -174,7 +174,7 @@ double Calibration::getVertCorr(size_t laserNbr) const {
   return mCorr[laserNbr].mVertCorr;
 }
 
-double Calibration::getSinVertCorr(size_t laserNbr) const {
+float Calibration::getSinVertCorr(size_t laserNbr) const {
   if (laserNbr > mNumLasers)
     throw OutOfBoundException<size_t>(laserNbr,
       "Calibration::getSinVertCorr(): Out of bound",
@@ -182,7 +182,7 @@ double Calibration::getSinVertCorr(size_t laserNbr) const {
   return mCorr[laserNbr].mSinVertCorr;
 }
 
-double Calibration::getCosVertCorr(size_t laserNbr) const {
+float Calibration::getCosVertCorr(size_t laserNbr) const {
   if (laserNbr > mNumLasers)
     throw OutOfBoundException<size_t>(laserNbr,
       "Calibration::getCosVertCorr(): Out of bound",
@@ -190,7 +190,7 @@ double Calibration::getCosVertCorr(size_t laserNbr) const {
   return mCorr[laserNbr].mCosVertCorr;
 }
 
-double Calibration::getDistCorr(size_t laserNbr) const {
+float Calibration::getDistCorr(size_t laserNbr) const {
   if (laserNbr > mNumLasers)
     throw OutOfBoundException<size_t>(laserNbr,
       "Calibration::getDistCorr(): Out of bound",
@@ -198,7 +198,7 @@ double Calibration::getDistCorr(size_t laserNbr) const {
   return mCorr[laserNbr].mDistCorr;
 }
 
-double Calibration::getVertOffsCorr(size_t laserNbr) const {
+float Calibration::getVertOffsCorr(size_t laserNbr) const {
   if (laserNbr > mNumLasers)
     throw OutOfBoundException<size_t>(laserNbr,
       "Calibration::getVertOffsCorr(): Out of bound",
@@ -206,7 +206,7 @@ double Calibration::getVertOffsCorr(size_t laserNbr) const {
   return mCorr[laserNbr].mVertOffsCorr;
 }
 
-double Calibration::getHorizOffsCorr(size_t laserNbr) const {
+float Calibration::getHorizOffsCorr(size_t laserNbr) const {
   if (laserNbr > mNumLasers)
     throw OutOfBoundException<size_t>(laserNbr,
       "Calibration::getHorizOffsCorr(): Out of bound",
@@ -214,7 +214,7 @@ double Calibration::getHorizOffsCorr(size_t laserNbr) const {
   return mCorr[laserNbr].mHorizOffsCorr;
 }
 
-void Calibration::setRotCorr(size_t laserNbr, double value) {
+void Calibration::setRotCorr(size_t laserNbr, float value) {
   if (laserNbr > mNumLasers)
     throw OutOfBoundException<size_t>(laserNbr,
       "Calibration::setRotCorr(): Out of bound",
@@ -224,7 +224,7 @@ void Calibration::setRotCorr(size_t laserNbr, double value) {
   mCorr[laserNbr].mCosRotCorr = cos(mCorr[laserNbr].mRotCorr);
 }
 
-void Calibration::setVertCorr(size_t laserNbr, double value) {
+void Calibration::setVertCorr(size_t laserNbr, float value) {
   if (laserNbr > mNumLasers)
     throw OutOfBoundException<size_t>(laserNbr,
       "Calibration::setVertCorr(): Out of bound",
@@ -234,7 +234,7 @@ void Calibration::setVertCorr(size_t laserNbr, double value) {
   mCorr[laserNbr].mCosVertCorr = cos(mCorr[laserNbr].mVertCorr);
 }
 
-void Calibration::setDistCorr(size_t laserNbr, double value) {
+void Calibration::setDistCorr(size_t laserNbr, float value) {
   if (laserNbr > mNumLasers)
     throw OutOfBoundException<size_t>(laserNbr,
       "Calibration::setDistCorr(): Out of bound",
@@ -242,7 +242,7 @@ void Calibration::setDistCorr(size_t laserNbr, double value) {
   mCorr[laserNbr].mDistCorr = value;
 }
 
-void Calibration::setVertOffsCorr(size_t laserNbr, double value) {
+void Calibration::setVertOffsCorr(size_t laserNbr, float value) {
   if (laserNbr > mNumLasers)
     throw OutOfBoundException<size_t>(laserNbr,
       "Calibration::setVertOffsCorr(): Out of bound",
@@ -250,7 +250,7 @@ void Calibration::setVertOffsCorr(size_t laserNbr, double value) {
   mCorr[laserNbr].mVertOffsCorr = value;
 }
 
-void Calibration::setHorizOffsCorr(size_t laserNbr, double value) {
+void Calibration::setHorizOffsCorr(size_t laserNbr, float value) {
   if (laserNbr > mNumLasers)
     throw OutOfBoundException<size_t>(laserNbr,
       "Calibration::setHorizOffsCorr(): Out of bound",
@@ -262,10 +262,10 @@ void Calibration::setHorizOffsCorr(size_t laserNbr, double value) {
 /* Methods                                                                    */
 /******************************************************************************/
 
-double Calibration::deg2rad(double deg) {
+float Calibration::deg2rad(float deg) {
   return deg * M_PI / 180.0;
 }
 
-double Calibration::rad2deg(double rad) {
+float Calibration::rad2deg(float rad) {
   return rad * 180.0 / M_PI;
 }

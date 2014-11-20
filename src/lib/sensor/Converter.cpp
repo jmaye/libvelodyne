@@ -27,7 +27,7 @@
 namespace Converter {
 
 void toPointCloud(const DataPacket& dataPacket, const Calibration&
-    calibration, VdynePointCloud& pointCloud, double minDistance, double
+    calibration, VdynePointCloud& pointCloud, float minDistance, float
     maxDistance) {
   pointCloud.setTimestamp(dataPacket.getTimestamp());
   for (size_t i = 0; i < dataPacket.mDataChunkNbr; ++i) {
@@ -35,34 +35,34 @@ void toPointCloud(const DataPacket& dataPacket, const Calibration&
     const DataPacket::DataChunk& data = dataPacket.getDataChunk(i);
     if (data.mHeaderInfo == dataPacket.mLowerBank)
       idxOffs = data.mLasersPerPacket;
-    const double rotation =
-      calibration.deg2rad((double)data.mRotationalInfo /
-      (double)dataPacket.mRotationResolution);
+    const float rotation =
+      calibration.deg2rad((float)data.mRotationalInfo /
+      (float)dataPacket.mRotationResolution);
     if (i == 0)
       pointCloud.setStartRotationAngle(rotation);
     else if (i == dataPacket.mDataChunkNbr -1)
       pointCloud.setEndRotationAngle(rotation);
     for (size_t j = 0; j < data.mLasersPerPacket; ++j) {
       size_t laserIdx = idxOffs + j;
-      const double distance = (calibration.getDistCorr(laserIdx)
-        + (double)data.mLaserData[j].mDistance /
-        (double)dataPacket.mDistanceResolution) /
-        (double)mMeterConversion;
+      const float distance = (calibration.getDistCorr(laserIdx)
+        + (float)data.mLaserData[j].mDistance /
+        (float)dataPacket.mDistanceResolution) /
+        (float)mMeterConversion;
       if ((distance < minDistance) || (distance > maxDistance))
         continue;
-      const double sinRot = sin(rotation) *
+      const float sinRot = sin(rotation) *
         calibration.getCosRotCorr(laserIdx) -
         cos(rotation) * calibration.getSinRotCorr(laserIdx);
-      const double cosRot = cos(rotation) *
+      const float cosRot = cos(rotation) *
         calibration.getCosRotCorr(laserIdx) +
         sin(rotation) * calibration.getSinRotCorr(laserIdx);
-      const double horizOffsCorr =
+      const float horizOffsCorr =
         calibration.getHorizOffsCorr(laserIdx) /
-        (double)mMeterConversion;
-      const double vertOffsCorr =
+        (float)mMeterConversion;
+      const float vertOffsCorr =
         calibration.getVertOffsCorr(laserIdx) /
-        (double)mMeterConversion;
-      const double xyDist = distance *
+        (float)mMeterConversion;
+      const float xyDist = distance *
         calibration.getCosVertCorr(laserIdx) -
         vertOffsCorr * calibration.getSinVertCorr(laserIdx);
       VdynePointCloud::Point3D point;
@@ -78,7 +78,7 @@ void toPointCloud(const DataPacket& dataPacket, const Calibration&
 }
 
 void toScanCloud(const DataPacket& dataPacket, const Calibration&
-    calibration, VdyneScanCloud& scanCloud, double minDistance, double
+    calibration, VdyneScanCloud& scanCloud, float minDistance, float
     maxDistance) {
   scanCloud.setTimestamp(dataPacket.getTimestamp());
   for (size_t i = 0; i < dataPacket.mDataChunkNbr; ++i) {
@@ -86,19 +86,19 @@ void toScanCloud(const DataPacket& dataPacket, const Calibration&
     const DataPacket::DataChunk& data = dataPacket.getDataChunk(i);
     if (data.mHeaderInfo == dataPacket.mLowerBank)
       idxOffs = data.mLasersPerPacket;
-    const double rotation =
-      calibration.deg2rad((double)data.mRotationalInfo /
-      (double)dataPacket.mRotationResolution);
+    const float rotation =
+      calibration.deg2rad((float)data.mRotationalInfo /
+      (float)dataPacket.mRotationResolution);
     if (i == 0)
       scanCloud.setStartRotationAngle(rotation);
     else if (i == dataPacket.mDataChunkNbr -1)
       scanCloud.setEndRotationAngle(rotation);
     for (size_t j = 0; j < data.mLasersPerPacket; ++j) {
       size_t laserIdx = idxOffs + j;
-      const double distance = (calibration.getDistCorr(laserIdx)
-        + (double)data.mLaserData[j].mDistance /
-        (double)dataPacket.mDistanceResolution) /
-        (double)mMeterConversion;
+      const float distance = (calibration.getDistCorr(laserIdx)
+        + (float)data.mLaserData[j].mDistance /
+        (float)dataPacket.mDistanceResolution) /
+        (float)mMeterConversion;
       if ((distance < minDistance) || (distance > maxDistance))
         continue;
       VdyneScanCloud::Scan scan;
@@ -112,12 +112,12 @@ void toScanCloud(const DataPacket& dataPacket, const Calibration&
   }
 }
 
-double normalizeAnglePositive(double angle) {
+float normalizeAnglePositive(float angle) {
   return fmod(fmod(angle, 2.0 * M_PI) + 2.0 * M_PI, 2.0 * M_PI);
 }
 
-double normalizeAngle(double angle) {
-  double value = normalizeAnglePositive(angle);
+float normalizeAngle(float angle) {
+  float value = normalizeAnglePositive(angle);
   if (value > M_PI)
     value -= 2.0 * M_PI;
   return value;

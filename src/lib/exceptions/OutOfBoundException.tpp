@@ -52,7 +52,7 @@ OutOfBoundException<X>& OutOfBoundException<X>::operator =
 }
 
 template <typename X>
-OutOfBoundException<X>::~OutOfBoundException() {
+OutOfBoundException<X>::~OutOfBoundException() throw() {
 }
 
 /******************************************************************************/

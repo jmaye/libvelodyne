@@ -30,5 +30,5 @@ TypeCastException::TypeCastException(const TypeCastException& other) :
     std::runtime_error(other) {
 }
 
-TypeCastException::~TypeCastException() {
+TypeCastException::~TypeCastException() throw() {
 }

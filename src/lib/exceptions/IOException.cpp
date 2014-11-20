@@ -30,5 +30,5 @@ IOException::IOException(const IOException& other) :
     std::runtime_error(other) {
 }
 
-IOException::~IOException() {
+IOException::~IOException() throw() {
 }

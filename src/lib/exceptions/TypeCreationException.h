@@ -45,7 +45,7 @@ public:
   /// Assignment operator
   TypeCreationException& operator = (const TypeCreationException& other);
   /// Destructor
-  virtual ~TypeCreationException();
+  virtual ~TypeCreationException() throw();
   /** @}
     */
 

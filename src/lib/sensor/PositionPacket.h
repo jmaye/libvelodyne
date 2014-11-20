@@ -44,13 +44,13 @@ public:
   /// Packet size
   static const size_t mPacketSize = 512;
   /// Gyro scale factor
-  static const double mGyroScaleFactor;
+  static const float mGyroScaleFactor;
   /// Temp scale factor
-  static const double mTempScaleFactor;
+  static const float mTempScaleFactor;
   /// Temp offset
-  static const double mTempOffset;
+  static const float mTempOffset;
   /// Accel scale factor
-  static const double mAccelScaleFactor;
+  static const float mAccelScaleFactor;
   /** @}
     */
 
@@ -76,29 +76,29 @@ public:
   /// Sets the timestamp
   void setTimestamp(int64_t timestamp);
   /// Returns the gyro1
-  double getGyro1() const;
+  float getGyro1() const;
   /// Returns the gyro2
-  double getGyro2() const;
+  float getGyro2() const;
   /// Returns the gyro3
-  double getGyro3() const;
+  float getGyro3() const;
   /// Returns the temp1
-  double getTemp1() const;
+  float getTemp1() const;
   /// Returns the temp2
-  double getTemp2() const;
+  float getTemp2() const;
   /// Returns the temp3
-  double getTemp3() const;
+  float getTemp3() const;
   /// Returns the accel1 x
-  double getAccel1X() const;
+  float getAccel1X() const;
   /// Returns the accel2 x
-  double getAccel2X() const;
+  float getAccel2X() const;
   /// Returns the accel3 x
-  double getAccel3X() const;
+  float getAccel3X() const;
   /// Returns the accel1 y
-  double getAccel1Y() const;
+  float getAccel1Y() const;
   /// Returns the accel2 y
-  double getAccel2Y() const;
+  float getAccel2Y() const;
   /// Returns the accel3 y
-  double getAccel3Y() const;
+  float getAccel3Y() const;
   /// Returns the GPS timestamp [us]
   uint32_t getGPSTimestamp() const;
   /// Returns the NMEA sentence

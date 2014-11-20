@@ -41,7 +41,7 @@ public:
   /// Copy constructor
   ThreadException(const ThreadException& other);
   /// Destructor
-  virtual ~ThreadException();
+  virtual ~ThreadException() throw();
   /** @}
     */
 

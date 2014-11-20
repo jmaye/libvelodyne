@@ -53,7 +53,7 @@ BadArgumentException<X>& BadArgumentException<X>::operator =
 }
 
 template <typename X>
-BadArgumentException<X>::~BadArgumentException() {
+BadArgumentException<X>::~BadArgumentException() throw() {
 }
 
 /******************************************************************************/

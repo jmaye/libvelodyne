@@ -44,7 +44,7 @@ public:
   /// Assignment operator
   SystemException& operator = (const SystemException& other);
   /// Destructor
-  virtual ~SystemException();
+  virtual ~SystemException() throw();
   /** @}
     */
 

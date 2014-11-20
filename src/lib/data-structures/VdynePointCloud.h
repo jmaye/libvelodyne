@@ -24,7 +24,7 @@
 #ifndef VDYNEPOINTCLOUD_H
 #define VDYNEPOINTCLOUD_H
 
-#include <stdint.h>
+#include <cstdint>
 
 #include <vector>
 
@@ -45,11 +45,11 @@ public:
   struct Point3D :
     public Serializable {
     /// X coordinate
-    double mX;
+    float mX;
     /// Y coordinate
-    double mY;
+    float mY;
     /// Z coordinate
-    double mZ;
+    float mZ;
     /// Intensity
     uint8_t mIntensity;
     /// Default constructor
@@ -128,17 +128,17 @@ public:
     @{
     */
   /// Returns the timestamp
-  double getTimestamp() const;
+  int64_t getTimestamp() const;
   /// Sets the timestamp
-  void setTimestamp(double timestamp);
+  void setTimestamp(int64_t timestamp);
   /// Returns the starting rotational angle
-  double getStartRotationAngle() const;
+  float getStartRotationAngle() const;
   /// Sets the starting rotational angle
-  void setStartRotationAngle(double angle);
+  void setStartRotationAngle(float angle);
   /// Returns the ending rotational angle
-  double getEndRotationAngle() const;
+  float getEndRotationAngle() const;
   /// Sets the ending rotational angle
-  void setEndRotationAngle(double angle);
+  void setEndRotationAngle(float angle);
   /// Returns the container
   const Container& getPoints() const;
   /// Returns iterator at start of the container
@@ -187,13 +187,13 @@ protected:
     @{
     */
   /// Timestamp of the cloud
-  double mTimestamp;
+  int64_t mTimestamp;
   /// Points in the cloud
   Container mPoints;
   /// Start angle of the cloud
-  double mStartRotationAngle;
+  float mStartRotationAngle;
   /// End angle of the cloud
-  double mEndRotationAngle;
+  float mEndRotationAngle;
   /** @}
     */
 

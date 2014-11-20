@@ -24,7 +24,7 @@
 #ifndef VDYNESCANCLOUD_H
 #define VDYNESCANCLOUD_H
 
-#include <stdint.h>
+#include <cstdint>
 
 #include <vector>
 
@@ -45,11 +45,11 @@ public:
   struct Scan :
     public Serializable {
     /// Range
-    double mRange;
+    float mRange;
     /// Heading angle
-    double mHeading;
+    float mHeading;
     /// Pitch angle
-    double mPitch;
+    float mPitch;
     /// Intensity
     uint8_t mIntensity;
     /// Default constructor
@@ -129,17 +129,17 @@ public:
     @{
     */
   /// Returns the timestamp
-  double getTimestamp() const;
+  int64_t getTimestamp() const;
   /// Sets the timestamp
-  void setTimestamp(double timestamp);
+  void setTimestamp(int64_t timestamp);
   /// Returns the starting rotational angle
-  double getStartRotationAngle() const;
+  float getStartRotationAngle() const;
   /// Sets the starting rotational angle
-  void setStartRotationAngle(double angle);
+  void setStartRotationAngle(float angle);
   /// Returns the ending rotational angle
-  double getEndRotationAngle() const;
+  float getEndRotationAngle() const;
   /// Sets the ending rotational angle
-  void setEndRotationAngle(double angle);
+  void setEndRotationAngle(float angle);
   /// Returns the container
   const Container& getScans() const;
   /// Returns iterator at start of the container
@@ -188,13 +188,13 @@ protected:
     @{
     */
   /// Timestamp of the cloud
-  double mTimestamp;
+  int64_t mTimestamp;
   /// Scans in the cloud
   Container mScans;
   /// Start angle of the cloud
-  double mStartRotationAngle;
+  float mStartRotationAngle;
   /// End angle of the cloud
-  double mEndRotationAngle;
+  float mEndRotationAngle;
   /** @}
     */
 

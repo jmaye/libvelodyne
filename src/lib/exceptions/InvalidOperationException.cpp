@@ -31,5 +31,5 @@ InvalidOperationException::InvalidOperationException(const
     std::runtime_error(other) {
 }
 
-InvalidOperationException::~InvalidOperationException() {
+InvalidOperationException::~InvalidOperationException() throw() {
 }

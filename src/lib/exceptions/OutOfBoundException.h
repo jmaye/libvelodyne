@@ -45,7 +45,7 @@ public:
   /// Assignment operator
   OutOfBoundException& operator = (const OutOfBoundException& other);
   /// Destructor
-  virtual ~OutOfBoundException();
+  virtual ~OutOfBoundException() throw();
   /** @}
     */
 

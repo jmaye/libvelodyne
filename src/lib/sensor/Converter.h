@@ -38,9 +38,9 @@ namespace Converter {
     @{
     */
   /// Minimum distance for representing points
-  static const double mMinDistance = 0.9;
+  static const float mMinDistance = 0.9;
   /// Maximum distance for representing points
-  static const double mMaxDistance = 120.0;
+  static const float mMaxDistance = 120.0;
   /// Conversion in meters
   static const size_t mMeterConversion = 100;
   /** @}
@@ -51,16 +51,16 @@ namespace Converter {
     */
   /// The toPointCloud function converts a data packet into a point cloud
   void toPointCloud(const DataPacket& dataPacket, const Calibration&
-    calibration, VdynePointCloud& pointCloud, double minDistance =
-    Converter::mMinDistance, double maxDistance = Converter::mMaxDistance);
+    calibration, VdynePointCloud& pointCloud, float minDistance =
+    Converter::mMinDistance, float maxDistance = Converter::mMaxDistance);
   /// The toScanCloud function converts a data packet into a scan cloud
   void toScanCloud(const DataPacket& dataPacket, const Calibration&
-    calibration, VdyneScanCloud& scanCloud, double minDistance =
-    Converter::mMinDistance, double maxDistance = Converter::mMaxDistance);
+    calibration, VdyneScanCloud& scanCloud, float minDistance =
+    Converter::mMinDistance, float maxDistance = Converter::mMaxDistance);
   /// Normalize an angle positive
-  double normalizeAnglePositive(double angle);
+  float normalizeAnglePositive(float angle);
   /// Normalize an angle
-  double normalizeAngle(double angle);
+  float normalizeAngle(float angle);
   /** @}
     */
 

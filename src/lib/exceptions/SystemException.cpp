@@ -52,7 +52,7 @@ SystemException& SystemException::operator =
   return *this;
 }
 
-SystemException::~SystemException() {
+SystemException::~SystemException() throw() {
 }
 
 /******************************************************************************/

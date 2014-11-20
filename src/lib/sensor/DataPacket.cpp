@@ -82,11 +82,11 @@ void DataPacket::write(std::ostream& stream) const {
     else
       stream << "low";
     stream << std::endl;
-    stream << "Angle: " << (double)mData[i].mRotationalInfo /
-      (double)mRotationResolution << std::endl;
+    stream << "Angle: " << (float)mData[i].mRotationalInfo /
+      (float)mRotationResolution << std::endl;
     for (size_t j = 0; j < DataChunk::mLasersPerPacket; ++j) {
-      stream  << (double)mData[i].mLaserData[j].mDistance /
-        (double)mDistanceResolution << " ";
+      stream  << (float)mData[i].mLaserData[j].mDistance /
+        (float)mDistanceResolution << " ";
     }
     stream << std::endl;
   }
@@ -98,9 +98,9 @@ void DataPacket::write(std::ostream& stream) const {
   }
   else {
     uint8_t intTemp = ((uint8_t*)&mSpinCount)[1];
-    double fracTemp = (double)((uint8_t*)&mSpinCount)[0] /
-      (double)mTemperatureResolution;
-    double temperature = (double)intTemp + fracTemp;
+    float fracTemp = (float)((uint8_t*)&mSpinCount)[0] /
+      (float)mTemperatureResolution;
+    float temperature = (float)intTemp + fracTemp;
     stream << "Temperature: " << temperature << std::endl;
   }
 }

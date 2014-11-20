@@ -53,7 +53,7 @@ ThreadsManagerException<X>& ThreadsManagerException<X>::operator =
 }
 
 template <typename X>
-ThreadsManagerException<X>::~ThreadsManagerException() {
+ThreadsManagerException<X>::~ThreadsManagerException() throw() {
 }
 
 /******************************************************************************/

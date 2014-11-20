@@ -45,7 +45,7 @@ public:
   /// Assignment operator
   BadArgumentException& operator = (const BadArgumentException& other);
   /// Destructor
-  virtual ~BadArgumentException();
+  virtual ~BadArgumentException() throw();
   /** @}
     */
 

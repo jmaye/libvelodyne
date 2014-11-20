@@ -39,23 +39,23 @@ public:
   /// The LaserCorrection struct defines the laser correction.
   struct LaserCorrection {
     /// Rotation correction
-    double mRotCorr;
+    float mRotCorr;
     /// Sinus of rotation correction
-    double mSinRotCorr;
+    float mSinRotCorr;
     /// Cosinus of rotation correction
-    double mCosRotCorr;
+    float mCosRotCorr;
     /// Vertical correction
-    double mVertCorr;
+    float mVertCorr;
     /// Sinus of vertical correction
-    double mSinVertCorr;
+    float mSinVertCorr;
     /// Cosinus of vertical correction
-    double mCosVertCorr;
+    float mCosVertCorr;
     /// Distortion correction
-    double mDistCorr;
+    float mDistCorr;
     /// Vertical offset correction
-    double mVertOffsCorr;
+    float mVertOffsCorr;
     /// Horizontal offset correction
-    double mHorizOffsCorr;
+    float mHorizOffsCorr;
     /// Default constructor
     LaserCorrection() :
         mRotCorr(0),
@@ -119,33 +119,33 @@ public:
   /// Returns the number of lasers
   size_t getNumLasers() const;
   /// Returns the rotation correction
-  double getRotCorr(size_t laserNbr) const;
+  float getRotCorr(size_t laserNbr) const;
   /// Sets the rotation correction
-  void setRotCorr(size_t laserNbr, double value);
+  void setRotCorr(size_t laserNbr, float value);
   /// Returns the sinus of rotation correction
-  double getSinRotCorr(size_t laserNbr) const;
+  float getSinRotCorr(size_t laserNbr) const;
   /// Returns the cosinus of rotation correction
-  double getCosRotCorr(size_t laserNbr) const;
+  float getCosRotCorr(size_t laserNbr) const;
   /// Returns the vertical correction
-  double getVertCorr(size_t laserNbr) const;
+  float getVertCorr(size_t laserNbr) const;
   /// Sets the vertical correction
-  void setVertCorr(size_t laserNbr, double value);
+  void setVertCorr(size_t laserNbr, float value);
   /// Returns the sinus of vertical correction
-  double getSinVertCorr(size_t laserNbr) const;
+  float getSinVertCorr(size_t laserNbr) const;
   /// Returns the cosinus of vertical correction
-  double getCosVertCorr(size_t laserNbr) const;
+  float getCosVertCorr(size_t laserNbr) const;
   /// Returns the distortion correction
-  double getDistCorr(size_t laserNbr) const;
+  float getDistCorr(size_t laserNbr) const;
   /// Sets the distortion correction
-  void setDistCorr(size_t laserNbr, double value);
+  void setDistCorr(size_t laserNbr, float value);
   /// Returns the vertical offset correction
-  double getVertOffsCorr(size_t laserNbr) const;
+  float getVertOffsCorr(size_t laserNbr) const;
   /// Sets the vertical offset correction
-  void setVertOffsCorr(size_t laserNbr, double value);
+  void setVertOffsCorr(size_t laserNbr, float value);
   /// Returns the horizontal offset correction
-  double getHorizOffsCorr(size_t laserNbr) const;
+  float getHorizOffsCorr(size_t laserNbr) const;
   /// Sets the horizontal offset correction
-  void setHorizOffsCorr(size_t laserNbr, double value);
+  void setHorizOffsCorr(size_t laserNbr, float value);
   /** @}
     */
 
@@ -153,9 +153,9 @@ public:
     @{
     */
   /// Converts degree to radian
-  static double deg2rad(double deg);
+  static float deg2rad(float deg);
   /// Converts radian to degree
-  static double rad2deg(double rad);
+  static float rad2deg(float rad);
   /** @}
     */
 

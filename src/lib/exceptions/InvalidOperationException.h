@@ -42,7 +42,7 @@ public:
   /// Copy constructor
   InvalidOperationException(const InvalidOperationException& other);
   /// Destructor
-  virtual ~InvalidOperationException();
+  virtual ~InvalidOperationException() throw();
   /** @}
     */
 

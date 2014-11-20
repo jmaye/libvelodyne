@@ -6,7 +6,7 @@ remake_project(
   libvelodyne
   VERSION 1.0
   RELEASE beta
-  SUMMARY "A C++ based Velodyne HDL-64E S2 and HDL-32E interfacing library"
+  SUMMARY "A C++ based Velodyne HDL-64E S2 and HDL-32E interfacing library."
   AUTHOR "Jerome Maye"
   CONTACT "jerome.maye@mavt.ethz.ch"
   HOME "https://github.com/jmaye/libvelodyne"

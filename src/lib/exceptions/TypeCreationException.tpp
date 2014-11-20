@@ -53,7 +53,7 @@ TypeCreationException<X>& TypeCreationException<X>::operator =
 }
 
 template <typename X>
-TypeCreationException<X>::~TypeCreationException() {
+TypeCreationException<X>::~TypeCreationException() throw() {
 }
 
 /******************************************************************************/

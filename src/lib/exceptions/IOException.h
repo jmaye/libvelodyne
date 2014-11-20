@@ -41,7 +41,7 @@ public:
   /// Copy constructor
   IOException(const IOException& other);
   /// Destructor
-  virtual ~IOException();
+  virtual ~IOException() throw();
   /** @}
     */
 

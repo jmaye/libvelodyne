@@ -45,7 +45,7 @@ public:
   /// Assignment operator
   ThreadsManagerException& operator = (const ThreadsManagerException& other);
   /// Destructor
-  virtual ~ThreadsManagerException();
+  virtual ~ThreadsManagerException() throw();
   /** @}
     */
 

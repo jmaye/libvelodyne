@@ -41,7 +41,7 @@ public:
   /// Copy constructor
   TypeCastException(const TypeCastException& other);
   /// Destructor
-  virtual ~TypeCastException();
+  virtual ~TypeCastException() throw();
   /** @}
     */
 
