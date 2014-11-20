@@ -59,7 +59,7 @@ SystemException::~SystemException() throw() {
 /* Accessors                                                                  */
 /******************************************************************************/
 
-const char* SystemException::what() const noexcept {
+const char* SystemException::what() const throw() {
   std::stringstream stream;
   stream << mMsg << ": " << strerror(mErrno);
   if (mFilename != " ")

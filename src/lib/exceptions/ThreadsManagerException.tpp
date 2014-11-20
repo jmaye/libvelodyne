@@ -60,7 +60,7 @@ ThreadsManagerException<X>::~ThreadsManagerException() throw() {
 /* Accessors                                                                  */
 /******************************************************************************/
 template <typename X>
-const char* ThreadsManagerException<X>::what() const noexcept {
+const char* ThreadsManagerException<X>::what() const throw() {
   std::stringstream stream;
   stream << mMsg << " [argument = " << mArg << "]";
   if (mFilename != " ")

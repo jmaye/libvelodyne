@@ -61,7 +61,7 @@ BadArgumentException<X>::~BadArgumentException() throw() {
 /******************************************************************************/
 
 template <typename X>
-const char* BadArgumentException<X>::what() const noexcept {
+const char* BadArgumentException<X>::what() const throw() {
   std::stringstream stream;
   stream << mMsg << " [argument = " << mArg << "]";
   if (mFilename != " ")

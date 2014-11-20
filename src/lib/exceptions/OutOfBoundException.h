@@ -53,7 +53,7 @@ public:
     @{
     */
   /// Access the exception string
-  virtual const char* what() const noexcept;
+  virtual const char* what() const throw();
   /** @}
     */
 

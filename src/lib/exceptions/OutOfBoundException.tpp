@@ -60,7 +60,7 @@ OutOfBoundException<X>::~OutOfBoundException() throw() {
 /******************************************************************************/
 
 template <typename X>
-const char* OutOfBoundException<X>::what() const noexcept {
+const char* OutOfBoundException<X>::what() const throw() {
   std::stringstream stream;
   stream << mMsg << " [argument = " << mArg << "]";
   if (mFilename != " ")

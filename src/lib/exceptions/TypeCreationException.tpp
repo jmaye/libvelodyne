@@ -60,7 +60,7 @@ TypeCreationException<X>::~TypeCreationException() throw() {
 /* Accessors                                                                  */
 /******************************************************************************/
 template <typename X>
-const char* TypeCreationException<X>::what() const noexcept {
+const char* TypeCreationException<X>::what() const throw() {
   std::stringstream stream;
   stream << mMsg << " [argument = " << mArg << "]";
   if (mFilename != " ")
