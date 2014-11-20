@@ -146,8 +146,8 @@ void SensorLiveControl::timerTimeout() {
   }
 }
 
-void SensorLiveControl::colorChanged(const QString& role, const QColor&
-    color) {
+void SensorLiveControl::colorChanged(const QString& /*role*/, const QColor&
+    /*color*/) {
   View3d::getInstance().update();
 }
 
@@ -171,7 +171,7 @@ void SensorLiveControl::maxDistanceChanged(double maxDistance) {
   setMaxDistance(maxDistance);
 }
 
-void SensorLiveControl::render(View3d& view, Scene3d& Scene3d) {
+void SensorLiveControl::render(View3d& /*view*/, Scene3d& /*Scene3d*/) {
   if (mUi->showPointsCheckBox->isChecked())
     renderPoints(mUi->pointSizeSpinBox->value(),
       mUi->smoothPointsCheckBox->isChecked());

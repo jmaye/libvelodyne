@@ -33,7 +33,7 @@ TypeCreationException<X>::TypeCreationException(const X& argument,
 
 template <typename X>
 TypeCreationException<X>::TypeCreationException(const TypeCreationException&
-    other) throw () :
+    other) :
     mMsg(other.mMsg),
     mArg(other.mArg),
     mFilename(other.mFilename),
@@ -42,7 +42,7 @@ TypeCreationException<X>::TypeCreationException(const TypeCreationException&
 
 template <typename X>
 TypeCreationException<X>& TypeCreationException<X>::operator =
-    (const TypeCreationException& other) throw () {
+    (const TypeCreationException& other) {
   if (this != &other) {
     mMsg = other.mMsg;
     mArg = other.mArg;
@@ -53,14 +53,14 @@ TypeCreationException<X>& TypeCreationException<X>::operator =
 }
 
 template <typename X>
-TypeCreationException<X>::~TypeCreationException() throw () {
+TypeCreationException<X>::~TypeCreationException() {
 }
 
 /******************************************************************************/
 /* Accessors                                                                  */
 /******************************************************************************/
 template <typename X>
-const char* TypeCreationException<X>::what() const throw () {
+const char* TypeCreationException<X>::what() const noexcept {
   std::stringstream stream;
   stream << mMsg << " [argument = " << mArg << "]";
   if (mFilename != " ")

@@ -40,11 +40,11 @@ public:
   SystemException(int errNo, const std::string& msg = "", const
     std::string& filename = " ", size_t line = 0);
   /// Copy constructor
-  SystemException(const SystemException& other) throw ();
+  SystemException(const SystemException& other);
   /// Assignment operator
-  SystemException& operator = (const SystemException& other) throw();
+  SystemException& operator = (const SystemException& other);
   /// Destructor
-  virtual ~SystemException() throw ();
+  virtual ~SystemException();
   /** @}
     */
 
@@ -52,7 +52,7 @@ public:
     @{
     */
   /// Access the exception string
-  virtual const char* what() const throw();
+  virtual const char* what() const noexcept;
   /** @}
     */
 

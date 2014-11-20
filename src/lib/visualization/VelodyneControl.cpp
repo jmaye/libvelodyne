@@ -83,7 +83,7 @@ void VelodyneControl::showVelodyneToggled(bool checked) {
   setShowVelodyne(checked);
 }
 
-void VelodyneControl::render(View3d& view, Scene3d& scene) {
+void VelodyneControl::render(View3d& /*view*/, Scene3d& /*scene*/) {
   if (mUi->showVelodyneCheckBox->isChecked())
     renderVelodyne();
 }

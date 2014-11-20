@@ -166,14 +166,14 @@ void Mutex::safeUnlock() {
   }
 }
 
-bool Mutex::safeEternalWait(const Mutex& mutex) const {
+bool Mutex::safeEternalWait(const Mutex& /*mutex*/) const {
   bool result = true;
   while (result && mNumLocks)
     result = !pthread_cond_wait(&(Condition::mIdentifier), &mIdentifier);
   return result;
 }
 
-bool Mutex::safeWaitUntil(const Mutex& mutex, const Timestamp& time) const {
+bool Mutex::safeWaitUntil(const Mutex& /*mutex*/, const Timestamp& time) const {
   bool result = true;
   timespec abstime = time;
   while (result && mNumLocks)

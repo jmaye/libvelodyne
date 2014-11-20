@@ -39,9 +39,9 @@ public:
   /// Constructs exception from message
   IOException(const std::string& msg = "");
   /// Copy constructor
-  IOException(const IOException& other) throw ();
+  IOException(const IOException& other);
   /// Destructor
-  virtual ~IOException() throw ();
+  virtual ~IOException();
   /** @}
     */
 

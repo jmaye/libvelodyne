@@ -29,6 +29,7 @@ Timestamp::Timestamp(double seconds) :
 }
 
 Timestamp::Timestamp(const Timestamp& other) :
+    Serializable(),
     mSeconds(other.mSeconds) {
 }
 
@@ -46,17 +47,17 @@ Timestamp::~Timestamp() {
 /* Stream operations                                                          */
 /******************************************************************************/
 
-void Timestamp::read(std::istream& stream) {
+void Timestamp::read(std::istream& /*stream*/) {
 }
 
 void Timestamp::write(std::ostream& stream) const {
   stream << "seconds: " << mSeconds;
 }
 
-void Timestamp::read(std::ifstream& stream) {
+void Timestamp::read(std::ifstream& /*stream*/) {
 }
 
-void Timestamp::write(std::ofstream& stream) const {
+void Timestamp::write(std::ofstream& /*stream*/) const {
 }
 
 /******************************************************************************/

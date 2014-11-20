@@ -41,12 +41,11 @@ public:
   ThreadsManagerException(const X& argument, const std::string& msg, const
     std::string& filename = " ", size_t line = 0);
   /// Copy constructor
-  ThreadsManagerException(const ThreadsManagerException& other) throw ();
+  ThreadsManagerException(const ThreadsManagerException& other);
   /// Assignment operator
-  ThreadsManagerException& operator = (const ThreadsManagerException& other)
-    throw ();
+  ThreadsManagerException& operator = (const ThreadsManagerException& other);
   /// Destructor
-  virtual ~ThreadsManagerException() throw ();
+  virtual ~ThreadsManagerException();
   /** @}
     */
 
@@ -54,7 +53,7 @@ public:
     @{
     */
   /// Access the exception string
-  virtual const char* what() const throw ();
+  virtual const char* what() const noexcept;
   /** @}
     */
 

@@ -33,7 +33,7 @@ ThreadsManagerException<X>::ThreadsManagerException(const X& argument,
 
 template <typename X>
 ThreadsManagerException<X>::ThreadsManagerException(const
-    ThreadsManagerException& other) throw () :
+    ThreadsManagerException& other) :
     mMsg(other.mMsg),
     mArg(other.mArg),
     mFilename(other.mFilename),
@@ -42,7 +42,7 @@ ThreadsManagerException<X>::ThreadsManagerException(const
 
 template <typename X>
 ThreadsManagerException<X>& ThreadsManagerException<X>::operator =
-    (const ThreadsManagerException& other) throw () {
+    (const ThreadsManagerException& other) {
   if (this != &other) {
     mMsg = other.mMsg;
     mArg = other.mArg;
@@ -53,14 +53,14 @@ ThreadsManagerException<X>& ThreadsManagerException<X>::operator =
 }
 
 template <typename X>
-ThreadsManagerException<X>::~ThreadsManagerException() throw () {
+ThreadsManagerException<X>::~ThreadsManagerException() {
 }
 
 /******************************************************************************/
 /* Accessors                                                                  */
 /******************************************************************************/
 template <typename X>
-const char* ThreadsManagerException<X>::what() const throw () {
+const char* ThreadsManagerException<X>::what() const noexcept {
   std::stringstream stream;
   stream << mMsg << " [argument = " << mArg << "]";
   if (mFilename != " ")

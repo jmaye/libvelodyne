@@ -37,6 +37,7 @@ Timer::Timer(bool start) :
 }
 
 Timer::Timer(const Timer& other) :
+    Serializable(),
     mStartTime(other.mStartTime),
     mPeriod(other.mPeriod) {
 }
@@ -56,7 +57,7 @@ Timer::~Timer() {
 /* Stream operations                                                          */
 /******************************************************************************/
 
-void Timer::read(std::istream& stream) {
+void Timer::read(std::istream& /*stream*/) {
 }
 
 void Timer::write(std::ostream& stream) const {
@@ -64,10 +65,10 @@ void Timer::write(std::ostream& stream) const {
     << "period: " << mPeriod;
 }
 
-void Timer::read(std::ifstream& stream) {
+void Timer::read(std::ifstream& /*stream*/) {
 }
 
-void Timer::write(std::ofstream& stream) const {
+void Timer::write(std::ofstream& /*stream*/) const {
 }
 
 /******************************************************************************/

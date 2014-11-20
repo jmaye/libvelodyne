@@ -41,11 +41,11 @@ public:
   OutOfBoundException(const X& argument, const std::string& msg, const
     std::string& filename = " ", size_t line = 0);
   /// Copy constructor
-  OutOfBoundException(const OutOfBoundException& other) throw();
+  OutOfBoundException(const OutOfBoundException& other);
   /// Assignment operator
-  OutOfBoundException& operator = (const OutOfBoundException& other) throw();
+  OutOfBoundException& operator = (const OutOfBoundException& other);
   /// Destructor
-  virtual ~OutOfBoundException() throw();
+  virtual ~OutOfBoundException();
   /** @}
     */
 
@@ -53,7 +53,7 @@ public:
     @{
     */
   /// Access the exception string
-  virtual const char* what() const throw();
+  virtual const char* what() const noexcept;
   /** @}
     */
 

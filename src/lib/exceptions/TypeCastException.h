@@ -39,9 +39,9 @@ public:
   /// Constructs exception from message
   TypeCastException(const std::string& msg = "");
   /// Copy constructor
-  TypeCastException(const TypeCastException& other) throw ();
+  TypeCastException(const TypeCastException& other);
   /// Destructor
-  virtual ~TypeCastException() throw ();
+  virtual ~TypeCastException();
   /** @}
     */
 

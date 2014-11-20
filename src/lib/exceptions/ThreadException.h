@@ -39,9 +39,9 @@ public:
   /// Constructs exception from message
   ThreadException(const std::string& msg = "");
   /// Copy constructor
-  ThreadException(const ThreadException& other) throw ();
+  ThreadException(const ThreadException& other);
   /// Destructor
-  virtual ~ThreadException() throw ();
+  virtual ~ThreadException();
   /** @}
     */
 

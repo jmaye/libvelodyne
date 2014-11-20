@@ -22,9 +22,9 @@ ThreadException::ThreadException(const std::string& msg) :
     std::runtime_error(msg) {
 }
 
-ThreadException::ThreadException(const ThreadException& other) throw () :
+ThreadException::ThreadException(const ThreadException& other) :
     std::runtime_error(other) {
 }
 
-ThreadException::~ThreadException() throw () {
+ThreadException::~ThreadException() {
 }

@@ -51,7 +51,7 @@ UDPConnectionClient::~UDPConnectionClient() {
 /* Stream operations                                                          */
 /******************************************************************************/
 
-void UDPConnectionClient::read(std::istream& stream) {
+void UDPConnectionClient::read(std::istream& /*stream*/) {
 }
 
 void UDPConnectionClient::write(std::ostream& stream) const {
@@ -60,10 +60,10 @@ void UDPConnectionClient::write(std::ostream& stream) const {
     << "timeout: " << mTimeout;
 }
 
-void UDPConnectionClient::read(std::ifstream& stream) {
+void UDPConnectionClient::read(std::ifstream& /*stream*/) {
 }
 
-void UDPConnectionClient::write(std::ofstream& stream) const {
+void UDPConnectionClient::write(std::ofstream& /*stream*/) const {
 }
 
 /******************************************************************************/

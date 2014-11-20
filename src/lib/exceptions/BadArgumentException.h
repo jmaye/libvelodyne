@@ -41,11 +41,11 @@ public:
   BadArgumentException(const X& argument, const std::string& msg, const
     std::string& filename = " ", size_t line = 0);
   /// Copy constructor
-  BadArgumentException(const BadArgumentException& other) throw();
+  BadArgumentException(const BadArgumentException& other);
   /// Assignment operator
-  BadArgumentException& operator = (const BadArgumentException& other) throw();
+  BadArgumentException& operator = (const BadArgumentException& other);
   /// Destructor
-  virtual ~BadArgumentException() throw();
+  virtual ~BadArgumentException();
   /** @}
     */
 
@@ -53,7 +53,7 @@ public:
     @{
     */
   /// Access the exception string
-  virtual const char* what() const throw();
+  virtual const char* what() const noexcept;
   /** @}
     */
 

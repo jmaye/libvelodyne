@@ -46,7 +46,7 @@ TCPConnectionClient::~TCPConnectionClient() {
 /* Stream operations                                                          */
 /******************************************************************************/
 
-void TCPConnectionClient::read(std::istream& stream) {
+void TCPConnectionClient::read(std::istream& /*stream*/) {
 }
 
 void TCPConnectionClient::write(std::ostream& stream) const {
@@ -55,10 +55,10 @@ void TCPConnectionClient::write(std::ostream& stream) const {
     << "timeout: " << mTimeout;
 }
 
-void TCPConnectionClient::read(std::ifstream& stream) {
+void TCPConnectionClient::read(std::ifstream& /*stream*/) {
 }
 
-void TCPConnectionClient::write(std::ofstream& stream) const {
+void TCPConnectionClient::write(std::ofstream& /*stream*/) const {
 }
 
 /******************************************************************************/

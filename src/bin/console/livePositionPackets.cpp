@@ -29,7 +29,7 @@
 #include "exceptions/IOException.h"
 #include "exceptions/SystemException.h"
 
-int main(int argc, char **argv) {
+int main(int /*argc*/, char **/*argv*/) {
   UDPConnectionServer com(8308);
   while (1) {
     PositionPacket posPacket;

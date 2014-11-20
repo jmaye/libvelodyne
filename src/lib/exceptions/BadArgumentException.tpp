@@ -32,8 +32,8 @@ BadArgumentException<X>::BadArgumentException(const X& argument,
 }
 
 template <typename X>
-BadArgumentException<X>::BadArgumentException(const BadArgumentException& other)
-    throw() :
+BadArgumentException<X>::BadArgumentException(const BadArgumentException&
+    other) :
     mMsg(other.mMsg),
     mArg(other.mArg),
     mFilename(other.mFilename),
@@ -42,7 +42,7 @@ BadArgumentException<X>::BadArgumentException(const BadArgumentException& other)
 
 template <typename X>
 BadArgumentException<X>& BadArgumentException<X>::operator =
-    (const BadArgumentException& other) throw() {
+    (const BadArgumentException& other) {
   if (this != &other) {
     mMsg = other.mMsg;
     mArg = other.mArg;
@@ -53,7 +53,7 @@ BadArgumentException<X>& BadArgumentException<X>::operator =
 }
 
 template <typename X>
-BadArgumentException<X>::~BadArgumentException() throw() {
+BadArgumentException<X>::~BadArgumentException() {
 }
 
 /******************************************************************************/
@@ -61,7 +61,7 @@ BadArgumentException<X>::~BadArgumentException() throw() {
 /******************************************************************************/
 
 template <typename X>
-const char* BadArgumentException<X>::what() const throw() {
+const char* BadArgumentException<X>::what() const noexcept {
   std::stringstream stream;
   stream << mMsg << " [argument = " << mArg << "]";
   if (mFilename != " ")

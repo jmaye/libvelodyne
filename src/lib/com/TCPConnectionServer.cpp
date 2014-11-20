@@ -44,7 +44,7 @@ TCPConnectionServer::~TCPConnectionServer() {
 /* Stream operations                                                          */
 /******************************************************************************/
 
-void TCPConnectionServer::read(std::istream& stream) {
+void TCPConnectionServer::read(std::istream& /*stream*/) {
 }
 
 void TCPConnectionServer::write(std::ostream& stream) const {
@@ -52,10 +52,10 @@ void TCPConnectionServer::write(std::ostream& stream) const {
     << "timeout: " << mTimeout;
 }
 
-void TCPConnectionServer::read(std::ifstream& stream) {
+void TCPConnectionServer::read(std::ifstream& /*stream*/) {
 }
 
-void TCPConnectionServer::write(std::ofstream& stream) const {
+void TCPConnectionServer::write(std::ofstream& /*stream*/) const {
 }
 
 /******************************************************************************/
@@ -116,7 +116,7 @@ bool TCPConnectionServer::isOpen() const {
   return (mSocket != 0);
 }
 
-void TCPConnectionServer::read(char* buffer, size_t numBytes) {
+void TCPConnectionServer::read(char* /*buffer*/, size_t /*numBytes*/) {
 //newsockfd = accept(sockfd,
 //                 (struct sockaddr *) &cli_addr,
 //                 &clilen);
@@ -145,7 +145,7 @@ void TCPConnectionServer::read(char* buffer, size_t numBytes) {
 //    throw IOException("TCPConnectionServer::read(): read timeout");
 }
 
-void TCPConnectionServer::write(const char* buffer, size_t numBytes) {
+void TCPConnectionServer::write(const char* /*buffer*/, size_t /*numBytes*/) {
 //  if (isOpen() == false)
 //    open();
 //  double intPart;

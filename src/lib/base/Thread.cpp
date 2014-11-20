@@ -47,6 +47,7 @@ Thread::Identifier::Identifier(pthread_t posix) :
 }
 
 Thread::Identifier::Identifier(const Identifier& other) :
+    Serializable(),
     mPosix(other.mPosix),
     mKernel(other.mKernel),
     mProcess(other.mProcess) {
@@ -129,7 +130,8 @@ void Thread::safeSetPriority(Priority priority) {
       const int maxPriority = sched_get_priority_max(policy);
       if ((minPriority != -1) && (maxPriority != -1)) {
         param.sched_priority = minPriority +
-          round((maxPriority - minPriority) / critical * priority);
+          static_cast<int>(std::round((maxPriority - minPriority) / critical *
+          priority));
         ret = pthread_setschedparam(mIdentifier.mPosix, policy, &param);
         if (ret)
           throw SystemException(ret,
@@ -174,17 +176,17 @@ const Condition& Thread::getTrigger() const {
 /* Streaming operations                                                       */
 /******************************************************************************/
 
-void Thread::Identifier::read(std::istream& stream) {
+void Thread::Identifier::read(std::istream& /*stream*/) {
 }
 
 void Thread::Identifier::write(std::ostream& stream) const {
   stream << mPosix;
 }
 
-void Thread::Identifier::read(std::ifstream& stream) {
+void Thread::Identifier::read(std::ifstream& /*stream*/) {
 }
 
-void Thread::Identifier::write(std::ofstream& stream) const {
+void Thread::Identifier::write(std::ofstream& /*stream*/) const {
 }
 
 /******************************************************************************/

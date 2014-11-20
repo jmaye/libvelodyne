@@ -57,7 +57,7 @@ SerialConnection::~SerialConnection() {
 /* Stream operations                                                          */
 /******************************************************************************/
 
-void SerialConnection::read(std::istream& stream) {
+void SerialConnection::read(std::istream& /*stream*/) {
 }
 
 void SerialConnection::write(std::ostream& stream) const {
@@ -70,10 +70,10 @@ void SerialConnection::write(std::ostream& stream) const {
     << "timeout: " << mTimeout;
 }
 
-void SerialConnection::read(std::ifstream& stream) {
+void SerialConnection::read(std::ifstream& /*stream*/) {
 }
 
-void SerialConnection::write(std::ofstream& stream) const {
+void SerialConnection::write(std::ofstream& /*stream*/) const {
 }
 
 /******************************************************************************/

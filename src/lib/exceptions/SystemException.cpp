@@ -34,7 +34,7 @@ SystemException::SystemException(int errNo, const
     mLine(line) {
 }
 
-SystemException::SystemException(const SystemException& other) throw() :
+SystemException::SystemException(const SystemException& other) :
     mMsg(other.mMsg),
     mErrno(other.mErrno),
     mFilename(other.mFilename),
@@ -42,7 +42,7 @@ SystemException::SystemException(const SystemException& other) throw() :
 }
 
 SystemException& SystemException::operator =
-    (const SystemException& other) throw() {
+    (const SystemException& other) {
   if (this != &other) {
     mMsg = other.mMsg;
     mErrno = other.mErrno;
@@ -52,14 +52,14 @@ SystemException& SystemException::operator =
   return *this;
 }
 
-SystemException::~SystemException() throw() {
+SystemException::~SystemException() {
 }
 
 /******************************************************************************/
 /* Accessors                                                                  */
 /******************************************************************************/
 
-const char* SystemException::what() const throw() {
+const char* SystemException::what() const noexcept {
   std::stringstream stream;
   stream << mMsg << ": " << strerror(mErrno);
   if (mFilename != " ")

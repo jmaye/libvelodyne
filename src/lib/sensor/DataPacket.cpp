@@ -38,6 +38,7 @@ DataPacket::DataPacket() :
 }
 
 DataPacket::DataPacket(const DataPacket& other) :
+    Serializable(),
     mTimestamp(other.mTimestamp),
     mSpinCount(other.mSpinCount),
     mReserved(other.mReserved) {
@@ -63,13 +64,13 @@ DataPacket::~DataPacket() {
 /* Streaming operations                                                       */
 /******************************************************************************/
 
-void DataPacket::read(std::ifstream& stream) {
+void DataPacket::read(std::ifstream& /*stream*/) {
 }
 
-void DataPacket::write(std::ofstream& stream) const {
+void DataPacket::write(std::ofstream& /*stream*/) const {
 }
 
-void DataPacket::read(std::istream& stream) {
+void DataPacket::read(std::istream& /*stream*/) {
 }
 
 void DataPacket::write(std::ostream& stream) const {

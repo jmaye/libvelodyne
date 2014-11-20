@@ -40,9 +40,9 @@ public:
   /// Constructs exception from message
   InvalidOperationException(const std::string& msg = "");
   /// Copy constructor
-  InvalidOperationException(const InvalidOperationException& other) throw ();
+  InvalidOperationException(const InvalidOperationException& other);
   /// Destructor
-  virtual ~InvalidOperationException() throw ();
+  virtual ~InvalidOperationException();
   /** @}
     */
 

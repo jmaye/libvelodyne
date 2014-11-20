@@ -26,9 +26,9 @@ TypeCastException::TypeCastException(const std::string& msg) :
     std::runtime_error(msg) {
 }
 
-TypeCastException::TypeCastException(const TypeCastException& other) throw () :
+TypeCastException::TypeCastException(const TypeCastException& other) :
     std::runtime_error(other) {
 }
 
-TypeCastException::~TypeCastException() throw () {
+TypeCastException::~TypeCastException() {
 }

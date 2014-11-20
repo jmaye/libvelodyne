@@ -44,6 +44,7 @@ PositionPacket::PositionPacket() :
 }
 
 PositionPacket::PositionPacket(const PositionPacket& other) :
+    Serializable(),
     mTimestamp(other.mTimestamp) {
 }
 
@@ -61,13 +62,13 @@ PositionPacket::~PositionPacket() {
 /* Streaming operations                                                       */
 /******************************************************************************/
 
-void PositionPacket::read(std::ifstream& stream) {
+void PositionPacket::read(std::ifstream& /*stream*/) {
 }
 
-void PositionPacket::write(std::ofstream& stream) const {
+void PositionPacket::write(std::ofstream& /*stream*/) const {
 }
 
-void PositionPacket::read(std::istream& stream) {
+void PositionPacket::read(std::istream& /*stream*/) {
 }
 
 void PositionPacket::write(std::ostream& stream) const {

@@ -41,12 +41,11 @@ public:
   TypeCreationException(const X& argument, const std::string& msg, const
     std::string& filename = " ", size_t line = 0);
   /// Copy constructor
-  TypeCreationException(const TypeCreationException& other) throw ();
+  TypeCreationException(const TypeCreationException& other);
   /// Assignment operator
-  TypeCreationException& operator = (const TypeCreationException& other)
-    throw ();
+  TypeCreationException& operator = (const TypeCreationException& other);
   /// Destructor
-  virtual ~TypeCreationException() throw ();
+  virtual ~TypeCreationException();
   /** @}
     */
 
@@ -54,7 +53,7 @@ public:
     @{
     */
   /// Access the exception string
-  virtual const char* what() const throw ();
+  virtual const char* what() const noexcept;
   /** @}
     */
 

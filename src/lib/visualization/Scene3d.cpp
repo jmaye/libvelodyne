@@ -85,7 +85,7 @@ double Scene3d::getScale() const {
 /*  Methods                                                                   */
 /******************************************************************************/
 
-void Scene3d::setup(View3d& view) {
+void Scene3d::setup(View3d& /*view*/) {
   glMatrixMode(GL_MODELVIEW);
   glScalef(mScale, mScale, mScale);
   glRotatef(mRotation[2] * 180.0 / M_PI, 1, 0, 0);

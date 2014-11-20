@@ -27,9 +27,9 @@ InvalidOperationException::InvalidOperationException(const std::string& msg) :
 }
 
 InvalidOperationException::InvalidOperationException(const
-    InvalidOperationException& other) throw () :
+    InvalidOperationException& other) :
     std::runtime_error(other) {
 }
 
-InvalidOperationException::~InvalidOperationException() throw () {
+InvalidOperationException::~InvalidOperationException() {
 }

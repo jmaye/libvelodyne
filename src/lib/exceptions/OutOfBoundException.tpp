@@ -32,8 +32,7 @@ OutOfBoundException<X>::OutOfBoundException(const X& argument, const
 }
 
 template <typename X>
-OutOfBoundException<X>::OutOfBoundException(const OutOfBoundException& other)
-    throw() :
+OutOfBoundException<X>::OutOfBoundException(const OutOfBoundException& other) :
     mMsg(other.mMsg),
     mArg(other.mArg),
     mFilename(other.mFilename),
@@ -42,7 +41,7 @@ OutOfBoundException<X>::OutOfBoundException(const OutOfBoundException& other)
 
 template <typename X>
 OutOfBoundException<X>& OutOfBoundException<X>::operator =
-    (const OutOfBoundException& other) throw() {
+    (const OutOfBoundException& other) {
   if (this != &other) {
     mMsg = other.mMsg;
     mArg = other.mArg;
@@ -53,7 +52,7 @@ OutOfBoundException<X>& OutOfBoundException<X>::operator =
 }
 
 template <typename X>
-OutOfBoundException<X>::~OutOfBoundException() throw() {
+OutOfBoundException<X>::~OutOfBoundException() {
 }
 
 /******************************************************************************/
@@ -61,7 +60,7 @@ OutOfBoundException<X>::~OutOfBoundException() throw() {
 /******************************************************************************/
 
 template <typename X>
-const char* OutOfBoundException<X>::what() const throw() {
+const char* OutOfBoundException<X>::what() const noexcept {
   std::stringstream stream;
   stream << mMsg << " [argument = " << mArg << "]";
   if (mFilename != " ")

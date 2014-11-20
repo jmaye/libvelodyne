@@ -213,27 +213,28 @@ void View3d::paintEvent(QPaintEvent* event) {
   emit updated();
 }
 
-void View3d::cameraPositionChanged(const std::vector<double>& position) {
+void View3d::cameraPositionChanged(const std::vector<double>& /*position*/) {
   update();
 }
 
-void View3d::cameraViewpointChanged(const std::vector<double>& viewpoint) {
+void View3d::cameraViewpointChanged(const std::vector<double>& /*viewpoint*/) {
   update();
 }
 
-void View3d::cameraRangeChanged(const std::vector<double>& range) {
+void View3d::cameraRangeChanged(const std::vector<double>& /*range*/) {
   update();
 }
 
-void View3d::sceneTranslationChanged(const std::vector<double>& translation) {
+void View3d::sceneTranslationChanged(const std::vector<double>&
+    /*translation*/) {
   update();
 }
 
-void View3d::sceneRotationChanged(const std::vector<double>& rotation) {
+void View3d::sceneRotationChanged(const std::vector<double>& /*rotation*/) {
   update();
 }
 
-void View3d::sceneScaleChanged(double scale) {
+void View3d::sceneScaleChanged(double /*scale*/) {
   update();
 }
 

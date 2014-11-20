@@ -35,6 +35,7 @@ Calibration::Calibration(size_t numLasers) :
 }
 
 Calibration::Calibration(const Calibration& other) :
+    Serializable(),
     mNumLasers(other.mNumLasers) {
   mCorr = new LaserCorrection[mNumLasers];
   for (size_t i = 0; i < mNumLasers; ++i)
@@ -60,7 +61,7 @@ Calibration::~Calibration() {
 /* Stream operations                                                          */
 /******************************************************************************/
 
-void Calibration::read(std::istream& stream) {
+void Calibration::read(std::istream& /*stream*/) {
 }
 
 void Calibration::write(std::ostream& stream) const {

@@ -204,8 +204,8 @@ void SensorBrowseControl::timerTimeout() {
     mTimer.start(0);
 }
 
-void SensorBrowseControl::colorChanged(const QString& role, const QColor&
-    color) {
+void SensorBrowseControl::colorChanged(const QString& /*role*/, const QColor&
+    /*color*/) {
   View3d::getInstance().update();
 }
 
@@ -229,7 +229,7 @@ void SensorBrowseControl::maxDistanceChanged(double maxDistance) {
   setMaxDistance(maxDistance);
 }
 
-void SensorBrowseControl::render(View3d& view, Scene3d& Scene3d) {
+void SensorBrowseControl::render(View3d& /*view*/, Scene3d& /*Scene3d*/) {
   if (mUi->showPointsCheckBox->isChecked())
     renderPoints(mUi->pointSizeSpinBox->value(),
       mUi->smoothPointsCheckBox->isChecked());

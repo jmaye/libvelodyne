@@ -26,9 +26,9 @@ IOException::IOException(const std::string& msg) :
     std::runtime_error(msg) {
 }
 
-IOException::IOException(const IOException& other) throw () :
+IOException::IOException(const IOException& other) :
     std::runtime_error(other) {
 }
 
-IOException::~IOException() throw () {
+IOException::~IOException() {
 }

@@ -341,7 +341,8 @@ void View3dControl::dumpAllToggled(bool checked) {
   setDumpAll(checked);
 }
 
-void View3dControl::colorChanged(const QString& role, const QColor& color) {
+void View3dControl::colorChanged(const QString& /*role*/, const QColor&
+    /*color*/) {
   View3d::getInstance().update();
 }
 
@@ -407,7 +408,7 @@ void View3dControl::sceneScaleChanged(double scale) {
   mUi->sceneScaleSpinBox->blockSignals(false);
 }
 
-void View3dControl::render(View3d& view, Scene3d& scene) {
+void View3dControl::render(View3d& /*view*/, Scene3d& /*scene*/) {
   double radius = mUi->groundXSpinBox->value();
   renderBackground();
   if (mUi->showFogCheckBox->isChecked()) {
