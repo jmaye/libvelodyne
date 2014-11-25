@@ -24,7 +24,11 @@
 #ifndef CALIBRATION_H
 #define CALIBRATION_H
 
+#include <cmath>
+
 #include "base/Serializable.h"
+
+#include "exceptions/OutOfBoundException.h"
 
 /** The class Calibration represents the calibration structure for the
     Velodyne.
@@ -117,35 +121,133 @@ public:
     @{
     */
   /// Returns the number of lasers
-  size_t getNumLasers() const;
+  size_t getNumLasers() const {
+    return mNumLasers;
+  }
   /// Returns the rotation correction
-  float getRotCorr(size_t laserNbr) const;
+  float getRotCorr(size_t laserNbr) const {
+#ifndef NDEBUG
+    if (laserNbr > mNumLasers)
+      throw OutOfBoundException<size_t>(laserNbr,
+        "Calibration::getRotCorr(): Out of bound",
+        __FILE__, __LINE__);
+#endif
+    return mCorr[laserNbr].mRotCorr;
+  }
   /// Sets the rotation correction
   void setRotCorr(size_t laserNbr, float value);
   /// Returns the sinus of rotation correction
-  float getSinRotCorr(size_t laserNbr) const;
+  float getSinRotCorr(size_t laserNbr) const {
+#ifndef NDEBUG
+    if (laserNbr > mNumLasers)
+      throw OutOfBoundException<size_t>(laserNbr,
+        "Calibration::getSinRotCorr(): Out of bound",
+        __FILE__, __LINE__);
+#endif
+    return mCorr[laserNbr].mSinRotCorr;
+  }
   /// Returns the cosinus of rotation correction
-  float getCosRotCorr(size_t laserNbr) const;
+  float getCosRotCorr(size_t laserNbr) const {
+#ifndef NDEBUG
+    if (laserNbr > mNumLasers)
+      throw OutOfBoundException<size_t>(laserNbr,
+        "Calibration::getCosRotCorr(): Out of bound",
+        __FILE__, __LINE__);
+#endif
+    return mCorr[laserNbr].mCosRotCorr;
+  }
   /// Returns the vertical correction
-  float getVertCorr(size_t laserNbr) const;
+  float getVertCorr(size_t laserNbr) const {
+#ifndef NDEBUG
+    if (laserNbr > mNumLasers)
+      throw OutOfBoundException<size_t>(laserNbr,
+        "Calibration::getVertCorr(): Out of bound",
+        __FILE__, __LINE__);
+#endif
+    return mCorr[laserNbr].mVertCorr;
+  }
   /// Sets the vertical correction
   void setVertCorr(size_t laserNbr, float value);
   /// Returns the sinus of vertical correction
-  float getSinVertCorr(size_t laserNbr) const;
+  float getSinVertCorr(size_t laserNbr) const {
+#ifndef NDEBUG
+    if (laserNbr > mNumLasers)
+      throw OutOfBoundException<size_t>(laserNbr,
+        "Calibration::getSinVertCorr(): Out of bound",
+        __FILE__, __LINE__);
+#endif
+    return mCorr[laserNbr].mSinVertCorr;
+  }
   /// Returns the cosinus of vertical correction
-  float getCosVertCorr(size_t laserNbr) const;
+  float getCosVertCorr(size_t laserNbr) const {
+#ifndef NDEBUG
+    if (laserNbr > mNumLasers)
+      throw OutOfBoundException<size_t>(laserNbr,
+        "Calibration::getCosVertCorr(): Out of bound",
+        __FILE__, __LINE__);
+#endif
+    return mCorr[laserNbr].mCosVertCorr;
+  }
   /// Returns the distortion correction
-  float getDistCorr(size_t laserNbr) const;
+  float getDistCorr(size_t laserNbr) const {
+#ifndef NDEBUG
+    if (laserNbr > mNumLasers)
+      throw OutOfBoundException<size_t>(laserNbr,
+        "Calibration::getDistCorr(): Out of bound",
+        __FILE__, __LINE__);
+#endif
+    return mCorr[laserNbr].mDistCorr;
+  }
   /// Sets the distortion correction
-  void setDistCorr(size_t laserNbr, float value);
+  void setDistCorr(size_t laserNbr, float value) {
+#ifndef NDEBUG
+    if (laserNbr > mNumLasers)
+      throw OutOfBoundException<size_t>(laserNbr,
+        "Calibration::setDistCorr(): Out of bound",
+        __FILE__, __LINE__);
+#endif
+    mCorr[laserNbr].mDistCorr = value;
+  }
   /// Returns the vertical offset correction
-  float getVertOffsCorr(size_t laserNbr) const;
+  float getVertOffsCorr(size_t laserNbr) const {
+#ifndef NDEBUG
+    if (laserNbr > mNumLasers)
+      throw OutOfBoundException<size_t>(laserNbr,
+        "Calibration::getVertOffsCorr(): Out of bound",
+        __FILE__, __LINE__);
+#endif
+    return mCorr[laserNbr].mVertOffsCorr;
+  }
   /// Sets the vertical offset correction
-  void setVertOffsCorr(size_t laserNbr, float value);
+  void setVertOffsCorr(size_t laserNbr, float value) {
+#ifndef NDEBUG
+    if (laserNbr > mNumLasers)
+      throw OutOfBoundException<size_t>(laserNbr,
+        "Calibration::setVertOffsCorr(): Out of bound",
+        __FILE__, __LINE__);
+#endif
+    mCorr[laserNbr].mVertOffsCorr = value;
+  }
   /// Returns the horizontal offset correction
-  float getHorizOffsCorr(size_t laserNbr) const;
+  float getHorizOffsCorr(size_t laserNbr) const {
+#ifndef NDEBUG
+    if (laserNbr > mNumLasers)
+      throw OutOfBoundException<size_t>(laserNbr,
+        "Calibration::getHorizOffsCorr(): Out of bound",
+        __FILE__, __LINE__);
+#endif
+    return mCorr[laserNbr].mHorizOffsCorr;
+  }
   /// Sets the horizontal offset correction
-  void setHorizOffsCorr(size_t laserNbr, float value);
+  void setHorizOffsCorr(size_t laserNbr, float value) {
+#ifndef NDEBUG
+    if (laserNbr > mNumLasers)
+      throw OutOfBoundException<size_t>(laserNbr,
+        "Calibration::setHorizOffsCorr(): Out of bound",
+        __FILE__, __LINE__);
+#endif
+    mCorr[laserNbr].mHorizOffsCorr = value;
+  }
   /** @}
     */
 
@@ -153,9 +255,13 @@ public:
     @{
     */
   /// Converts degree to radian
-  static float deg2rad(float deg);
+  static float deg2rad(float deg) {
+    return deg * M_PI / 180.0;
+  }
   /// Converts radian to degree
-  static float rad2deg(float rad);
+  static float rad2deg(float rad) {
+    return rad * 180.0 / M_PI;
+  }
   /** @}
     */
 

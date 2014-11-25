@@ -28,6 +28,8 @@
 
 #include "base/Serializable.h"
 
+#include "exceptions/OutOfBoundException.h"
+
 class UDPConnectionServer;
 class BinaryReader;
 class BinaryWriter;
@@ -126,13 +128,16 @@ public:
     @{
     */
   /// Default constructor
-  DataPacket();
+  DataPacket() :
+      mTimestamp(0),
+      mSpinCount(0),
+      mReserved(0) {}
   /// Copy constructor
   DataPacket(const DataPacket& other);
   /// Assignment operator
   DataPacket& operator = (const DataPacket& other);
   /// Destructor
-  ~DataPacket();
+  ~DataPacket() {}
   /** @}
     */
 
@@ -140,21 +145,49 @@ public:
     @{
     */
   /// Returns the timestamp of the acquisition [ns]
-  int64_t getTimestamp() const;
+  int64_t getTimestamp() const {
+    return mTimestamp;
+  }
   /// Sets the timestamp
-  void setTimestamp(int64_t timestamp);
+  void setTimestamp(int64_t timestamp) {
+    mTimestamp = timestamp;
+  }
   /// Returns the spin count
-  uint16_t getSpinCount() const;
+  uint16_t getSpinCount() const {
+    return mSpinCount;
+  }
   /// Sets the spin count
-  void setSpinCount(uint16_t spinCount);
+  void setSpinCount(uint16_t spinCount) {
+    mSpinCount = spinCount;
+  }
   /// Returns the reserved stuff
-  uint32_t getReserved() const;
+  uint32_t getReserved() const {
+    return mReserved;
+  }
   /// Sets the reserved stuff
-  void setReserved(uint32_t reserved);
+  void setReserved(uint32_t reserved) {
+    mReserved = reserved;
+  }
   /// Returns a data chunk
-  const DataChunk& getDataChunk(size_t dataChunkIdx) const;
+  const DataChunk& getDataChunk(size_t dataChunkIdx) const {
+#ifndef NDEBUG
+    if (dataChunkIdx >= mDataChunkNbr)
+      throw OutOfBoundException<size_t>(dataChunkIdx,
+        "DataPacket::getDataChunk(): Out of bound",
+        __FILE__, __LINE__);
+#endif
+    return mData[dataChunkIdx];
+  }
   /// Sets the data chunk
-  void setDataChunk(const DataChunk& data, size_t dataChunkIdx);
+  void setDataChunk(const DataChunk& data, size_t dataChunkIdx) {
+#ifndef NDEBUG
+    if (dataChunkIdx >= mDataChunkNbr)
+      throw OutOfBoundException<size_t>(dataChunkIdx,
+        "DataPacket::getDataChunk(): Out of bound",
+        __FILE__, __LINE__);
+#endif
+    mData[dataChunkIdx] = data;
+  }
   /// Returns GPS timestamp [us]
   uint32_t getGPSTimestamp() const;
   /** @}

@@ -115,13 +115,21 @@ public:
     @{
     */
   /// Default constructor
-  VdyneScanCloud();
+  VdyneScanCloud() :
+      mTimestamp(0),
+      mStartRotationAngle(0),
+      mEndRotationAngle(0) {}
   /// Copy constructor
-  VdyneScanCloud(const VdyneScanCloud& other);
+  VdyneScanCloud(const VdyneScanCloud& other) :
+      Serializable(),
+      mTimestamp(other.mTimestamp),
+      mScans(other.mScans),
+      mStartRotationAngle(other.mStartRotationAngle),
+      mEndRotationAngle(other.mEndRotationAngle) {}
   /// Assignment operator
   VdyneScanCloud& operator = (const VdyneScanCloud& other);
   /// Destructor
-  ~VdyneScanCloud();
+  ~VdyneScanCloud() {}
   /** @}
     */
 
@@ -129,33 +137,61 @@ public:
     @{
     */
   /// Returns the timestamp
-  int64_t getTimestamp() const;
+  int64_t getTimestamp() const {
+    return mTimestamp;
+  }
   /// Sets the timestamp
-  void setTimestamp(int64_t timestamp);
+  void setTimestamp(int64_t timestamp) {
+    mTimestamp = timestamp;
+  }
   /// Returns the starting rotational angle
-  float getStartRotationAngle() const;
+  float getStartRotationAngle() const {
+    return mStartRotationAngle;
+  }
   /// Sets the starting rotational angle
-  void setStartRotationAngle(float angle);
+  void setStartRotationAngle(float angle) {
+    mStartRotationAngle = angle;
+  }
   /// Returns the ending rotational angle
-  float getEndRotationAngle() const;
+  float getEndRotationAngle() const {
+    return mEndRotationAngle;
+  }
   /// Sets the ending rotational angle
-  void setEndRotationAngle(float angle);
+  void setEndRotationAngle(float angle) {
+    mEndRotationAngle = angle;
+  }
   /// Returns the container
-  const Container& getScans() const;
+  const Container& getScans() const {
+    return mScans;
+  }
   /// Returns iterator at start of the container
-  ConstScanIterator getScanBegin() const;
+  ConstScanIterator getScanBegin() const {
+    return mScans.cbegin();
+  }
   /// Returns iterator at start of the container
-  ScanIterator getScanBegin();
+  ScanIterator getScanBegin() {
+    return mScans.begin();
+  }
   /// Returns iterator at end of the container
-  ConstScanIterator getScanEnd() const;
+  ConstScanIterator getScanEnd() const {
+    return mScans.cend();
+  }
   /// Returns iterator at end of the container
-  ScanIterator getScanEnd();
+  ScanIterator getScanEnd() {
+    return mScans.end();
+  }
   /// Returns the size of the cloud
-  size_t getSize() const;
+  size_t getSize() const {
+    return mScans.size();
+  }
   /// Inserts a scan into the scan cloud
-  void insertScan(const Scan& scan);
+  void insertScan(const Scan& scan) {
+    mScans.push_back(scan);
+  }
   /// Clear the scan cloud
-  void clear();
+  void clear() {
+    mScans.clear();
+  }
   /** @}
     */
 

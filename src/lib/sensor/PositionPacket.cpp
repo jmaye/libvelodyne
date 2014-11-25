@@ -39,23 +39,11 @@ const float PositionPacket::mAccelScaleFactor = 0.001221;
 /* Constructors and Destructor                                                */
 /******************************************************************************/
 
-PositionPacket::PositionPacket() :
-    mTimestamp(0) {
-}
-
-PositionPacket::PositionPacket(const PositionPacket& other) :
-    Serializable(),
-    mTimestamp(other.mTimestamp) {
-}
-
 PositionPacket& PositionPacket::operator = (const PositionPacket &other) {
   if (this != &other) {
     mTimestamp = other.mTimestamp;
   }
   return *this;
-}
-
-PositionPacket::~PositionPacket() {
 }
 
 /******************************************************************************/
@@ -91,14 +79,6 @@ void PositionPacket::write(std::ostream& stream) const {
 /******************************************************************************/
 /* Accessors                                                                  */
 /******************************************************************************/
-
-int64_t PositionPacket::getTimestamp() const {
-  return mTimestamp;
-}
-
-void PositionPacket::setTimestamp(int64_t timestamp) {
-  mTimestamp = timestamp;
-}
 
 float PositionPacket::getGyro1() const {
   if ((mGyro1 & 0x0fff) & 0x0800)
@@ -185,14 +165,6 @@ float PositionPacket::getAccel3Y() const {
     return (int16_t)((mAccel3Y & 0x0fff) | 0xf000) * mAccelScaleFactor;
   else
     return (mAccel3Y & 0x0fff) * mAccelScaleFactor;
-}
-
-uint32_t PositionPacket::getGPSTimestamp() const {
-  return mGPSTimestamp;
-}
-
-const uint8_t* PositionPacket::getNMEASentence() const {
-  return mNMEASentence;
 }
 
 /******************************************************************************/

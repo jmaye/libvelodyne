@@ -18,11 +18,8 @@
 
 #include "sensor/Calibration.h"
 
-#include <cmath>
-
 #include <string>
 
-#include "exceptions/OutOfBoundException.h"
 #include "exceptions/IOException.h"
 
 /******************************************************************************/
@@ -138,82 +135,6 @@ void Calibration::write(std::ofstream& stream) const {
 /* Accessors                                                                  */
 /******************************************************************************/
 
-size_t Calibration::getNumLasers() const {
-  return mNumLasers;
-}
-
-float Calibration::getRotCorr(size_t laserNbr) const {
-  if (laserNbr > mNumLasers)
-    throw OutOfBoundException<size_t>(laserNbr,
-      "Calibration::getRotCorr(): Out of bound",
-      __FILE__, __LINE__);
-  return mCorr[laserNbr].mRotCorr;
-}
-
-float Calibration::getSinRotCorr(size_t laserNbr) const {
-  if (laserNbr > mNumLasers)
-    throw OutOfBoundException<size_t>(laserNbr,
-      "Calibration::getSinRotCorr(): Out of bound",
-      __FILE__, __LINE__);
-  return mCorr[laserNbr].mSinRotCorr;
-}
-
-float Calibration::getCosRotCorr(size_t laserNbr) const {
-  if (laserNbr > mNumLasers)
-    throw OutOfBoundException<size_t>(laserNbr,
-      "Calibration::getCosRotCorr(): Out of bound",
-      __FILE__, __LINE__);
-  return mCorr[laserNbr].mCosRotCorr;
-}
-
-float Calibration::getVertCorr(size_t laserNbr) const {
-  if (laserNbr > mNumLasers)
-    throw OutOfBoundException<size_t>(laserNbr,
-      "Calibration::getVertCorr(): Out of bound",
-      __FILE__, __LINE__);
-  return mCorr[laserNbr].mVertCorr;
-}
-
-float Calibration::getSinVertCorr(size_t laserNbr) const {
-  if (laserNbr > mNumLasers)
-    throw OutOfBoundException<size_t>(laserNbr,
-      "Calibration::getSinVertCorr(): Out of bound",
-      __FILE__, __LINE__);
-  return mCorr[laserNbr].mSinVertCorr;
-}
-
-float Calibration::getCosVertCorr(size_t laserNbr) const {
-  if (laserNbr > mNumLasers)
-    throw OutOfBoundException<size_t>(laserNbr,
-      "Calibration::getCosVertCorr(): Out of bound",
-      __FILE__, __LINE__);
-  return mCorr[laserNbr].mCosVertCorr;
-}
-
-float Calibration::getDistCorr(size_t laserNbr) const {
-  if (laserNbr > mNumLasers)
-    throw OutOfBoundException<size_t>(laserNbr,
-      "Calibration::getDistCorr(): Out of bound",
-      __FILE__, __LINE__);
-  return mCorr[laserNbr].mDistCorr;
-}
-
-float Calibration::getVertOffsCorr(size_t laserNbr) const {
-  if (laserNbr > mNumLasers)
-    throw OutOfBoundException<size_t>(laserNbr,
-      "Calibration::getVertOffsCorr(): Out of bound",
-      __FILE__, __LINE__);
-  return mCorr[laserNbr].mVertOffsCorr;
-}
-
-float Calibration::getHorizOffsCorr(size_t laserNbr) const {
-  if (laserNbr > mNumLasers)
-    throw OutOfBoundException<size_t>(laserNbr,
-      "Calibration::getHorizOffsCorr(): Out of bound",
-      __FILE__, __LINE__);
-  return mCorr[laserNbr].mHorizOffsCorr;
-}
-
 void Calibration::setRotCorr(size_t laserNbr, float value) {
   if (laserNbr > mNumLasers)
     throw OutOfBoundException<size_t>(laserNbr,
@@ -232,40 +153,4 @@ void Calibration::setVertCorr(size_t laserNbr, float value) {
   mCorr[laserNbr].mVertCorr = deg2rad(value);
   mCorr[laserNbr].mSinVertCorr = sin(mCorr[laserNbr].mVertCorr);
   mCorr[laserNbr].mCosVertCorr = cos(mCorr[laserNbr].mVertCorr);
-}
-
-void Calibration::setDistCorr(size_t laserNbr, float value) {
-  if (laserNbr > mNumLasers)
-    throw OutOfBoundException<size_t>(laserNbr,
-      "Calibration::setDistCorr(): Out of bound",
-      __FILE__, __LINE__);
-  mCorr[laserNbr].mDistCorr = value;
-}
-
-void Calibration::setVertOffsCorr(size_t laserNbr, float value) {
-  if (laserNbr > mNumLasers)
-    throw OutOfBoundException<size_t>(laserNbr,
-      "Calibration::setVertOffsCorr(): Out of bound",
-      __FILE__, __LINE__);
-  mCorr[laserNbr].mVertOffsCorr = value;
-}
-
-void Calibration::setHorizOffsCorr(size_t laserNbr, float value) {
-  if (laserNbr > mNumLasers)
-    throw OutOfBoundException<size_t>(laserNbr,
-      "Calibration::setHorizOffsCorr(): Out of bound",
-      __FILE__, __LINE__);
-  mCorr[laserNbr].mHorizOffsCorr = value;
-}
-
-/******************************************************************************/
-/* Methods                                                                    */
-/******************************************************************************/
-
-float Calibration::deg2rad(float deg) {
-  return deg * M_PI / 180.0;
-}
-
-float Calibration::rad2deg(float rad) {
-  return rad * 180.0 / M_PI;
 }

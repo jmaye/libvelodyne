@@ -22,20 +22,6 @@
 /* Constructors and Destructor                                                */
 /******************************************************************************/
 
-VdynePointCloud::VdynePointCloud() :
-    mTimestamp(0),
-    mStartRotationAngle(0),
-    mEndRotationAngle(0) {
-}
-
-VdynePointCloud::VdynePointCloud(const VdynePointCloud& other) :
-    Serializable(),
-    mTimestamp(other.mTimestamp),
-    mPoints(other.mPoints),
-    mStartRotationAngle(other.mStartRotationAngle),
-    mEndRotationAngle(other.mEndRotationAngle) {
-}
-
 VdynePointCloud& VdynePointCloud::operator = (const VdynePointCloud& other) {
   if (this != &other) {
     mTimestamp = other.mTimestamp;
@@ -44,9 +30,6 @@ VdynePointCloud& VdynePointCloud::operator = (const VdynePointCloud& other) {
     mEndRotationAngle = other.mEndRotationAngle;
   }
   return *this;
-}
-
-VdynePointCloud::~VdynePointCloud() {
 }
 
 /******************************************************************************/
@@ -89,64 +72,4 @@ void VdynePointCloud::readBinary(std::istream& stream) {
     point.readBinary(stream);
     mPoints.push_back(point);
   }
-}
-
-/******************************************************************************/
-/* Accessors                                                                  */
-/******************************************************************************/
-
-int64_t VdynePointCloud::getTimestamp() const {
-  return mTimestamp;
-}
-
-void VdynePointCloud::setTimestamp(int64_t timestamp) {
-  mTimestamp = timestamp;
-}
-
-float VdynePointCloud::getStartRotationAngle() const {
-  return mStartRotationAngle;
-}
-
-void VdynePointCloud::setStartRotationAngle(float angle) {
-  mStartRotationAngle = angle;
-}
-
-float VdynePointCloud::getEndRotationAngle() const {
-  return mEndRotationAngle;
-}
-
-void VdynePointCloud::setEndRotationAngle(float angle) {
-  mEndRotationAngle = angle;
-}
-
-VdynePointCloud::ConstPointIterator VdynePointCloud::getPointBegin() const {
-  return mPoints.begin();
-}
-
-VdynePointCloud::PointIterator VdynePointCloud::getPointBegin() {
-  return mPoints.begin();
-}
-
-VdynePointCloud::ConstPointIterator VdynePointCloud::getPointEnd() const {
-  return mPoints.end();
-}
-
-VdynePointCloud::PointIterator VdynePointCloud::getPointEnd() {
-  return mPoints.end();
-}
-
-const VdynePointCloud::Container& VdynePointCloud::getPoints() const {
-  return mPoints;
-}
-
-size_t VdynePointCloud::getSize() const {
-  return mPoints.size();
-}
-
-void VdynePointCloud::insertPoint(const Point3D& point) {
-  mPoints.push_back(point);
-}
-
-void VdynePointCloud::clear() {
-  mPoints.clear();
 }

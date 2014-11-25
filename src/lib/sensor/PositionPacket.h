@@ -58,13 +58,16 @@ public:
     @{
     */
   /// Default constructor
-  PositionPacket();
+  PositionPacket() :
+     mTimestamp(0) {}
   /// Copy constructor
-  PositionPacket(const PositionPacket& other);
+  PositionPacket(const PositionPacket& other) :
+      Serializable(),
+      mTimestamp(other.mTimestamp) {}
   /// Assignment operator
   PositionPacket& operator = (const PositionPacket& other);
   /// Destructor
-  ~PositionPacket();
+  ~PositionPacket() {}
   /** @}
     */
 
@@ -72,9 +75,13 @@ public:
     @{
     */
   /// Returns the timestamp of the acquisition [ns]
-  int64_t getTimestamp() const;
+  int64_t getTimestamp() const {
+    return mTimestamp;
+  }
   /// Sets the timestamp
-  void setTimestamp(int64_t timestamp);
+  void setTimestamp(int64_t timestamp) {
+    mTimestamp = timestamp;
+  }
   /// Returns the gyro1
   float getGyro1() const;
   /// Returns the gyro2
@@ -100,9 +107,13 @@ public:
   /// Returns the accel3 y
   float getAccel3Y() const;
   /// Returns the GPS timestamp [us]
-  uint32_t getGPSTimestamp() const;
+  uint32_t getGPSTimestamp() const {
+    return mGPSTimestamp;
+  }
   /// Returns the NMEA sentence
-  const uint8_t* getNMEASentence() const;
+  const uint8_t* getNMEASentence() const {
+    return mNMEASentence;
+  }
   /** @}
     */
 

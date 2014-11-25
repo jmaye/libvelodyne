@@ -18,8 +18,6 @@
 
 #include "sensor/Converter.h"
 
-#include <cmath>
-
 /******************************************************************************/
 /* Methods                                                                    */
 /******************************************************************************/
@@ -36,8 +34,8 @@ void toPointCloud(const DataPacket& dataPacket, const Calibration&
     if (data.mHeaderInfo == dataPacket.mLowerBank)
       idxOffs = data.mLasersPerPacket;
     const float rotation =
-      calibration.deg2rad((float)data.mRotationalInfo /
-      (float)dataPacket.mRotationResolution);
+      calibration.deg2rad(static_cast<float>(data.mRotationalInfo) /
+      static_cast<float>(dataPacket.mRotationResolution));
     if (i == 0)
       pointCloud.setStartRotationAngle(rotation);
     else if (i == dataPacket.mDataChunkNbr -1)
@@ -45,9 +43,9 @@ void toPointCloud(const DataPacket& dataPacket, const Calibration&
     for (size_t j = 0; j < data.mLasersPerPacket; ++j) {
       size_t laserIdx = idxOffs + j;
       const float distance = (calibration.getDistCorr(laserIdx)
-        + (float)data.mLaserData[j].mDistance /
-        (float)dataPacket.mDistanceResolution) /
-        (float)mMeterConversion;
+        + static_cast<float>(data.mLaserData[j].mDistance) /
+        static_cast<float>(dataPacket.mDistanceResolution)) /
+        static_cast<float>(mMeterConversion);
       if ((distance < minDistance) || (distance > maxDistance))
         continue;
       const float sinRot = sin(rotation) *
@@ -58,10 +56,10 @@ void toPointCloud(const DataPacket& dataPacket, const Calibration&
         sin(rotation) * calibration.getSinRotCorr(laserIdx);
       const float horizOffsCorr =
         calibration.getHorizOffsCorr(laserIdx) /
-        (float)mMeterConversion;
+        static_cast<float>(mMeterConversion);
       const float vertOffsCorr =
         calibration.getVertOffsCorr(laserIdx) /
-        (float)mMeterConversion;
+        static_cast<float>(mMeterConversion);
       const float xyDist = distance *
         calibration.getCosVertCorr(laserIdx) -
         vertOffsCorr * calibration.getSinVertCorr(laserIdx);
@@ -87,8 +85,8 @@ void toScanCloud(const DataPacket& dataPacket, const Calibration&
     if (data.mHeaderInfo == dataPacket.mLowerBank)
       idxOffs = data.mLasersPerPacket;
     const float rotation =
-      calibration.deg2rad((float)data.mRotationalInfo /
-      (float)dataPacket.mRotationResolution);
+      calibration.deg2rad(static_cast<float>(data.mRotationalInfo) /
+      static_cast<float>(dataPacket.mRotationResolution));
     if (i == 0)
       scanCloud.setStartRotationAngle(rotation);
     else if (i == dataPacket.mDataChunkNbr -1)
@@ -96,9 +94,9 @@ void toScanCloud(const DataPacket& dataPacket, const Calibration&
     for (size_t j = 0; j < data.mLasersPerPacket; ++j) {
       size_t laserIdx = idxOffs + j;
       const float distance = (calibration.getDistCorr(laserIdx)
-        + (float)data.mLaserData[j].mDistance /
-        (float)dataPacket.mDistanceResolution) /
-        (float)mMeterConversion;
+        + static_cast<float>(data.mLaserData[j].mDistance) /
+        static_cast<float>(dataPacket.mDistanceResolution)) /
+        static_cast<float>(mMeterConversion);
       if ((distance < minDistance) || (distance > maxDistance))
         continue;
       VdyneScanCloud::Scan scan;
@@ -110,10 +108,6 @@ void toScanCloud(const DataPacket& dataPacket, const Calibration&
       scanCloud.insertScan(scan);
     }
   }
-}
-
-float normalizeAnglePositive(float angle) {
-  return fmod(fmod(angle, 2.0 * M_PI) + 2.0 * M_PI, 2.0 * M_PI);
 }
 
 float normalizeAngle(float angle) {

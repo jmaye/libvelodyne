@@ -25,17 +25,10 @@
 #include "base/BinaryBufferReader.h"
 #include "base/BinaryStreamReader.h"
 #include "base/BinaryStreamWriter.h"
-#include "exceptions/OutOfBoundException.h"
 
 /******************************************************************************/
 /* Constructors and Destructor                                                */
 /******************************************************************************/
-
-DataPacket::DataPacket() :
-    mTimestamp(0),
-    mSpinCount(0),
-    mReserved(0) {
-}
 
 DataPacket::DataPacket(const DataPacket& other) :
     Serializable(),
@@ -55,9 +48,6 @@ DataPacket& DataPacket::operator = (const DataPacket &other) {
       mData[i] = other.mData[i];
   }
   return *this;
-}
-
-DataPacket::~DataPacket() {
 }
 
 /******************************************************************************/
@@ -108,47 +98,6 @@ void DataPacket::write(std::ostream& stream) const {
 /******************************************************************************/
 /* Accessors                                                                  */
 /******************************************************************************/
-
-int64_t DataPacket::getTimestamp() const {
-  return mTimestamp;
-}
-
-uint16_t DataPacket::getSpinCount() const {
-  return mSpinCount;
-}
-
-uint32_t DataPacket::getReserved() const {
-  return mReserved;
-}
-
-const DataPacket::DataChunk& DataPacket::getDataChunk(size_t dataChunkIdx)
-    const {
-  if (dataChunkIdx >= mDataChunkNbr)
-    throw OutOfBoundException<size_t>(dataChunkIdx,
-      "DataPacket::getDataChunk(): Out of bound",
-      __FILE__, __LINE__);
-  return mData[dataChunkIdx];
-}
-
-void DataPacket::setTimestamp(int64_t timestamp) {
-  mTimestamp = timestamp;
-}
-
-void DataPacket::setSpinCount(uint16_t spinCount) {
-  mSpinCount = spinCount;
-}
-
-void DataPacket::setReserved(uint32_t reserved) {
-  mReserved = reserved;
-}
-
-void DataPacket::setDataChunk(const DataChunk& data, size_t dataChunkIdx) {
-  if (dataChunkIdx >= mDataChunkNbr)
-    throw OutOfBoundException<size_t>(dataChunkIdx,
-      "DataPacket::getDataChunk(): Out of bound",
-      __FILE__, __LINE__);
-  mData[dataChunkIdx] = data;
-}
 
 uint32_t DataPacket::getGPSTimestamp() const {
   uint32_t gpsTimestamp;

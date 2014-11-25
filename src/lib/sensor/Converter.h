@@ -24,6 +24,8 @@
 #ifndef CONVERTER_H
 #define CONVERTER_H
 
+#include <cmath>
+
 #include "sensor/DataPacket.h"
 #include "sensor/Calibration.h"
 #include "data-structures/VdynePointCloud.h"
@@ -58,7 +60,9 @@ namespace Converter {
     calibration, VdyneScanCloud& scanCloud, float minDistance =
     Converter::mMinDistance, float maxDistance = Converter::mMaxDistance);
   /// Normalize an angle positive
-  float normalizeAnglePositive(float angle);
+  inline float normalizeAnglePositive(float angle) {
+    return std::fmod(std::fmod(angle, 2.0 * M_PI) + 2.0 * M_PI, 2.0 * M_PI);
+  }
   /// Normalize an angle
   float normalizeAngle(float angle);
   /** @}

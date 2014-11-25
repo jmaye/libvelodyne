@@ -1,3 +1,9 @@
+libvelodyne (1.0-113) precise; urgency=low
+
+  * inlining critical functions 
+
+ -- Jerome Maye <jerome.maye@mavt.ethz.ch>  Tue, 25 Nov 2014 13:07:44 +0100
+
 libvelodyne (1.0-112) precise; urgency=low
 
   * backward compatibility to lucid 

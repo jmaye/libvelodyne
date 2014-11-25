@@ -62,9 +62,9 @@ public:
     @{
     */
   /// Default constructor
-  Serializable();
+  Serializable() {}
   /// Destructor
-  virtual ~Serializable();
+  virtual ~Serializable() {}
   /** @}
     */
 

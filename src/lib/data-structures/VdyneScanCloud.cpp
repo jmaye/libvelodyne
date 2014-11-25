@@ -22,20 +22,6 @@
 /* Constructors and Destructor                                                */
 /******************************************************************************/
 
-VdyneScanCloud::VdyneScanCloud() :
-    mTimestamp(0),
-    mStartRotationAngle(0),
-    mEndRotationAngle(0) {
-}
-
-VdyneScanCloud::VdyneScanCloud(const VdyneScanCloud& other) :
-    Serializable(),
-    mTimestamp(other.mTimestamp),
-    mScans(other.mScans),
-    mStartRotationAngle(other.mStartRotationAngle),
-    mEndRotationAngle(other.mEndRotationAngle) {
-}
-
 VdyneScanCloud& VdyneScanCloud::operator = (const VdyneScanCloud& other) {
   if (this != &other) {
     mTimestamp = other.mTimestamp;
@@ -44,9 +30,6 @@ VdyneScanCloud& VdyneScanCloud::operator = (const VdyneScanCloud& other) {
     mEndRotationAngle = other.mEndRotationAngle;
   }
   return *this;
-}
-
-VdyneScanCloud::~VdyneScanCloud() {
 }
 
 /******************************************************************************/
@@ -89,64 +72,4 @@ void VdyneScanCloud::readBinary(std::istream& stream) {
     scan.readBinary(stream);
     mScans.push_back(scan);
   }
-}
-
-/******************************************************************************/
-/* Accessors                                                                  */
-/******************************************************************************/
-
-int64_t VdyneScanCloud::getTimestamp() const {
-  return mTimestamp;
-}
-
-void VdyneScanCloud::setTimestamp(int64_t timestamp) {
-  mTimestamp = timestamp;
-}
-
-float VdyneScanCloud::getStartRotationAngle() const {
-  return mStartRotationAngle;
-}
-
-void VdyneScanCloud::setStartRotationAngle(float angle) {
-  mStartRotationAngle = angle;
-}
-
-float VdyneScanCloud::getEndRotationAngle() const {
-  return mEndRotationAngle;
-}
-
-void VdyneScanCloud::setEndRotationAngle(float angle) {
-  mEndRotationAngle = angle;
-}
-
-VdyneScanCloud::ConstScanIterator VdyneScanCloud::getScanBegin() const {
-  return mScans.begin();
-}
-
-VdyneScanCloud::ScanIterator VdyneScanCloud::getScanBegin() {
-  return mScans.begin();
-}
-
-VdyneScanCloud::ConstScanIterator VdyneScanCloud::getScanEnd() const {
-  return mScans.end();
-}
-
-VdyneScanCloud::ScanIterator VdyneScanCloud::getScanEnd() {
-  return mScans.end();
-}
-
-const VdyneScanCloud::Container& VdyneScanCloud::getScans() const {
-  return mScans;
-}
-
-size_t VdyneScanCloud::getSize() const {
-  return mScans.size();
-}
-
-void VdyneScanCloud::insertScan(const Scan& point) {
-  mScans.push_back(point);
-}
-
-void VdyneScanCloud::clear() {
-  mScans.clear();
 }

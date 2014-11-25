@@ -114,13 +114,21 @@ public:
     @{
     */
   /// Default constructor
-  VdynePointCloud();
+  VdynePointCloud() :
+      mTimestamp(0),
+      mStartRotationAngle(0),
+      mEndRotationAngle(0) {}
   /// Copy constructor
-  VdynePointCloud(const VdynePointCloud& other);
+  VdynePointCloud(const VdynePointCloud& other) :
+      Serializable(),
+      mTimestamp(other.mTimestamp),
+      mPoints(other.mPoints),
+      mStartRotationAngle(other.mStartRotationAngle),
+      mEndRotationAngle(other.mEndRotationAngle) {}
   /// Assignment operator
   VdynePointCloud& operator = (const VdynePointCloud& other);
   // Destructor
-  ~VdynePointCloud();
+  ~VdynePointCloud() {}
   /** @}
     */
 
@@ -128,33 +136,61 @@ public:
     @{
     */
   /// Returns the timestamp
-  int64_t getTimestamp() const;
+  int64_t getTimestamp() const {
+    return mTimestamp;
+  }
   /// Sets the timestamp
-  void setTimestamp(int64_t timestamp);
+  void setTimestamp(int64_t timestamp) {
+    mTimestamp = timestamp;
+  }
   /// Returns the starting rotational angle
-  float getStartRotationAngle() const;
+  float getStartRotationAngle() const {
+    return mStartRotationAngle;
+  }
   /// Sets the starting rotational angle
-  void setStartRotationAngle(float angle);
+  void setStartRotationAngle(float angle) {
+    mStartRotationAngle = angle;
+  }
   /// Returns the ending rotational angle
-  float getEndRotationAngle() const;
+  float getEndRotationAngle() const {
+    return mEndRotationAngle;
+  }
   /// Sets the ending rotational angle
-  void setEndRotationAngle(float angle);
+  void setEndRotationAngle(float angle) {
+    mEndRotationAngle = angle;
+  }
   /// Returns the container
-  const Container& getPoints() const;
+  const Container& getPoints() const {
+    return mPoints;
+  }
   /// Returns iterator at start of the container
-  ConstPointIterator getPointBegin() const;
+  ConstPointIterator getPointBegin() const {
+    return mPoints.cbegin();
+  }
   /// Returns iterator at start of the container
-  PointIterator getPointBegin();
+  PointIterator getPointBegin() {
+    return mPoints.begin();
+  }
   /// Returns iterator at end of the container
-  ConstPointIterator getPointEnd() const;
+  ConstPointIterator getPointEnd() const {
+    return mPoints.cend();
+  }
   /// Returns iterator at end of the container
-  PointIterator getPointEnd();
+  PointIterator getPointEnd() {
+    return mPoints.end();
+  }
   /// Returns the size of the cloud
-  size_t getSize() const;
+  size_t getSize() const {
+    return mPoints.size();
+  }
   /// Inserts a point into the point cloud
-  void insertPoint(const Point3D& point);
+  void insertPoint(const Point3D& point) {
+    mPoints.push_back(point);
+  }
   /// Clear the point cloud
-  void clear();
+  void clear() {
+    mPoints.clear();
+  }
   /** @}
     */
 
