@@ -51,7 +51,7 @@ Calibration& Calibration::operator = (const Calibration& other) {
 
 Calibration::~Calibration() {
   if (mCorr)
-    delete mCorr;
+    delete [] mCorr;
 }
 
 /******************************************************************************/
