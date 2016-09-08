@@ -120,14 +120,20 @@ void Calibration::read(std::ifstream& stream) {
 void Calibration::write(std::ofstream& stream) const {
   if (!stream.is_open())
     throw IOException("Calibration::write(): could not open file");
+
+  const std::string fieldSep("\t\t");
+  stream.precision(8);
+  stream.width(0);
+  stream.unsetf(std::ios::fixed |std::ios::scientific);
+
   for (size_t i = 0; i < mNumLasers; ++i) {
-    stream << "id " << i << std::endl
-           << "rotCorrection " << rad2deg(mCorr[i].mRotCorr) << std::endl
-           << "vertCorrection " << rad2deg(mCorr[i].mVertCorr) << std::endl
-           << "distCorrection " << mCorr[i].mDistCorr << std::endl
-           << "vertOffsetCorrection " << mCorr[i].mVertOffsCorr << std::endl
-           << "horizOffsetCorrection " << mCorr[i].mHorizOffsCorr << std::endl
-           << std::endl;
+    stream << "id" << fieldSep << i << std::endl
+           << "rotCorrection" << fieldSep << rad2deg(mCorr[i].mRotCorr) << std::endl
+           << "vertCorrection" << fieldSep << rad2deg(mCorr[i].mVertCorr) << std::endl
+           << "distCorrection" << fieldSep << mCorr[i].mDistCorr << std::endl
+           << "vertOffsetCorrection" << fieldSep << mCorr[i].mVertOffsCorr << std::endl
+           << "horizOffsetCorrection" << fieldSep << mCorr[i].mHorizOffsCorr << std::endl
+           ;
   }
 }
 
