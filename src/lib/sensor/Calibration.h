@@ -124,7 +124,7 @@ public:
   size_t getNumLasers() const {
     return mNumLasers;
   }
-  /// Returns the rotation correction
+  /// Returns the rotation correction in radians
   float getRotCorr(size_t laserNbr) const {
 #ifndef NDEBUG
     if (laserNbr > mNumLasers)
@@ -134,7 +134,7 @@ public:
 #endif
     return mCorr[laserNbr].mRotCorr;
   }
-  /// Sets the rotation correction
+  /// Sets the rotation correction in radians
   void setRotCorr(size_t laserNbr, float value);
   /// Returns the sinus of rotation correction
   float getSinRotCorr(size_t laserNbr) const {
@@ -156,7 +156,7 @@ public:
 #endif
     return mCorr[laserNbr].mCosRotCorr;
   }
-  /// Returns the vertical correction
+  /// Returns the vertical correction in radians
   float getVertCorr(size_t laserNbr) const {
 #ifndef NDEBUG
     if (laserNbr > mNumLasers)
@@ -166,7 +166,7 @@ public:
 #endif
     return mCorr[laserNbr].mVertCorr;
   }
-  /// Sets the vertical correction
+  /// Sets the vertical correction in radians
   void setVertCorr(size_t laserNbr, float value);
   /// Returns the sinus of vertical correction
   float getSinVertCorr(size_t laserNbr) const {

@@ -146,7 +146,7 @@ void Calibration::setRotCorr(size_t laserNbr, float value) {
     throw OutOfBoundException<size_t>(laserNbr,
       "Calibration::setRotCorr(): Out of bound",
       __FILE__, __LINE__);
-  mCorr[laserNbr].mRotCorr = deg2rad(value);
+  mCorr[laserNbr].mRotCorr = value;
   mCorr[laserNbr].mSinRotCorr = sin(mCorr[laserNbr].mRotCorr);
   mCorr[laserNbr].mCosRotCorr = cos(mCorr[laserNbr].mRotCorr);
 }
@@ -156,7 +156,7 @@ void Calibration::setVertCorr(size_t laserNbr, float value) {
     throw OutOfBoundException<size_t>(laserNbr,
       "Calibration::setVertCorr(): Out of bound",
       __FILE__, __LINE__);
-  mCorr[laserNbr].mVertCorr = deg2rad(value);
+  mCorr[laserNbr].mVertCorr = value;
   mCorr[laserNbr].mSinVertCorr = sin(mCorr[laserNbr].mVertCorr);
   mCorr[laserNbr].mCosVertCorr = cos(mCorr[laserNbr].mVertCorr);
 }
